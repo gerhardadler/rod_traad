@@ -36,6 +36,14 @@
                 {% endfor %}
                 {% endfor %}
             </div>
+            <div id="mistakes">
+                <span>Feil igjen:</span>
+                <span id="hearts">
+                    {% for i in range(1, 5) %}
+                    <span class="heart" id="heart{{ i }}">{% include 'snippets/heart-solid.svg.jinja' %}</span>
+                    {% endfor %}
+                </span>
+            </div>
             <button id="submit" class="button neutral">Bekreft</button>
         </div>
     </main>

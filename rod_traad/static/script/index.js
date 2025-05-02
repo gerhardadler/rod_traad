@@ -4,8 +4,50 @@ const solved = [];
 let mistakes = 0;
 const maxMistakes = 4;
 
-const puzzle = document.querySelector("#puzzle");
-const words = puzzle.querySelectorAll(".word");
+const puzzleElement = document.querySelector("#puzzle");
+const wordElements = puzzleElement.querySelectorAll(".word");
+const heartsElement = document.querySelector("#mistakes");
+
+function makeGuess() {
+  let correct = false;
+  Object.entries(solutions).forEach(([solutionName, solution], index) => {
+    if (solution.length === selected.size) {
+      const isEqual = solution.every((word) => selected.has(word));
+
+      if (isEqual) {
+        // correct guess
+        selected.clear();
+
+        wordElements.forEach((word) => {
+          if (solution.includes(word.innerText)) {
+            word.remove();
+            // word.style.position = "absolute";
+            // solved.push(word.innerText);
+            // const checkbox = word.querySelector('input[type="checkbox"]');
+            // checkbox.checked = false;
+          }
+        });
+        drawSolved(index + 1, solutionName, solution);
+        correct = true;
+      }
+    }
+  });
+  if (!correct) {
+    mistakes++;
+    drawMistakes();
+  }
+}
+
+function drawMistakes() {
+  const hearts = heartsElement.querySelectorAll(".heart");
+  hearts.forEach((heart, index) => {
+    if (maxMistakes - mistakes <= index) {
+      heart.classList.add("heart-lost");
+    } else {
+      heart.classList.remove("heart-lost");
+    }
+  });
+}
 
 function drawSolved(solutionNumber, solutionName, words) {
   const solvedWord = document.createElement("div");
@@ -18,10 +60,10 @@ function drawSolved(solutionNumber, solutionName, words) {
   solvedWord.appendChild(solvedWordTitle);
   solvedWord.appendChild(solvedWordText);
 
-  puzzle.insertBefore(solvedWord, puzzle.querySelector(".word"));
+  puzzleElement.insertBefore(solvedWord, puzzleElement.querySelector(".word"));
 }
 
-words.forEach((word) => {
+wordElements.forEach((word) => {
   const checkbox = word.querySelector('input[type="checkbox"]');
 
   function shrinkCheckbox() {
@@ -58,26 +100,4 @@ words.forEach((word) => {
 
 const submitButton = document.querySelector("#submit");
 
-submitButton.addEventListener("click", (e) => {
-  Object.entries(solutions).forEach(([solutionName, solution], index) => {
-    if (solution.length === selected.size) {
-      const isEqual = solution.every((word) => selected.has(word));
-
-      if (isEqual) {
-        selected.clear();
-
-        words.forEach((word) => {
-          if (solution.includes(word.innerText)) {
-            word.remove();
-            // word.style.position = "absolute";
-            // solved.push(word.innerText);
-            // const checkbox = word.querySelector('input[type="checkbox"]');
-            // checkbox.checked = false;
-          }
-        });
-        drawSolved(index + 1, solutionName, solution);
-        return;
-      }
-    }
-  });
-});
+submitButton.addEventListener("click", makeGuess);

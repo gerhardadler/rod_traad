@@ -81,6 +81,34 @@ input[type="checkbox"]:focus-visible + span {
 }
 
 #submit {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   width: 15rem;
+}
+
+#mistakes {
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+#hearts {
+  display: flex;
+  width: 8rem;
+  justify-content: space-between;
+}
+
+.heart {
+  transition: 1s ease;
+}
+
+.heart svg {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.heart-lost {
+  opacity: 0;
+  transform: scale(0);
 }

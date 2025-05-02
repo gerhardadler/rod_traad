@@ -1,0 +1,3 @@
+fastapi[standard]==0.115.2
+sqlmodel==0.0.24
+jinja2>=3.0.0

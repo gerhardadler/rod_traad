@@ -1,0 +1,150 @@
+:root {
+  --primary: #5a7e37;
+  --alternate-primary: #a4d17f;
+  --neutral: #5e5e5e;
+  --alternate-neutral: #8c8c8c;
+  --text-1: white;
+  --text-2: #bebebe;
+  --opposite-text-1: black;
+  --danger: #b23d3d;
+  --alternate-danger: #e57369;
+  --background-1: #171718;
+  --background-15: #1f2020;
+  --background-2: #2c2f2e;
+  --background-25: #373a38;
+  --background-3: #444845;
+  --default-color: var(--primary);
+  --alternate-default-color: var(--alternate-primary);
+  --solution-1: #e0cf4e;
+  --solution-2: #79d161;
+  --solution-3: #67a5db;
+  --solution-4: #d669dc;
+}
+
+* {
+  box-sizing: border-box !important;
+}
+
+*:focus-visible {
+  outline: 3px solid var(--alternate-primary);
+}
+
+html {
+  color: var(--text-1);
+  font-family: Inter, Helvetica, Arial, Verdana, sans-serif;
+}
+
+input {
+  all: unset;
+}
+
+ul {
+  all: unset;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  all: unset;
+  padding: 0;
+  margin: 0;
+}
+
+button {
+  all: unset;
+}
+
+a,
+a:hover,
+a:focus,
+a:active {
+  color: inherit;
+  text-decoration: none;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--background-1);
+}
+
+.preload * {
+  transition: none !important;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo {
+  display: block;
+  height: 8rem;
+}
+
+.content {
+  padding: 0.5rem;
+  max-width: 50rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 1em;
+}
+
+h2 {
+  font-size: 1.4rem;
+}
+
+.primary {
+  --default-color: var(--primary);
+  --alternate-default-color: var(--alternate-primary);
+}
+
+.neutral {
+  --default-color: var(--neutral);
+  --alternate-default-color: var(--alternate-neutral);
+}
+
+.danger {
+  --default-color: var(--danger);
+  --alternate-default-color: var(--alternate-danger);
+}
+
+.alternate-primary {
+  --default-color: var(--alternate-primary);
+  --alternate-default-color: var(--primary);
+}
+
+.alternate-danger {
+  --default-color: var(--alternate-danger);
+  --alternate-default-color: var(--danger);
+}
+
+.solution-1 {
+  --default-color: var(--solution-1);
+}
+
+.solution-2 {
+  --default-color: var(--solution-2);
+}
+
+.solution-3 {
+  --default-color: var(--solution-3);
+}
+
+.solution-4 {
+  --default-color: var(--solution-4);
+}
+
+@media screen and (max-width: 45rem) {
+  h1 {
+    font-size: 1.7rem;
+  }
+}

@@ -1,0 +1,86 @@
+.content {
+  align-items: center;
+}
+
+h1 {
+  text-align: center;
+}
+
+#puzzle {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.word span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  height: 5.5rem;
+  border-radius: 0.5rem;
+  background: var(--background-2);
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+.word:hover span {
+  background: var(--background-3);
+  cursor: pointer;
+}
+
+.solved {
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  background: var(--default-color);
+  text-align: center;
+  height: 5.5rem;
+  border-radius: 0.5rem;
+  color: var(--opposite-text-1);
+}
+
+.solved h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.solved p {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+/* Triggered when mouse is down */
+.shrink {
+  transform: scale(0.95);
+  transition: transform 0.5s ease;
+}
+
+/* Hide the checkbox but keep it accessible */
+.visually-hidden {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Checked (active) state */
+input[type="checkbox"]:checked + span {
+  background-color: var(--primary);
+  color: var(--opposite-text);
+}
+
+input[type="checkbox"]:focus-visible + span {
+  outline: 2px solid #0056b3; /* or use a box-shadow for a glow effect */
+  outline-offset: 2px;
+}
+
+#submit {
+  margin-top: 2rem;
+  width: 15rem;
+}

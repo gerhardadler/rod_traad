@@ -1,0 +1,41 @@
+import { WordItem as Word } from "./word.js";
+
+export class UI {
+  constructor(game) {
+    this.game = game;
+    this.puzzle = document.querySelector("#puzzle");
+    this.hearts = document.querySelectorAll("#mistakes .heart");
+
+    this.words = Array.from(document.querySelectorAll(".word")).map((word) => {
+      new Word(word, this.game, this);
+    });
+
+    document.querySelector("#submit").addEventListener("click", () => {
+      this.game.makeGuess();
+    });
+  }
+
+  updateMistakes() {
+    this.hearts.forEach((heart, i) => {
+      if (this.game.maxMistakes - this.game.gameState.mistakes <= i) {
+        heart.classList.add("heart-lost");
+      } else {
+        heart.classList.remove("heart-lost");
+      }
+    });
+  }
+
+  markSolved(index, name, words) {
+    const div = document.createElement("div");
+    div.classList.add("solved", `solution-${index}`);
+    div.innerHTML = `<h3>${name}</h3><p>${words.join(", ")}</p>`;
+    this.puzzle.insertBefore(div, this.puzzle.querySelector(".word"));
+
+    // remove matched words from DOM
+    this.puzzle.querySelectorAll(".word").forEach((wordEl) => {
+      if (words.includes(wordEl.innerText)) {
+        wordEl.remove();
+      }
+    });
+  }
+}

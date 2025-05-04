@@ -7,7 +7,7 @@ from rod_traad.helpers.puzzle import get_puzzle, get_puzzle_today
 
 
 def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
-    router = APIRouter(prefix='')
+    router = APIRouter(prefix='/puzzle')
 
     @router.get('/today')
     def get_today():

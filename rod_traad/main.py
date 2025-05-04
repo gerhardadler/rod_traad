@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from rod_traad.engine import setup_engine
-from rod_traad.routers import index
+from rod_traad.routers import index, api
 
 
 def date_format(value: date | Any):
@@ -40,6 +40,7 @@ def create_app():
     templates.env.filters['float_format'] = float_format  # type: ignore
 
     app.include_router(index.create_router(engine, templates))
+    app.include_router(api.create_router(engine, templates))
 
     return app
 

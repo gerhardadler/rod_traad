@@ -2,9 +2,36 @@ import { areArraysEqual } from "./utils.js";
 import { UI } from "./ui.js";
 
 export class GameState {
-  constructor() {
-    this.solved = {};
-    this.guesses = [];
+  constructor(solved = [], guesses = []) {
+    this.solved = solved;
+    this.guesses = guesses;
+  }
+
+  static fromLocalStorage() {
+    try {
+      const savedState = localStorage.getItem("gameState");
+      if (!savedState) return new GameState();
+
+      const parsed = JSON.parse(savedState);
+      const { solved = {}, guesses = [] } = parsed;
+
+      return new GameState(solved, guesses);
+    } catch (error) {
+      console.warn("Failed to parse game state from localStorage:", error);
+      return new GameState();
+    }
+  }
+
+  saveToLocalStorage() {
+    try {
+      const state = JSON.stringify({
+        solved: this.solved,
+        guesses: this.guesses,
+      });
+      localStorage.setItem("gameState", state);
+    } catch (error) {
+      console.error("Failed to save game state to localStorage:", error);
+    }
   }
 
   get mistakes() {
@@ -36,21 +63,28 @@ export class Game {
       this.gameState.guesses.some((guess) =>
         areArraysEqual(guess, this.selected)
       )
-    ) {
+    )
       return;
-    }
+
     let correct = false;
 
     Object.entries(solutions).forEach(([name, solution], index) => {
       if (areArraysEqual(this.selected, solution)) {
         correct = true;
         this.selected = [];
-        this.ui.markSolved(index + 1, name, solution);
+        this.gameState.solved.push({
+          index: index + 1,
+          name: name,
+          words: solution,
+        });
+        this.gameState.saveToLocalStorage();
+        this.ui.updateSolved();
       }
     });
 
     if (!correct) {
       this.gameState.guesses.push(this.selected);
+      this.gameState.saveToLocalStorage();
       this.ui.updateMistakes();
     }
   }

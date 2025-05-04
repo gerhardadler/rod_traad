@@ -13,6 +13,9 @@ export class UI {
     document.querySelector("#submit").addEventListener("click", () => {
       this.game.makeGuess();
     });
+
+    this.updateMistakes();
+    this.updateSolved();
   }
 
   updateMistakes() {
@@ -25,17 +28,29 @@ export class UI {
     });
   }
 
+  updateSolved() {
+    const solved = this.game.gameState.solved;
+    solved.forEach(({ index, name, words }) => {
+      this.markSolved(index, name, words);
+    });
+  }
+
   markSolved(index, name, words) {
+    const matchingWordElements = Array.from(
+      this.puzzle.querySelectorAll(".word")
+    ).filter((wordEl) => words.includes(wordEl.innerText));
+
+    if (matchingWordElements.length === 0) {
+      return;
+    }
+
+    matchingWordElements.forEach((wordEl) => {
+      wordEl.remove();
+    });
+
     const div = document.createElement("div");
     div.classList.add("solved", `solution-${index}`);
     div.innerHTML = `<h3>${name}</h3><p>${words.join(", ")}</p>`;
     this.puzzle.insertBefore(div, this.puzzle.querySelector(".word"));
-
-    // remove matched words from DOM
-    this.puzzle.querySelectorAll(".word").forEach((wordEl) => {
-      if (words.includes(wordEl.innerText)) {
-        wordEl.remove();
-      }
-    });
   }
 }

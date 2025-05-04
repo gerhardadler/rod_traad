@@ -2,9 +2,10 @@ import { areArraysEqual } from "./utils.js";
 import { UI } from "./ui.js";
 
 export class GameState {
-  constructor(solved = [], guesses = []) {
-    this.solved = solved;
-    this.guesses = guesses;
+  constructor(puzzleDate, solved, guesses) {
+    this.puzzleDate = puzzleDate || null;
+    this.solved = solved || [];
+    this.guesses = guesses || [];
   }
 
   static fromLocalStorage() {
@@ -13,9 +14,9 @@ export class GameState {
       if (!savedState) return new GameState();
 
       const parsed = JSON.parse(savedState);
-      const { solved = {}, guesses = [] } = parsed;
+      const { puzzleDate = null, solved = {}, guesses = [] } = parsed;
 
-      return new GameState(solved, guesses);
+      return new GameState(puzzleDate, solved, guesses);
     } catch (error) {
       console.warn("Failed to parse game state from localStorage:", error);
       return new GameState();
@@ -25,6 +26,7 @@ export class GameState {
   saveToLocalStorage() {
     try {
       const state = JSON.stringify({
+        puzzleDate: this.puzzleDate,
         solved: this.solved,
         guesses: this.guesses,
       });

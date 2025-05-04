@@ -3,6 +3,8 @@ import tomllib
 
 from pydantic import BaseModel
 
+from rod_traad.config import TIMEZONE
+
 
 class PuzzleData(BaseModel):
     author: str
@@ -25,4 +27,4 @@ def get_puzzle_today():
     """
     Fetch the puzzle for today.
     """
-    return get_puzzle(datetime.now().date())
+    return get_puzzle(datetime.now(TIMEZONE).date())

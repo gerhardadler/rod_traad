@@ -48,7 +48,8 @@
         </div>
     </main>
     <script>
-        const solutions = JSON.parse('{{ puzzle.model_dump(mode="json").solutions | tojson }}');
+        const puzzleData = JSON.parse('{{ puzzle.model_dump_json() | safe}}');
+        const solutions = puzzleData.solutions;
         const puzzleDate = "{{ puzzle_date }}";
     </script>
 </body>

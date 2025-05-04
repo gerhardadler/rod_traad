@@ -102,6 +102,10 @@ h2 {
   font-size: 1.4rem;
 }
 
+.no-animate * {
+  transition: none !important;
+}
+
 .primary {
   --default-color: var(--primary);
   --alternate-default-color: var(--alternate-primary);

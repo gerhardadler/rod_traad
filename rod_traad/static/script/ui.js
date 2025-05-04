@@ -3,8 +3,12 @@ import { WordItem as Word } from "./word.js";
 export class UI {
   constructor(game) {
     this.game = game;
+    this.body = document.querySelector("body");
     this.puzzle = document.querySelector("#puzzle");
-    this.hearts = document.querySelectorAll("#mistakes .heart");
+    this.mistakes = document.querySelector("#mistakes");
+    this.hearts = this.mistakes.querySelectorAll(".heart");
+
+    this.animationsActive = false;
 
     this.words = Array.from(document.querySelectorAll(".word")).map((word) => {
       new Word(word, this.game, this);
@@ -16,6 +20,23 @@ export class UI {
 
     this.updateMistakes();
     this.updateSolved();
+    this.activateAnimations();
+    this.showPuzzle();
+  }
+
+  activateAnimations() {
+    this.animationsActive = true;
+    this.body.classList.remove("no-animate");
+  }
+
+  deactivateAnimations() {
+    this.animationsActive = false;
+    this.body.classList.add("no-animate");
+  }
+
+  showPuzzle() {
+    this.puzzle.classList.add("fade-in-show");
+    this.mistakes.classList.add("fade-in-show");
   }
 
   updateMistakes() {

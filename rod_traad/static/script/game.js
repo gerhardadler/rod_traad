@@ -1,5 +1,5 @@
 import { areArraysEqual } from "./utils.js";
-import { UI } from "./ui.js";
+import { UI } from "./ui/ui.js";
 
 export class GameState {
   constructor(puzzleDate, solved, guesses) {
@@ -80,14 +80,31 @@ export class Game {
           words: solution,
         });
         this.gameState.saveToLocalStorage();
-        this.ui.updateSolved();
+        // this.ui.puzzle.animateSolve({
+        //   index: index + 1,
+        //   name: name,
+        //   words: solution,
+        // });
+        this.ui.draw();
       }
     });
 
     if (!correct) {
       this.gameState.guesses.push(this.selected);
       this.gameState.saveToLocalStorage();
-      this.ui.updateMistakes();
+      this.ui.draw();
     }
+  }
+
+  get isGameOver() {
+    return this.isGameWon || this.isGameLost;
+  }
+
+  get isGameWon() {
+    return this.gameState.solved.length === Object.keys(solutions).length;
+  }
+
+  get isGameLost() {
+    return this.gameState.mistakes >= this.maxMistakes;
   }
 }

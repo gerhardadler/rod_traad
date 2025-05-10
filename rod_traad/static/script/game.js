@@ -64,7 +64,8 @@ export class Game {
     if (
       this.gameState.guesses.some((guess) =>
         areArraysEqual(guess, this.selected)
-      )
+      ) ||
+      this.selected.length !== 4
     )
       return;
 

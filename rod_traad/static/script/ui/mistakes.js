@@ -21,7 +21,7 @@ export class Mistakes {
     this.el = document.querySelector("#mistakes");
 
     this.mistakesText = document.createElement("span");
-    this.mistakesText.innerText = "Feil igjen: ";
+    this.mistakesText.innerText = "Liv: ";
 
     this.heartsContainer = document.createElement("span");
     this.heartsContainer.classList.add("hearts");

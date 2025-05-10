@@ -1,24 +1,28 @@
 :root {
-  --primary: #5a7e37;
-  --alternate-primary: #a4d17f;
-  --neutral: #5e5e5e;
-  --alternate-neutral: #8c8c8c;
-  --text-1: white;
-  --text-2: #bebebe;
-  --opposite-text-1: black;
+  --primary: #cf2639;
+  --alternate-primary: #e97583;
+  --neutral: #e3e4f2;
+  --alternate-neutral: #ced0e5;
+  --text-1: #333448;
+  --text-2: #34353f;
+  --opposite-text-1: #ffffff;
   --danger: #b23d3d;
   --alternate-danger: #e57369;
-  --background-1: #171718;
-  --background-15: #1f2020;
-  --background-2: #2c2f2e;
-  --background-25: #373a38;
-  --background-3: #444845;
+  --background-1: #eceef4;
+  --background-15: #d5d9e1;
+  --background-2: #cdcedd;
+  --background-25: #b7b8cc;
+  --background-3: #a7aac4;
   --default-color: var(--primary);
   --alternate-default-color: var(--alternate-primary);
-  --solution-1: #e0cf4e;
-  --solution-2: #79d161;
-  --solution-3: #67a5db;
-  --solution-4: #d669dc;
+  --solution-1: #21bf63;
+  --alternate-solution-1: #6be29d;
+  --solution-2: #237bc9;
+  --alternate-solution-2: #74b4ec;
+  --solution-3: #c11eae;
+  --alternate-solution-3: #e069d0;
+  --solution-4: #cf2639;
+  --alternate-solution-4: #e97583;
 }
 
 * {
@@ -133,18 +137,22 @@ h2 {
 
 .solution-1 {
   --default-color: var(--solution-1);
+  --alternate-default-color: var(--alternate-solution-1);
 }
 
 .solution-2 {
   --default-color: var(--solution-2);
+  --alternate-default-color: var(--alternate-solution-2);
 }
 
 .solution-3 {
   --default-color: var(--solution-3);
+  --alternate-default-color: var(--alternate-solution-3);
 }
 
 .solution-4 {
   --default-color: var(--solution-4);
+  --alternate-default-color: var(--alternate-solution-4);
 }
 
 @media screen and (max-width: 45rem) {

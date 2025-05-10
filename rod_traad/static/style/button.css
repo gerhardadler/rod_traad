@@ -1,10 +1,11 @@
 .button {
   font-size: 1.2rem;
   text-align: center;
-  font-weight: bold;
+  font-weight: 600;
   padding: 0.6em 1.2em;
   border-radius: 0.7rem;
-  background: var(--default-color);
+  background: white;
+  border: 3px solid var(--alternate-default-color);
   transition: 0.2s;
   user-select: none;
   cursor: pointer;
@@ -12,6 +13,6 @@
 
 .button:hover,
 .button:focus-visible {
-  color: var(--opposite-text-1);
-  background: var(--alternate-default-color);
+  /* color: var(--opposite-text-1); */
+  background: var(--default-color);
 }

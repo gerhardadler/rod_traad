@@ -1,12 +1,10 @@
-.fade-in {
+.transition {
   transition: 0.5s ease;
-  opacity: 0;
-  transform: scale(0.95);
 }
 
-.fade-in-show {
-  opacity: 1;
-  transform: scale(1);
+.fade-in {
+  opacity: 0;
+  transform: scale(0.95);
 }
 
 .content {
@@ -14,7 +12,35 @@
 }
 
 h1 {
-  text-align: center;
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+h1 .logo {
+  color: var(--primary);
+  height: 4.5rem;
+  width: auto;
+}
+
+h1 .date {
+  transform: translateY(0.85rem);
+  font-weight: normal;
+  font-size: 1.9rem;
+}
+
+#status {
+  font-family: "Poltawski Novi", serif;
+  font-style: italic;
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+#game-screen {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
 }
 
 #puzzle {
@@ -22,6 +48,7 @@ h1 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
+  position: relative;
 }
 
 .word span {
@@ -33,38 +60,15 @@ h1 {
   font-weight: bold;
   height: 5.5rem;
   border-radius: 0.5rem;
-  background: var(--background-2);
-  transition: background-color 0.3s ease;
+  background: white;
+  border: 3px solid var(--alternate-neutral);
+  transition: 0.3s ease;
   user-select: none;
 }
 
 .word:hover span {
-  background: var(--background-3);
+  background: var(--neutral);
   cursor: pointer;
-}
-
-.solved {
-  grid-column: span 4;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.2rem;
-  background: var(--default-color);
-  text-align: center;
-  height: 5.5rem;
-  border-radius: 0.5rem;
-  color: var(--opposite-text-1);
-}
-
-.solved h3 {
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-.solved p {
-  margin: 0;
-  font-size: 1.2rem;
 }
 
 /* Triggered when mouse is down */
@@ -82,8 +86,9 @@ h1 {
 
 /* Checked (active) state */
 input[type="checkbox"]:checked + span {
-  background-color: var(--primary);
-  color: var(--opposite-text);
+  background-color: var(--alternate-neutral);
+  border: 3px solid var(--background-3);
+  /* color: var(--background); */
 }
 
 input[type="checkbox"]:focus-visible + span {
@@ -91,9 +96,29 @@ input[type="checkbox"]:focus-visible + span {
   outline-offset: 2px;
 }
 
-#submit {
-  margin-top: 1.5rem;
-  width: 15rem;
+.solved {
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  background: var(--alternate-default-color);
+  text-align: center;
+  height: 5.5rem;
+  border: 3px solid var(--default-color);
+  border-radius: 0.5rem;
+  /* color: var(--text-1); */
+}
+
+.solved h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.solved p {
+  margin: 0;
+  font-size: 1.2rem;
 }
 
 #mistakes {
@@ -101,12 +126,12 @@ input[type="checkbox"]:focus-visible + span {
   font-size: 1.1rem;
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.8rem;
 }
 
 .hearts {
   display: flex;
-  width: 8rem;
+  width: 7.8rem;
   justify-content: space-between;
 }
 
@@ -115,11 +140,26 @@ input[type="checkbox"]:focus-visible + span {
 }
 
 .heart svg {
-  width: 1.4rem;
-  height: 1.4rem;
+  color: var(--alternate-primary);
+  stroke: var(--primary);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  overflow: visible;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .heart-lost {
   opacity: 0;
   transform: scale(0);
+}
+
+.buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.buttons .button {
+  width: 10rem;
 }

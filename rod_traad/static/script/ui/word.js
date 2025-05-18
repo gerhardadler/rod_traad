@@ -78,4 +78,20 @@ export class WordItem {
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
   }
+
+  async animateJump() {
+    this.el.style.transition = "0.2s ease-in-out";
+    this.el.style.transform = "translateY(-10px)";
+
+    // Force reflow
+    void this.el.offsetHeight;
+
+    await new Promise((resolve) => setTimeout(resolve, 200));
+
+    this.el.style.transform = "translateY(0px)";
+
+    await new Promise((resolve) => setTimeout(resolve, 200));
+
+    this.el.style.transition = "0s";
+  }
 }

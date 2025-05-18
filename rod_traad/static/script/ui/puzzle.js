@@ -41,10 +41,13 @@ export class Puzzle {
     });
   }
 
-  animateJump() {
-    this.wordItems.forEach((wordItem, i) => {
-      wordItem.animateJump();
-    });
+  async animateJump(words) {
+    const selectedWordItems = this.wordItems.filter((w) =>
+      words.includes(w.word)
+    );
+    for (const wordItem of selectedWordItems) {
+      await wordItem.animateJump();
+    }
   }
 
   async animateMove(word, toIndex) {
@@ -71,6 +74,12 @@ export class Puzzle {
   }
 
   async animateSolve({ index, name, words }) {
+    // make items jump
+
+    await this.animateJump(words);
+
+    await new Promise((resolve) => setTimeout(resolve, 200));
+
     const moves = [];
     const wordsToMove = [...words];
 
@@ -101,6 +110,7 @@ export class Puzzle {
       moves.map((move) => this.animateMove(move.word, move.index))
     );
 
+    // animate adding solved item
     words.forEach((word) => {
       const wordItem = this.wordItems.find((w) => w.word === word);
       wordItem.animateFadeOut();

@@ -15,14 +15,14 @@
   --background-3: #a7aac4;
   --default-color: var(--primary);
   --alternate-default-color: var(--alternate-primary);
-  --solution-1: #21bf63;
-  --alternate-solution-1: #6be29d;
-  --solution-2: #237bc9;
-  --alternate-solution-2: #74b4ec;
-  --solution-3: #c11eae;
-  --alternate-solution-3: #e069d0;
-  --solution-4: #cf2639;
-  --alternate-solution-4: #e97583;
+  --solution-1: hsl(145, 71%, 44%);
+  --alternate-solution-1: hsl(145, 67%, 65%);
+  --solution-2: hsl(220, 70%, 46%);
+  --alternate-solution-2: hsl(220, 76%, 69%);
+  --solution-3: hsl(280, 73%, 50%);
+  --alternate-solution-3: hsl(280, 66%, 70%);
+  --solution-4: hsl(353, 69%, 48%);
+  --alternate-solution-4: hsl(353, 73%, 69%);
 }
 
 * {

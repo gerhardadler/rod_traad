@@ -45,6 +45,31 @@ h1 .date {
 
 #puzzle {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#puzzle .solved-container {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+}
+
+/* This is quite ugly. The reason it is done, is to have spacing between the solved 
+and unsolved containers without having extra spacing above or below either container. 
+---> */
+
+#puzzle .solved-container .solved:last-child {
+  margin-bottom: 0.5rem;
+}
+
+#puzzle .solved-container .solved:nth-child(4) {
+  margin-bottom: 0;
+}
+
+/* <--- */
+
+#puzzle .unsolved-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;

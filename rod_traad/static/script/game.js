@@ -81,12 +81,12 @@ export class Game {
           words: solution,
         });
         this.gameState.saveToLocalStorage();
-        // this.ui.puzzle.animateSolve({
-        //   index: index + 1,
-        //   name: name,
-        //   words: solution,
-        // });
-        this.ui.draw();
+        this.ui.puzzle.animateSolve({
+          index: index + 1,
+          name: name,
+          words: solution,
+        });
+        // this.ui.draw();
       }
     });
 

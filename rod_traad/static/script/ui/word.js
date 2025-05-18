@@ -41,7 +41,7 @@ export class WordItem {
     this.el.addEventListener("click", (e) => e.preventDefault());
   }
 
-  animateMove(gridSize, gapSize, startIndex, endIndex) {
+  async animateMove(gridSize, gapSize, startIndex, endIndex) {
     const calculatePosition = (index) => {
       const column = index % gridSize[0];
       const row = Math.floor(index / gridSize[0]);
@@ -66,7 +66,16 @@ export class WordItem {
     // Force reflow
     void this.el.offsetHeight;
 
-    this.el.style.transition = "0.5s ease-in-out";
+    this.el.style.transition = "0.6s ease-in-out";
     this.el.style.transform = `translate(${endPosition[0]}, ${endPosition[1]})`;
+
+    await new Promise((resolve) => setTimeout(resolve, 600));
+  }
+
+  async animateFadeOut() {
+    this.el.style.transition = "1s ease";
+    this.el.style.opacity = "0";
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 }

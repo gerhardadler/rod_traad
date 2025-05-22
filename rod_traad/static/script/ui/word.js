@@ -1,3 +1,5 @@
+import { animateElement } from "../utils.js";
+
 export class WordItem {
   constructor(game, ui, word) {
     this.game = game;
@@ -73,53 +75,16 @@ export class WordItem {
   }
 
   async animateFadeOut() {
-    this.el.style.transition = "1s ease";
-    this.el.style.opacity = "0";
-
-    await new Promise((resolve) => setTimeout(resolve, 1005));
+    return animateElement(this.el, "fadeOut", 1000, "ease");
   }
 
-  async animateJump() {
-    this.el.style.transition = "0.15s ease-in-out";
-    this.el.style.transform = "translateY(-5px)";
-
-    // Force reflow
-    void this.el.offsetHeight;
-
-    await new Promise((resolve) => setTimeout(resolve, 155));
-
-    this.el.style.transform = "translateY(0px)";
-
-    await new Promise((resolve) => setTimeout(resolve, 155));
-
-    this.el.style.transition = "0s";
+  animateJump() {
+    return animateElement(this.el, "jump", 300, "ease-in-out");
   }
 
   async animateError() {
-    this.el.style.transition =
-      "transform 0.15s ease-in-out, opacity 0.465s ease-in-out";
-    this.el.style.transform = "translateX(-5px)";
-    this.el.style.opacity = "0.5";
-
-    // Force reflow
-    void this.el.offsetHeight;
-
-    await new Promise((resolve) => setTimeout(resolve, 155));
-
-    this.el.style.transform = "translateX(5px)";
-
-    // Force reflow
-    void this.el.offsetHeight;
-
-    await new Promise((resolve) => setTimeout(resolve, 155));
-
-    this.el.style.transform = "translateX(0px)";
-
-    await new Promise((resolve) => setTimeout(resolve, 155));
-
-    this.el.style.opacity = "1";
-
-    await new Promise((resolve) => setTimeout(resolve, 465));
-    this.el.style.transition = "0s";
+    animateElement(this.el, "shake", 500, "ease-in-out");
+    await animateElement(this.el, "fade-out-half", 500, "ease-in-out");
+    return animateElement(this.el, "fade-in-half", 500, "ease-in-out");
   }
 }

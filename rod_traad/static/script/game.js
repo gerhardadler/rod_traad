@@ -93,7 +93,7 @@ export class Game {
     if (!correct) {
       this.gameState.guesses.push(this.selected);
       this.gameState.saveToLocalStorage();
-      await this.ui.puzzle.animateError(this.selected);
+      await this.ui.animateError(this.selected);
       this.ui.draw();
     }
   }

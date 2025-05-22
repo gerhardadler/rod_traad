@@ -43,6 +43,19 @@ export class UI {
     this.mistakes.draw();
   }
 
+  async animateError(words) {
+    await this.puzzle.animateJump(words);
+    this.puzzle.animateError(words);
+
+    return new Promise((resolve) =>
+      setTimeout(async () => {
+        // after the shake is done, animate the hearts
+        await this.mistakes.animateLostHearts();
+        resolve();
+      }, 500)
+    );
+  }
+
   show() {
     this.content.classList.remove("fade-in");
   }

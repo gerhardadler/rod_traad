@@ -1,4 +1,5 @@
 import { heartSvg } from "./svg.js";
+import { animateElement } from "../utils.js";
 
 class Heart {
   constructor(index) {
@@ -9,8 +10,9 @@ class Heart {
     this.el.innerHTML = heartSvg;
   }
 
-  hide() {
-    this.el.classList.add("heart-lost");
+  animateHide() {
+    animateElement(this.el, "scale-out", 500, "ease-in-out");
+    return animateElement(this.el, "fade-out", 500, "ease-in-out");
   }
 }
 
@@ -25,23 +27,30 @@ export class Mistakes {
 
     this.heartsContainer = document.createElement("span");
     this.heartsContainer.classList.add("hearts");
+
     this.hearts = [];
-    for (let i = 0; i < this.game.maxMistakes; i++) {
-      const heart = new Heart(i);
-      this.hearts.push(heart);
-      this.heartsContainer.appendChild(heart.el);
-    }
 
     this.el.appendChild(this.mistakesText);
     this.el.appendChild(this.heartsContainer);
   }
 
   draw() {
-    this.hearts.forEach((heart, i) => {
-      if (this.game.maxMistakes - this.game.gameState.mistakes <= i) {
-        console.log(this.game.maxMistakes - this.game.gameState.mistakes);
-        heart.hide();
-      }
-    });
+    this.heartsContainer.innerHTML = "";
+    for (
+      let i = 0;
+      i < this.game.maxMistakes - this.game.gameState.mistakes;
+      i++
+    ) {
+      const heart = new Heart(i);
+      this.hearts.push(heart);
+      this.heartsContainer.appendChild(heart.el);
+    }
+  }
+
+  async animateLostHearts() {
+    const lostHearts = this.hearts.slice(
+      this.game.maxMistakes - this.game.gameState.mistakes
+    );
+    await Promise.all(lostHearts.map((heart) => heart.animateHide()));
   }
 }

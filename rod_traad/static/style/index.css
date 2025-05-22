@@ -156,13 +156,9 @@ input[type="checkbox"]:focus-visible + span {
 }
 
 .hearts {
-  display: flex;
-  width: 7.8rem;
-  justify-content: space-between;
-}
-
-.heart {
-  transition: 1s ease;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
 }
 
 .heart svg {
@@ -173,11 +169,6 @@ input[type="checkbox"]:focus-visible + span {
   overflow: visible;
   width: 1.5rem;
   height: 1.5rem;
-}
-
-.heart-lost {
-  opacity: 0;
-  transform: scale(0);
 }
 
 .buttons {

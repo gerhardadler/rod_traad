@@ -74,8 +74,6 @@ export class Puzzle {
   }
 
   async animateError(words) {
-    console.log("yo");
-    await this.animateJump(words);
     const selectedWordItems = this.wordItems.filter((w) =>
       words.includes(w.word)
     );
@@ -89,7 +87,7 @@ export class Puzzle {
     // make items jump
     await this.animateJump(words);
 
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     const moves = [];
     const wordsToMove = [...words];

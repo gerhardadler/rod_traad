@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 import tomllib
 
 from pydantic import BaseModel
@@ -27,4 +27,4 @@ def get_puzzle_today():
     """
     Fetch the puzzle for today.
     """
-    return get_puzzle(datetime.now(TIMEZONE).date())
+    return get_puzzle(datetime.datetime.now(TIMEZONE).date())

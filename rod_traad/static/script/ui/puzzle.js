@@ -73,9 +73,20 @@ export class Puzzle {
     await solvedItem.animateSolve();
   }
 
+  async animateError(words) {
+    console.log("yo");
+    await this.animateJump(words);
+    const selectedWordItems = this.wordItems.filter((w) =>
+      words.includes(w.word)
+    );
+
+    await Promise.all(
+      selectedWordItems.map((wordItem) => wordItem.animateError())
+    );
+  }
+
   async animateSolve({ index, name, words }) {
     // make items jump
-
     await this.animateJump(words);
 
     await new Promise((resolve) => setTimeout(resolve, 200));

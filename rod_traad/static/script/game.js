@@ -60,7 +60,7 @@ export class Game {
     return false;
   }
 
-  makeGuess() {
+  async makeGuess() {
     if (
       this.gameState.guesses.some((guess) =>
         areArraysEqual(guess, this.selected)
@@ -93,6 +93,7 @@ export class Game {
     if (!correct) {
       this.gameState.guesses.push(this.selected);
       this.gameState.saveToLocalStorage();
+      await this.ui.puzzle.animateError(this.selected);
       this.ui.draw();
     }
   }

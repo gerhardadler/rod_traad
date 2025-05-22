@@ -69,29 +69,57 @@ export class WordItem {
     this.el.style.transition = "0.6s ease-in-out";
     this.el.style.transform = `translate(${endPosition[0]}, ${endPosition[1]})`;
 
-    await new Promise((resolve) => setTimeout(resolve, 600));
+    await new Promise((resolve) => setTimeout(resolve, 605));
   }
 
   async animateFadeOut() {
     this.el.style.transition = "1s ease";
     this.el.style.opacity = "0";
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1005));
   }
 
   async animateJump() {
-    this.el.style.transition = "0.2s ease-in-out";
-    this.el.style.transform = "translateY(-10px)";
+    this.el.style.transition = "0.15s ease-in-out";
+    this.el.style.transform = "translateY(-5px)";
 
     // Force reflow
     void this.el.offsetHeight;
 
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    await new Promise((resolve) => setTimeout(resolve, 155));
 
     this.el.style.transform = "translateY(0px)";
 
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    await new Promise((resolve) => setTimeout(resolve, 155));
 
+    this.el.style.transition = "0s";
+  }
+
+  async animateError() {
+    this.el.style.transition =
+      "transform 0.15s ease-in-out, opacity 0.465s ease-in-out";
+    this.el.style.transform = "translateX(-5px)";
+    this.el.style.opacity = "0.5";
+
+    // Force reflow
+    void this.el.offsetHeight;
+
+    await new Promise((resolve) => setTimeout(resolve, 155));
+
+    this.el.style.transform = "translateX(5px)";
+
+    // Force reflow
+    void this.el.offsetHeight;
+
+    await new Promise((resolve) => setTimeout(resolve, 155));
+
+    this.el.style.transform = "translateX(0px)";
+
+    await new Promise((resolve) => setTimeout(resolve, 155));
+
+    this.el.style.opacity = "1";
+
+    await new Promise((resolve) => setTimeout(resolve, 465));
     this.el.style.transition = "0s";
   }
 }

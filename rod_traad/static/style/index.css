@@ -47,6 +47,7 @@ h1 .date {
   width: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 #puzzle .solved-container {
@@ -179,4 +180,24 @@ input[type="checkbox"]:focus-visible + span {
 
 .buttons .button {
   width: 10rem;
+}
+
+.toast-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  gap: 0.5rem;
+}
+
+.toast {
+  background: var(--text-1);
+  color: var(--opposite-text-1);
+  font-weight: 500;
+  font-size: 1.1rem;
+  padding: 1em 1.5em;
+  border-radius: 0.5em;
+  box-shadow: 0 4px 10px rgba(23, 23, 26, 0.178);
 }

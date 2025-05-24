@@ -1,5 +1,6 @@
 import { WordItem } from "./word.js";
 import { Solved } from "./solved.js";
+import { ToastContainer } from "./toast.js";
 
 export class Puzzle {
   constructor(game, ui, solved, unselected) {
@@ -9,6 +10,9 @@ export class Puzzle {
     this.el = document.querySelector("#puzzle");
     this.solvedContainer = this.el.querySelector(".solved-container");
     this.unsolvedContainer = this.el.querySelector(".unsolved-container");
+
+    this.toastContainer = new ToastContainer();
+    this.el.appendChild(this.toastContainer.el);
 
     this.animationsActive = false;
 
@@ -128,7 +132,5 @@ export class Puzzle {
     await this.animateSolved({ index, name, words });
 
     this.unselected.splice(0, 4);
-
-    this.draw();
   }
 }

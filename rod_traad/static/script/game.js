@@ -66,13 +66,19 @@ export class Game {
         areArraysEqual(guess, this.selected)
       ) ||
       this.selected.length !== 4
-    )
+    ) {
+      this.ui.addToast("Allerede gjettet.");
       return;
+    }
 
     let correct = false;
+    let oneAway = false;
 
     Object.entries(solutions).forEach(([name, solution], index) => {
-      if (areArraysEqual(this.selected, solution)) {
+      const arrayDifference = this.selected.filter(
+        (item) => !solution.includes(item)
+      );
+      if (arrayDifference.length === 0) {
         correct = true;
         this.selected = [];
         this.gameState.solved.push({
@@ -86,14 +92,19 @@ export class Game {
           name: name,
           words: solution,
         });
-        // this.ui.draw();
+        this.ui.draw();
+      } else if (arrayDifference.length === 1) {
+        oneAway = true;
       }
     });
 
     if (!correct) {
       this.gameState.guesses.push(this.selected);
       this.gameState.saveToLocalStorage();
-      await this.ui.animateError(this.selected);
+
+      const toastMessage = oneAway ? "Én unna!" : undefined;
+      await this.ui.animateError(this.selected, toastMessage);
+
       this.ui.draw();
     }
   }

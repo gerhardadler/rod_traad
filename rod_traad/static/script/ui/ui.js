@@ -43,17 +43,24 @@ export class UI {
     this.mistakes.draw();
   }
 
-  async animateError(words) {
+  async animateError(words, toastMessage = undefined) {
     await this.puzzle.animateJump(words);
     this.puzzle.animateError(words);
 
     return new Promise((resolve) =>
       setTimeout(async () => {
-        // after the shake is done, animate the hearts
+        // after the shake is done, show toast and animate lost hearts
+        if (toastMessage) {
+          this.addToast(toastMessage);
+        }
         await this.mistakes.animateLostHearts();
         resolve();
       }, 500)
     );
+  }
+
+  addToast(message) {
+    this.puzzle.toastContainer.addToast(message);
   }
 
   show() {

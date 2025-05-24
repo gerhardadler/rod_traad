@@ -94,7 +94,7 @@ export class Game {
           name: name,
           words: solution,
         });
-        this.ui.draw();
+        // this.ui.draw();
       } else if (arrayDifference.length === 1) {
         oneAway = true;
       }

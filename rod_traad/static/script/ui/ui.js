@@ -26,6 +26,11 @@ export class UI {
     });
     this.submitButton.setDisabled(true);
 
+    this.shuffleButton = document.querySelector("#shuffle");
+    this.shuffleButton.addEventListener("click", () => {
+      this.puzzle.shuffle();
+    });
+
     this.draw();
     this.activateAnimations();
     this.show();

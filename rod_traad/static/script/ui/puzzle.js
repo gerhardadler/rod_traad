@@ -132,5 +132,19 @@ export class Puzzle {
     await this.animateSolved({ index, name, words });
 
     this.unselected.splice(0, 4);
+
+    this.draw();
+  }
+
+  async shuffle() {
+    this.unselected = this.unselected.sort(() => Math.random() - 0.5);
+    // create moves and wait for them to finish
+    await Promise.all(
+      this.unselected.map((word) => {
+        const toIndex = this.wordItems.findIndex((w) => w.word === word);
+        return this.animateMove(word, toIndex);
+      })
+    );
+    this.draw();
   }
 }

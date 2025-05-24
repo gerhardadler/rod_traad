@@ -4,6 +4,18 @@ export function areArraysEqual(arr1, arr2) {
   );
 }
 
+export function ensureShuffle(arr) {
+  let originalOrder = [...arr];
+  let newOrder = [...arr];
+
+  // Keep shuffling until a change occurs
+  do {
+    newOrder.sort(() => Math.random() - 0.5);
+  } while (newOrder.every((word, i) => word === originalOrder[i]));
+
+  return newOrder;
+}
+
 export function animateElement(
   el,
   name,

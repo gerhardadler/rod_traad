@@ -1,6 +1,7 @@
 import { WordItem } from "./word.js";
 import { Solved } from "./solved.js";
 import { ToastContainer } from "./toast.js";
+import { ensureShuffle } from "../utils.js";
 
 export class Puzzle {
   constructor(game, ui, solved, unselected) {
@@ -137,7 +138,8 @@ export class Puzzle {
   }
 
   async shuffle() {
-    this.unselected.sort(() => Math.random() - 0.5);
+    this.unselected = ensureShuffle(this.unselected);
+
     // create moves and wait for them to finish
     await Promise.all(
       this.unselected.map((word, i) => {

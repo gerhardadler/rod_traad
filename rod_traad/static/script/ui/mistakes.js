@@ -35,6 +35,7 @@ export class Mistakes {
   }
 
   draw() {
+    this.hearts = [];
     this.heartsContainer.innerHTML = "";
     for (
       let i = 0;

@@ -33,6 +33,11 @@ export class UI {
       this.submitButton.temporarilyDisable(shufflePromise);
     });
 
+    this.deselectButton = new Button("#deselect");
+    this.deselectButton.el.addEventListener("click", () => {
+      this.puzzle.deselectAll();
+    });
+
     this.draw();
     this.activateAnimations();
     this.show();

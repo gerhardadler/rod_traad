@@ -62,6 +62,11 @@ export class Game {
     return out;
   }
 
+  deselectWord(word) {
+    this.selected = this.selected.filter((w) => w !== word);
+    this.ui.submitButton.setDisabled(this.selected.length !== 4);
+  }
+
   async makeGuess() {
     if (
       this.gameState.guesses.some((guess) =>

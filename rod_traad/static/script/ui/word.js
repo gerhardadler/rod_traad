@@ -43,6 +43,12 @@ export class WordItem {
     this.el.addEventListener("click", (e) => e.preventDefault());
   }
 
+  deselect() {
+    this.checkbox.checked = false;
+    this.el.classList.remove("selected");
+    this.game.deselectWord(this.word);
+  }
+
   async animateMove(gridSize, gapSize, startIndex, endIndex) {
     const calculatePosition = (index) => {
       const column = index % gridSize[0];

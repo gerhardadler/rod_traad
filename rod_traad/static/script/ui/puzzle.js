@@ -46,6 +46,10 @@ export class Puzzle {
     });
   }
 
+  deselectAll() {
+    this.wordItems.forEach((wordItem) => wordItem.deselect());
+  }
+
   async animateJump(words) {
     const selectedWordItems = this.wordItems.filter((w) =>
       words.includes(w.word)

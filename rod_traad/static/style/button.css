@@ -11,8 +11,12 @@
   cursor: pointer;
 }
 
-.button:hover,
-.button:focus-visible {
-  /* color: var(--opposite-text-1); */
+.button:hover:not(:disabled),
+.button:focus-visible:not(:disabled) {
   background: var(--default-color);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

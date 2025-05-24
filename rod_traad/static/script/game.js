@@ -50,14 +50,16 @@ export class Game {
   }
 
   toggleWord(word) {
+    let out = false;
     if (this.selected.includes(word)) {
       this.selected = this.selected.filter((w) => w !== word);
-      return true;
+      out = true;
     } else if (this.selected.length < 4) {
       this.selected.push(word);
-      return true;
+      out = true;
     }
-    return false;
+    this.ui.submitButton.setDisabled(this.selected.length !== 4);
+    return out;
   }
 
   async makeGuess() {

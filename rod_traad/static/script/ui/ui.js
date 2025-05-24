@@ -1,5 +1,6 @@
 import { Puzzle } from "./puzzle.js";
 import { Mistakes } from "./mistakes.js";
+import { SubmitButton } from "./submit-button.js";
 
 export class UI {
   constructor(game) {
@@ -19,13 +20,15 @@ export class UI {
     this.puzzle = new Puzzle(this.game, this, this.solved, this.unselected);
     this.mistakes = new Mistakes(this.game, this);
 
+    this.submitButton = new SubmitButton();
+    this.submitButton.el.addEventListener("click", () => {
+      this.game.makeGuess();
+    });
+    this.submitButton.setDisabled(true);
+
     this.draw();
     this.activateAnimations();
     this.show();
-
-    document.querySelector("#submit").addEventListener("click", () => {
-      this.game.makeGuess();
-    });
   }
 
   activateAnimations() {

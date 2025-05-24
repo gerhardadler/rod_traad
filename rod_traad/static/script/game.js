@@ -77,8 +77,8 @@ export class Game {
     let oneAway = false;
 
     Object.entries(solutions).forEach(([name, solution], index) => {
-      const arrayDifference = this.selected.filter(
-        (item) => !solution.includes(item)
+      const arrayDifference = solution.filter(
+        (item) => !this.selected.includes(item)
       );
       if (arrayDifference.length === 0) {
         correct = true;

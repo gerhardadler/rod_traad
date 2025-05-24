@@ -137,12 +137,11 @@ export class Puzzle {
   }
 
   async shuffle() {
-    this.unselected = this.unselected.sort(() => Math.random() - 0.5);
+    this.unselected.sort(() => Math.random() - 0.5);
     // create moves and wait for them to finish
     await Promise.all(
-      this.unselected.map((word) => {
-        const toIndex = this.wordItems.findIndex((w) => w.word === word);
-        return this.animateMove(word, toIndex);
+      this.unselected.map((word, i) => {
+        return this.animateMove(word, i);
       })
     );
     this.draw();

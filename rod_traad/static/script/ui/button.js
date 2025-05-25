@@ -1,6 +1,11 @@
 export class Button {
-  constructor(selector) {
-    this.el = document.querySelector(selector);
+  constructor(el) {
+    this.el = el;
+  }
+
+  static fromSelector(selector) {
+    const el = document.querySelector(selector);
+    return new Button(el);
   }
 
   setDisabled(disabled) {

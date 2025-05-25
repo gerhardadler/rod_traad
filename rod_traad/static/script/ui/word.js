@@ -1,4 +1,5 @@
 import { animateElement } from "../utils.js";
+import { Button } from "./button.js";
 
 export class WordItem {
   constructor(game, ui, word) {
@@ -10,25 +11,27 @@ export class WordItem {
     this.el.setAttribute("for", word);
     this.el.classList.add("word");
 
-    this.checkbox = document.createElement("input");
-    this.checkbox.type = "checkbox";
-    this.checkbox.classList.add("visually-hidden");
-    this.checkbox.id = word;
-    this.checkbox.checked = this.game.selected.includes(word);
-    this.checkbox.setAttribute("autocomplete", "off");
+    const checkboxEl = document.createElement("input");
+    checkboxEl.type = "checkbox";
+    checkboxEl.classList.add("visually-hidden");
+    checkboxEl.id = word;
+    checkboxEl.checked = this.game.selected.includes(word);
+    checkboxEl.setAttribute("autocomplete", "off");
+    this.checkbox = new Button(checkboxEl);
 
     this.span = document.createElement("span");
     this.span.innerText = word;
 
-    this.el.appendChild(this.checkbox);
+    this.el.appendChild(this.checkbox.el);
     this.el.appendChild(this.span);
 
     this.el.addEventListener("mousedown", () => {
-      const alreadySelected = this.checkbox.checked;
+      if (this.checkbox.el.disabled) return;
+      const alreadySelected = this.checkbox.el.checked;
 
       if (!this.game.toggleWord(word)) return;
 
-      this.checkbox.checked = !alreadySelected;
+      this.checkbox.el.checked = !alreadySelected;
 
       this.el.classList.add("shrink");
       document.addEventListener(
@@ -44,7 +47,7 @@ export class WordItem {
   }
 
   deselect() {
-    this.checkbox.checked = false;
+    this.checkbox.el.checked = false;
     this.el.classList.remove("selected");
     this.game.deselectWord(this.word);
   }

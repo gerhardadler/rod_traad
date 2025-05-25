@@ -50,6 +50,12 @@ export class Puzzle {
     this.wordItems.forEach((wordItem) => wordItem.deselect());
   }
 
+  temporarilyDisableButtons(promise) {
+    this.wordItems.forEach((wordItem) => {
+      wordItem.checkbox.temporarilyDisable(promise);
+    });
+  }
+
   async animateJump(words) {
     const selectedWordItems = this.wordItems.filter((w) =>
       words.includes(w.word)

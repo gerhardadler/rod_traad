@@ -20,20 +20,20 @@ export class UI {
     this.puzzle = new Puzzle(this.game, this, this.solved, this.unselected);
     this.mistakes = new Mistakes(this.game, this);
 
-    this.submitButton = new Button("#submit");
+    this.submitButton = Button.fromSelector("#submit");
     this.submitButton.el.addEventListener("click", () => {
       const makeGuessPromise = this.game.makeGuess();
       this.temporarilyDisableButtons(makeGuessPromise);
     });
     this.submitButton.setDisabled(true);
 
-    this.shuffleButton = new Button("#shuffle");
+    this.shuffleButton = Button.fromSelector("#shuffle");
     this.shuffleButton.el.addEventListener("click", async () => {
       const shufflePromise = this.puzzle.shuffle();
       this.temporarilyDisableButtons(shufflePromise);
     });
 
-    this.deselectButton = new Button("#deselect");
+    this.deselectButton = Button.fromSelector("#deselect");
     this.deselectButton.el.addEventListener("click", () => {
       this.puzzle.deselectAll();
     });
@@ -78,6 +78,7 @@ export class UI {
     this.submitButton.temporarilyDisable(promise);
     this.shuffleButton.temporarilyDisable(promise);
     this.deselectButton.temporarilyDisable(promise);
+    this.puzzle.temporarilyDisableButtons(promise);
   }
 
   async animateGameOver() {

@@ -93,7 +93,7 @@ and unsolved containers without having extra spacing above or below either conta
   user-select: none;
 }
 
-.word:hover span {
+.word:hover input[type="checkbox"]:not(:disabled) + span {
   background: var(--neutral);
   cursor: pointer;
 }

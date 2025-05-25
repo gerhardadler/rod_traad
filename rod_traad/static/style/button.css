@@ -16,7 +16,7 @@
   background: var(--default-color);
 }
 
-.button:disabled {
+.button.disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }

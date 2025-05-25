@@ -23,16 +23,15 @@ export class ToastContainer {
     this.el.classList.add("toast-container");
   }
 
-  addToast(message) {
+  async addToast(message) {
     const toast = new Toast(message);
     this.el.appendChild(toast.el);
-    toast.animateIn().then(() => {
-      // Automatically remove the toast after a delay
-      setTimeout(() => {
-        toast.animateOut().then(() => {
-          toast.el.remove();
-        });
-      }, 3000);
-    });
+    await toast.animateIn();
+
+    // let the toast be visible for a while
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    await toast.animateOut();
+    toast.el.remove();
   }
 }

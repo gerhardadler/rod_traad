@@ -77,54 +77,55 @@ export class Game {
       this.ui.addToast("Allerede gjettet.");
       return;
     }
-
     let correct = false;
     let oneAway = false;
 
-    Object.entries(solutions).forEach(([name, solution], index) => {
-      const arrayDifference = solution.filter(
+    for (const [index, [name, solution]] of Object.entries(
+      solutions
+    ).entries()) {
+      const difference = solution.filter(
         (item) => !this.selected.includes(item)
       );
-      if (arrayDifference.length === 0) {
+
+      if (difference.length === 0) {
         correct = true;
         this.selected = [];
-        this.gameState.solved.push({
-          index: index + 1,
-          name: name,
-          words: solution,
-        });
+        const solvedGroup = { index: index + 1, name, words: solution };
+        this.gameState.solved.push(solvedGroup);
         this.gameState.saveToLocalStorage();
-        this.ui.puzzle.animateSolve({
-          index: index + 1,
-          name: name,
-          words: solution,
-        });
-        // this.ui.draw();
-      } else if (arrayDifference.length === 1) {
+        await this.ui.puzzle.animateSolve(solvedGroup);
+        break; // assuming only one correct match is possible
+      } else if (difference.length === 1) {
         oneAway = true;
       }
-    });
-
+    }
     if (!correct) {
       this.gameState.guesses.push(this.selected);
       this.gameState.saveToLocalStorage();
 
-      const toastMessage = oneAway ? "Én unna!" : undefined;
+      const toastMessage =
+        oneAway && !this.isGameLost() ? "Én unna!" : undefined;
       await this.ui.animateError(this.selected, toastMessage);
 
       this.ui.draw();
+
+      if (this.isGameLost()) {
+        this.ui.addToast("Du har tapt!");
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await this.ui.animateGameOver();
+      }
     }
   }
 
-  get isGameOver() {
-    return this.isGameWon || this.isGameLost;
+  isGameOver() {
+    return this.isGameWon() || this.isGameLost();
   }
 
-  get isGameWon() {
+  isGameWon() {
     return this.gameState.solved.length === Object.keys(solutions).length;
   }
 
-  get isGameLost() {
+  isGameLost() {
     return this.gameState.mistakes >= this.maxMistakes;
   }
 }

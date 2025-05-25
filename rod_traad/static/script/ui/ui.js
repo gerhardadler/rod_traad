@@ -22,15 +22,15 @@ export class UI {
 
     this.submitButton = new Button("#submit");
     this.submitButton.el.addEventListener("click", () => {
-      this.game.makeGuess();
+      const makeGuessPromise = this.game.makeGuess();
+      this.temporarilyDisableButtons(makeGuessPromise);
     });
     this.submitButton.setDisabled(true);
 
     this.shuffleButton = new Button("#shuffle");
     this.shuffleButton.el.addEventListener("click", async () => {
       const shufflePromise = this.puzzle.shuffle();
-      this.shuffleButton.temporarilyDisable(shufflePromise);
-      this.submitButton.temporarilyDisable(shufflePromise);
+      this.temporarilyDisableButtons(shufflePromise);
     });
 
     this.deselectButton = new Button("#deselect");
@@ -74,8 +74,36 @@ export class UI {
     );
   }
 
+  temporarilyDisableButtons(promise) {
+    this.submitButton.temporarilyDisable(promise);
+    this.shuffleButton.temporarilyDisable(promise);
+    this.deselectButton.temporarilyDisable(promise);
+  }
+
+  async animateGameOver() {
+    this.puzzle.deselectAll();
+
+    // animate all solutions
+    let i = 0;
+    for (const [name, solution] of Object.entries(solutions)) {
+      if (!this.game.gameState.solved.some((s) => s.name === name)) {
+        this.game.gameState.solved.push({
+          index: i + 1,
+          name: name,
+          words: solution,
+        });
+        await this.puzzle.animateSolve({
+          index: i + 1,
+          name: name,
+          words: solution,
+        });
+      }
+      i++;
+    }
+  }
+
   addToast(message) {
-    this.puzzle.toastContainer.addToast(message);
+    return this.puzzle.toastContainer.addToast(message);
   }
 
   show() {

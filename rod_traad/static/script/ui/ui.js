@@ -64,7 +64,7 @@ export class UI {
     this.result.draw(gameState.isGameWon(), gameState.isGameLost());
   }
 
-  async animateError(words, toastMessage = undefined) {
+  async animateError(words, mistakes, toastMessage = undefined) {
     await this.puzzle.animateJump(words);
     this.puzzle.animateError(words);
 
@@ -74,7 +74,7 @@ export class UI {
         if (toastMessage) {
           this.addToast(toastMessage);
         }
-        await this.mistakes.animateLostHearts();
+        await this.mistakes.animateLostHearts(mistakes);
         resolve();
       }, 500)
     );

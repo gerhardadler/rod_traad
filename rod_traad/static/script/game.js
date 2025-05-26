@@ -132,7 +132,11 @@ export class Game {
 
       const toastMessage =
         oneAway && !this.gameState.isGameLost() ? "Én unna!" : undefined;
-      await this.ui.animateError(this.gameState.selected, toastMessage);
+      await this.ui.animateError(
+        this.gameState.selected,
+        this.gameState.mistakes,
+        toastMessage
+      );
 
       this.ui.draw(this.gameState);
 

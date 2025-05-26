@@ -153,6 +153,17 @@ input[type="checkbox"]:focus-visible + span {
   font-size: 1.2rem;
 }
 
+.bottom {
+  display: grid;
+  place-content: center;
+  place-items: center;
+}
+
+.bottom * {
+  grid-row: 1;
+  grid-column: 1;
+}
+
 #mistakes {
   margin-top: 1.5rem;
   font-size: 1.1rem;
@@ -207,8 +218,4 @@ input[type="checkbox"]:focus-visible + span {
   padding: 1em 1.5em;
   border-radius: 0.5em;
   box-shadow: 0 4px 10px rgba(23, 23, 26, 0.178);
-}
-
-#result {
-  display: none;
 }

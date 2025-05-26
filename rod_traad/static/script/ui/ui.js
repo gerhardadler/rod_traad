@@ -2,6 +2,7 @@ import { Puzzle } from "./puzzle.js";
 import { Mistakes } from "./mistakes.js";
 import { Button } from "./button.js";
 import { Result } from "./result.js";
+import { GameBottom } from "./game-bottom.js";
 
 export class UI {
   constructor(
@@ -10,10 +11,6 @@ export class UI {
     deselectWordCallback,
     gameState
   ) {
-    this.makeGuessCallback = makeGuessCallback;
-    this.toggleWordCallback = toggleWordCallback;
-    this.deselectWordCallback = deselectWordCallback;
-
     this.body = document.querySelector("body");
     this.content = document.querySelector(".content");
 
@@ -21,31 +18,12 @@ export class UI {
 
     this.puzzle = new Puzzle(toggleWordCallback, deselectWordCallback);
 
-    this.gameBottom = document.querySelector("#game-bottom");
+    this.gameBottom = new GameBottom(
+      makeGuessCallback,
+      gameState,
+      this.temporarilyDisableButtons.bind(this)
+    );
     this.result = new Result();
-
-    this.mistakes = new Mistakes();
-
-    this.submitButton = Button.fromSelector("#submit");
-    this.submitButton.el.addEventListener("click", () => {
-      const makeGuessPromise = this.makeGuessCallback();
-      this.temporarilyDisableButtons(makeGuessPromise);
-    });
-    this.submitButton.setDisabled(true);
-
-    this.shuffleButton = Button.fromSelector("#shuffle");
-    this.shuffleButton.el.addEventListener("click", async () => {
-      const shufflePromise = this.puzzle
-        .shuffle(gameState.unsolved)
-        .then(() => this.draw(gameState));
-
-      this.temporarilyDisableButtons(shufflePromise);
-    });
-
-    this.deselectButton = Button.fromSelector("#deselect");
-    this.deselectButton.el.addEventListener("click", () => {
-      this.puzzle.deselectAll();
-    });
   }
 
   activateAnimations() {
@@ -59,8 +37,8 @@ export class UI {
   }
 
   draw(gameState) {
-    this.puzzle.draw(gameState.solved, gameState.unsolved, gameState.selected);
-    this.mistakes.draw(gameState.mistakes);
+    this.puzzle.draw(gameState);
+    this.gameBottom.draw(gameState);
     this.result.draw(gameState.isGameWon(), gameState.isGameLost());
   }
 
@@ -74,23 +52,26 @@ export class UI {
         if (toastMessage) {
           this.addToast(toastMessage);
         }
-        await this.mistakes.animateLostHearts(mistakes);
+        await this.gameBottom.mistakes.animateLostHearts(mistakes);
         resolve();
       }, 500)
     );
   }
 
   temporarilyDisableButtons(promise) {
-    this.submitButton.temporarilyDisable(promise);
-    this.shuffleButton.temporarilyDisable(promise);
-    this.deselectButton.temporarilyDisable(promise);
+    this.gameBottom.temporarilyDisableButtons(promise);
     this.puzzle.temporarilyDisableButtons(promise);
   }
 
   async animateGameOver(gameState) {
     this.puzzle.deselectAll();
+    await this.gameBottom.animateHide();
 
-    const fakeGameState = structuredClone(gameState);
+    this.result.setLoseContent();
+    await this.result.animateShow();
+
+    const fakeGameState = gameState.clone();
+    fakeGameState.guesses = []; // so puzzle doesnt think game is over
     // animate all solutions
     let i = 0;
     for (const [name, solution] of Object.entries(solutions)) {
@@ -105,15 +86,10 @@ export class UI {
           name: name,
           words: solution,
         });
-        this.puzzle.draw(
-          fakeGameState.solved,
-          fakeGameState.unsolved,
-          fakeGameState.selected
-        );
+        this.puzzle.draw(fakeGameState);
       }
       i++;
     }
-    this.draw(fakeGameState);
   }
 
   addToast(message) {

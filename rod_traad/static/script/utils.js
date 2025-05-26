@@ -27,22 +27,17 @@ export function animateElement(
     const prev = el.style.animation ? el.style.animation + ", " : "";
     el.style.animation = prev + animationString;
 
-    const handle = (e) => {
-      if (e.animationName === name) {
-        el.removeEventListener("animationend", handle);
-        resolve();
+    // reflow
+    void el.offsetHeight; // Trigger reflow to apply the new animation
 
-        // Optional: Clean up animation
-        const animations = el.style.animation
-          .split(",")
-          .filter((anim) => !anim.includes(name))
-          .join(",")
-          .trim();
-
-        el.style.animation = animations;
-      }
-    };
-
-    el.addEventListener("animationend", handle);
+    setTimeout(() => {
+      // Optional: Clean up animation
+      el.style.animation = el.style.animation
+        .split(",")
+        .filter((anim) => !anim.includes(name))
+        .join(",")
+        .trim();
+      resolve();
+    }, duration);
   });
 }

@@ -3,18 +3,20 @@ import { UI } from "./ui/ui.js";
 import { MAX_MISTAKES } from "./config.js";
 
 export class GameState {
-  constructor(puzzleDate, solved, guesses) {
+  constructor(puzzleDate, solved, guesses, selected = null, unsolved = null) {
     this.puzzleDate = puzzleDate || null;
     this.solved = solved || [];
     this.guesses = guesses || [];
 
     // not part of the saved state, used for UI interactions
-    this.selected = [];
-    this.unsolved = puzzleData.grid
-      .flat()
-      .filter(
-        (word) => !this.solved.some((solved) => solved.words.includes(word))
-      );
+    this.selected = selected || [];
+    this.unsolved =
+      unsolved ||
+      puzzleData.grid
+        .flat()
+        .filter(
+          (word) => !this.solved.some((solved) => solved.words.includes(word))
+        );
   }
 
   static fromLocalStorage() {
@@ -43,6 +45,16 @@ export class GameState {
     } catch (error) {
       console.error("Failed to save game state to localStorage:", error);
     }
+  }
+
+  clone() {
+    return new GameState(
+      this.puzzleDate,
+      JSON.parse(JSON.stringify(this.solved)),
+      JSON.parse(JSON.stringify(this.guesses)),
+      [...this.selected],
+      [...this.unsolved]
+    );
   }
 
   get mistakes() {
@@ -84,13 +96,17 @@ export class Game {
       this.gameState.selected.push(word);
       out = true;
     }
-    this.ui.submitButton.setDisabled(this.gameState.selected.length !== 4);
+    this.ui.gameBottom.submitButton.setDisabled(
+      this.gameState.selected.length !== 4
+    );
     return out;
   }
 
   deselectWord(word) {
     this.gameState.selected = this.gameState.selected.filter((w) => w !== word);
-    this.ui.submitButton.setDisabled(this.gameState.selected.length !== 4);
+    this.ui.gameBottom.submitButton.setDisabled(
+      this.gameState.selected.length !== 4
+    );
   }
 
   async makeGuess() {
@@ -137,13 +153,11 @@ export class Game {
         this.gameState.mistakes,
         toastMessage
       );
-
-      this.ui.draw(this.gameState);
+      this.ui.gameBottom.mistakes.draw(this.gameState.mistakes);
 
       if (this.gameState.isGameLost()) {
-        this.ui.addToast("Du har tapt!");
-        await new Promise((resolve) => setTimeout(resolve, 1000));
         await this.ui.animateGameOver(this.gameState);
+        this.ui.draw(this.gameState);
       }
     }
   }

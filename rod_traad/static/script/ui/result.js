@@ -15,24 +15,30 @@ export class Result {
     subtitleEl.textContent = subtitle;
   }
 
+  setWinContent() {
+    this.setTitle("Du vant!");
+    this.setText("Klarer du det igjen i morgen?");
+  }
+
+  setLoseContent() {
+    this.setTitle("Du tapte...");
+    this.setText("Prøv igjen i morgen!");
+  }
+
   draw(isGameWon, isGameLost) {
     if (isGameWon) {
-      this.setTitle("Gratulerer!");
-      this.setText("Du har løst oppgaven!");
-      this.show();
+      this.setWinContent();
+      this.el.style.display = "block";
     } else if (isGameLost) {
-      this.setTitle("Du tapte!");
-      this.setText("Prøv igjen neste gang.");
-      this.show();
+      this.setLoseContent();
+      this.el.style.display = "block";
     } else {
-      this.hide();
+      this.el.style.display = "none";
     }
   }
 
-  async show() {
-    if (getComputedStyle(this.el).display !== "none") return;
+  async animateShow() {
     this.el.style.display = "block";
-
     return animateElement(this.el, "fade-in", 500, "ease-in-out");
   }
 

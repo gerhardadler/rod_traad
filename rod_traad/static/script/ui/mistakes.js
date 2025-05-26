@@ -1,5 +1,6 @@
 import { heartSvg } from "./svg.js";
 import { animateElement } from "../utils.js";
+import { MAX_MISTAKES } from "../config.js";
 
 class Heart {
   constructor(index) {
@@ -17,9 +18,7 @@ class Heart {
 }
 
 export class Mistakes {
-  constructor(game, ui) {
-    this.game = game;
-    this.ui = ui;
+  constructor() {
     this.el = document.querySelector("#mistakes");
 
     this.mistakesText = document.createElement("span");
@@ -34,24 +33,18 @@ export class Mistakes {
     this.el.appendChild(this.heartsContainer);
   }
 
-  draw() {
+  draw(mistakes) {
     this.hearts = [];
     this.heartsContainer.innerHTML = "";
-    for (
-      let i = 0;
-      i < this.game.maxMistakes - this.game.gameState.mistakes;
-      i++
-    ) {
+    for (let i = 0; i < MAX_MISTAKES - mistakes; i++) {
       const heart = new Heart(i);
       this.hearts.push(heart);
       this.heartsContainer.appendChild(heart.el);
     }
   }
 
-  async animateLostHearts() {
-    const lostHearts = this.hearts.slice(
-      this.game.maxMistakes - this.game.gameState.mistakes
-    );
+  async animateLostHearts(mistakes) {
+    const lostHearts = this.hearts.slice(MAX_MISTAKES - mistakes);
     await Promise.all(lostHearts.map((heart) => heart.animateHide()));
   }
 }

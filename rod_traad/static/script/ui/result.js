@@ -1,8 +1,7 @@
 import { animateElement } from "../utils.js";
 
 export class Result {
-  constructor(game) {
-    this.game = game;
+  constructor() {
     this.el = document.querySelector("#result");
   }
 
@@ -16,12 +15,12 @@ export class Result {
     subtitleEl.textContent = subtitle;
   }
 
-  draw() {
-    if (this.game.isGameWon()) {
+  draw(isGameWon, isGameLost) {
+    if (isGameWon) {
       this.setTitle("Gratulerer!");
       this.setText("Du har løst oppgaven!");
       this.show();
-    } else if (this.game.isGameLost()) {
+    } else if (isGameLost) {
       this.setTitle("Du tapte!");
       this.setText("Prøv igjen neste gang.");
       this.show();

@@ -4,37 +4,41 @@ import { Button } from "./button.js";
 import { Result } from "./result.js";
 
 export class UI {
-  constructor(game) {
-    this.game = game;
+  constructor(
+    makeGuessCallback,
+    toggleWordCallback,
+    deselectWordCallback,
+    gameState
+  ) {
+    this.makeGuessCallback = makeGuessCallback;
+    this.toggleWordCallback = toggleWordCallback;
+    this.deselectWordCallback = deselectWordCallback;
+
     this.body = document.querySelector("body");
     this.content = document.querySelector(".content");
 
     this.animationsActive = false;
 
-    this.solved = this.game.gameState.solved;
-    this.unselected = puzzleData.grid
-      .flat()
-      .filter(
-        (word) => !this.solved.some((solved) => solved.words.includes(word))
-      );
-
-    this.puzzle = new Puzzle(this.game, this, this.solved, this.unselected);
+    this.puzzle = new Puzzle(toggleWordCallback, deselectWordCallback);
 
     this.gameBottom = document.querySelector("#game-bottom");
-    this.result = new Result(this.game);
+    this.result = new Result();
 
-    this.mistakes = new Mistakes(this.game, this);
+    this.mistakes = new Mistakes();
 
     this.submitButton = Button.fromSelector("#submit");
     this.submitButton.el.addEventListener("click", () => {
-      const makeGuessPromise = this.game.makeGuess();
+      const makeGuessPromise = this.makeGuessCallback();
       this.temporarilyDisableButtons(makeGuessPromise);
     });
     this.submitButton.setDisabled(true);
 
     this.shuffleButton = Button.fromSelector("#shuffle");
     this.shuffleButton.el.addEventListener("click", async () => {
-      const shufflePromise = this.puzzle.shuffle();
+      const shufflePromise = this.puzzle
+        .shuffle(gameState.unsolved)
+        .then(() => this.draw(gameState));
+
       this.temporarilyDisableButtons(shufflePromise);
     });
 
@@ -42,10 +46,6 @@ export class UI {
     this.deselectButton.el.addEventListener("click", () => {
       this.puzzle.deselectAll();
     });
-
-    this.draw();
-    this.activateAnimations();
-    this.show();
   }
 
   activateAnimations() {
@@ -58,10 +58,10 @@ export class UI {
     this.body.classList.add("no-animate");
   }
 
-  draw() {
-    this.puzzle.draw();
-    this.mistakes.draw();
-    this.result.draw();
+  draw(gameState) {
+    this.puzzle.draw(gameState.solved, gameState.unsolved, gameState.selected);
+    this.mistakes.draw(gameState.mistakes);
+    this.result.draw(gameState.isGameWon(), gameState.isGameLost());
   }
 
   async animateError(words, toastMessage = undefined) {
@@ -87,27 +87,33 @@ export class UI {
     this.puzzle.temporarilyDisableButtons(promise);
   }
 
-  async animateGameOver() {
+  async animateGameOver(gameState) {
     this.puzzle.deselectAll();
 
+    const fakeGameState = structuredClone(gameState);
     // animate all solutions
     let i = 0;
     for (const [name, solution] of Object.entries(solutions)) {
-      if (!this.game.gameState.solved.some((s) => s.name === name)) {
-        this.game.gameState.solved.push({
+      if (!fakeGameState.solved.some((s) => s.name === name)) {
+        fakeGameState.solved.push({
           index: i + 1,
           name: name,
           words: solution,
         });
-        await this.puzzle.animateSolve({
+        await this.puzzle.animateSolve(fakeGameState.unsolved, {
           index: i + 1,
           name: name,
           words: solution,
         });
+        this.puzzle.draw(
+          fakeGameState.solved,
+          fakeGameState.unsolved,
+          fakeGameState.selected
+        );
       }
       i++;
     }
-    this.draw();
+    this.draw(fakeGameState);
   }
 
   addToast(message) {

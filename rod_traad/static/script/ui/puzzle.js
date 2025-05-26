@@ -4,9 +4,9 @@ import { ToastContainer } from "./toast.js";
 import { ensureShuffle } from "../utils.js";
 
 export class Puzzle {
-  constructor(game, ui, solved, unselected) {
-    this.game = game;
-    this.ui = ui;
+  constructor(toggleWordCallback, deselectWordCallback) {
+    this.toggleWordCallback = toggleWordCallback;
+    this.deselectWordCallback = deselectWordCallback;
 
     this.el = document.querySelector("#puzzle");
     this.solvedContainer = this.el.querySelector(".solved-container");
@@ -17,9 +17,6 @@ export class Puzzle {
 
     this.animationsActive = false;
 
-    this.solved = solved;
-    this.unselected = unselected;
-
     this.solvedItems = [];
     this.wordItems = [];
 
@@ -28,19 +25,24 @@ export class Puzzle {
       .getPropertyValue("gap");
   }
 
-  draw() {
+  draw(solved, unsolved, selected) {
     this.solvedItems = [];
     this.wordItems = [];
     this.solvedContainer.innerHTML = "";
     this.unsolvedContainer.innerHTML = "";
 
-    this.solved.forEach(({ index, name, words }) => {
-      const solvedItem = new Solved(this.game, this.ui, index, name, words);
+    solved.forEach(({ index, name, words }) => {
+      const solvedItem = new Solved(index, name, words);
       this.solvedContainer.appendChild(solvedItem.el);
     });
 
-    this.unselected.forEach((word) => {
-      const wordItem = new WordItem(this.game, this.ui, word);
+    unsolved.forEach((word) => {
+      const wordItem = new WordItem(
+        word,
+        this.toggleWordCallback,
+        this.deselectWordCallback,
+        selected.includes(word)
+      );
       this.wordItems.push(wordItem);
       this.unsolvedContainer.appendChild(wordItem.el);
     });
@@ -79,7 +81,7 @@ export class Puzzle {
   }
 
   async animateSolved({ index, name, words }) {
-    const solvedItem = new Solved(this.game, this.ui, index, name, words);
+    const solvedItem = new Solved(index, name, words);
     this.unsolvedContainer.insertBefore(
       solvedItem.el,
       this.unsolvedContainer.firstChild
@@ -98,7 +100,8 @@ export class Puzzle {
     );
   }
 
-  async animateSolve({ index, name, words }) {
+  async animateSolve(unsolved, { index, name, words }) {
+    console.log(unsolved, index, name, words);
     // make items jump
     await this.animateJump(words);
 
@@ -107,7 +110,7 @@ export class Puzzle {
     const moves = [];
     const wordsToMove = [...words];
 
-    const topRow = this.unselected.slice(0, 4);
+    const topRow = unsolved.slice(0, 4);
     // create moves
     topRow.forEach((topWord, i) => {
       // skip if the word is already in the top row
@@ -121,14 +124,14 @@ export class Puzzle {
       moves.push({ word: wordToMove, index: i });
       moves.push({
         word: topWord,
-        index: this.unselected.indexOf(wordToMove),
+        index: unsolved.indexOf(wordToMove),
       });
 
-      this.unselected[this.unselected.indexOf(wordToMove)] = topWord;
-      this.unselected[i] = wordToMove;
+      unsolved[unsolved.indexOf(wordToMove)] = topWord;
+      unsolved[i] = wordToMove;
     });
 
-    console.log(this.unselected);
+    console.log(unsolved);
 
     await Promise.all(
       moves.map((move) => this.animateMove(move.word, move.index))
@@ -142,20 +145,17 @@ export class Puzzle {
 
     await this.animateSolved({ index, name, words });
 
-    this.unselected.splice(0, 4);
-
-    this.draw();
+    unsolved.splice(0, 4);
   }
 
-  async shuffle() {
-    this.unselected = ensureShuffle(this.unselected);
+  async shuffle(unsolved) {
+    ensureShuffle(unsolved);
 
     // create moves and wait for them to finish
     await Promise.all(
-      this.unselected.map((word, i) => {
+      unsolved.map((word, i) => {
         return this.animateMove(word, i);
       })
     );
-    this.draw();
   }
 }

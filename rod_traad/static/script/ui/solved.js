@@ -1,8 +1,5 @@
 export class Solved {
-  constructor(game, ui, index, name, words) {
-    this.game = game;
-    this.ui = ui;
-
+  constructor(index, name, words) {
     this.el = document.createElement("div");
     this.el.classList.add("solved", `solution-${index}`);
 

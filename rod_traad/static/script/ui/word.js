@@ -2,10 +2,10 @@ import { animateElement } from "../utils.js";
 import { Button } from "./button.js";
 
 export class WordItem {
-  constructor(game, ui, word) {
-    this.game = game;
-    this.ui = ui;
+  constructor(word, toggleWordCallback, deselectWordCallback, checked) {
     this.word = word;
+    this.toggleWordCallback = toggleWordCallback;
+    this.deselectWordCallback = deselectWordCallback;
 
     this.el = document.createElement("label");
     this.el.setAttribute("for", word);
@@ -15,7 +15,7 @@ export class WordItem {
     checkboxEl.type = "checkbox";
     checkboxEl.classList.add("visually-hidden");
     checkboxEl.id = word;
-    checkboxEl.checked = this.game.selected.includes(word);
+    checkboxEl.checked = checked;
     checkboxEl.setAttribute("autocomplete", "off");
     this.checkbox = new Button(checkboxEl);
 
@@ -29,7 +29,7 @@ export class WordItem {
       if (this.checkbox.el.disabled) return;
       const alreadySelected = this.checkbox.el.checked;
 
-      if (!this.game.toggleWord(word)) return;
+      if (!this.toggleWordCallback(word)) return;
 
       this.checkbox.el.checked = !alreadySelected;
 
@@ -49,7 +49,7 @@ export class WordItem {
   deselect() {
     this.checkbox.el.checked = false;
     this.el.classList.remove("selected");
-    this.game.deselectWord(this.word);
+    this.deselectWordCallback(this.word);
   }
 
   async animateMove(gridSize, gapSize, startIndex, endIndex) {

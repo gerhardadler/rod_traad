@@ -8,6 +8,9 @@ function setupGame() {
     gameState.saveToLocalStorage();
   }
   const game = new Game(gameState);
+  game.ui.draw(gameState);
+  game.ui.activateAnimations();
+  game.ui.show();
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -203,3 +203,7 @@ input[type="checkbox"]:focus-visible + span {
   border-radius: 0.5em;
   box-shadow: 0 4px 10px rgba(23, 23, 26, 0.178);
 }
+
+#result {
+  display: none;
+}

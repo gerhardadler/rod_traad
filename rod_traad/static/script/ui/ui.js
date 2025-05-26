@@ -1,6 +1,7 @@
 import { Puzzle } from "./puzzle.js";
 import { Mistakes } from "./mistakes.js";
 import { Button } from "./button.js";
+import { Result } from "./result.js";
 
 export class UI {
   constructor(game) {
@@ -18,6 +19,10 @@ export class UI {
       );
 
     this.puzzle = new Puzzle(this.game, this, this.solved, this.unselected);
+
+    this.gameBottom = document.querySelector("#game-bottom");
+    this.result = new Result(this.game);
+
     this.mistakes = new Mistakes(this.game, this);
 
     this.submitButton = Button.fromSelector("#submit");
@@ -56,6 +61,7 @@ export class UI {
   draw() {
     this.puzzle.draw();
     this.mistakes.draw();
+    this.result.draw();
   }
 
   async animateError(words, toastMessage = undefined) {
@@ -101,6 +107,7 @@ export class UI {
       }
       i++;
     }
+    this.draw();
   }
 
   addToast(message) {

@@ -28,17 +28,17 @@ export class Result {
   draw(isGameWon, isGameLost) {
     if (isGameWon) {
       this.setWinContent();
-      this.el.style.display = "block";
+      this.el.style.display = "flex";
     } else if (isGameLost) {
       this.setLoseContent();
-      this.el.style.display = "block";
+      this.el.style.display = "flex";
     } else {
       this.el.style.display = "none";
     }
   }
 
   async animateShow() {
-    this.el.style.display = "block";
+    this.el.style.display = "flex";
     return animateElement(this.el, "fade-in", 500, "ease-in-out");
   }
 

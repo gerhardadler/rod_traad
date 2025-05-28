@@ -4,8 +4,8 @@
   font-weight: 600;
   padding: 0.6em 1.2em;
   border-radius: 0.7rem;
-  background: white;
-  border: 3px solid var(--alternate-default-color);
+  background: var(--default-color-100);
+  border: 3px solid var(--default-color-200);
   transition: 0.2s;
   user-select: none;
   cursor: pointer;
@@ -13,7 +13,7 @@
 
 .button:hover:not(:disabled),
 .button:focus-visible:not(:disabled) {
-  background: var(--default-color);
+  background: var(--default-color-150);
 }
 
 .button.disabled {

@@ -18,7 +18,7 @@ h1 {
 }
 
 h1 .logo {
-  color: var(--primary);
+  color: var(--solution-4-350);
   height: 4.5rem;
   width: auto;
 }
@@ -87,22 +87,27 @@ and unsolved containers without having extra spacing above or below either conta
   font-weight: bold;
   height: 100%;
   border-radius: 0.5rem;
-  background: white;
-  border: 3px solid var(--alternate-neutral);
+  background: var(--neutral-100);
+  border: 3px solid var(--neutral-200);
   transition: 0.3s ease;
   user-select: none;
 }
 
 .word:hover input[type="checkbox"]:not(:disabled):not(:checked) + span {
-  background: var(--neutral);
+  background: var(--neutral-150);
   cursor: pointer;
 }
 
 .word:hover input[type="checkbox"]:not(:disabled):checked + span {
-  background: var(--background-2);
+  background: var(--neutral-300);
   cursor: pointer;
 }
 
+/* Checked (active) state */
+input[type="checkbox"]:checked + span {
+  background-color: var(--neutral-250);
+  border: 3px solid var(--neutral-350);
+}
 /* Triggered when mouse is down */
 .shrink {
   transform: scale(0.95);
@@ -114,13 +119,6 @@ and unsolved containers without having extra spacing above or below either conta
   position: absolute;
   opacity: 0;
   pointer-events: none;
-}
-
-/* Checked (active) state */
-input[type="checkbox"]:checked + span {
-  background-color: var(--alternate-neutral);
-  border: 3px solid var(--background-3);
-  /* color: var(--background); */
 }
 
 input[type="checkbox"]:focus-visible + span {
@@ -135,10 +133,10 @@ input[type="checkbox"]:focus-visible + span {
   align-items: center;
   justify-content: center;
   gap: 0.2rem;
-  background: var(--alternate-default-color);
+  background: var(--default-color-250);
   text-align: center;
   height: 5.5rem;
-  border: 3px solid var(--default-color);
+  border: 3px solid var(--default-color-350);
   border-radius: 0.5rem;
   /* color: var(--text-1); */
 }
@@ -154,12 +152,12 @@ input[type="checkbox"]:focus-visible + span {
 }
 
 .bottom {
+  width: 100%;
   display: grid;
-  place-content: center;
   place-items: center;
 }
 
-.bottom * {
+.bottom > * {
   grid-row: 1;
   grid-column: 1;
 }
@@ -181,8 +179,8 @@ input[type="checkbox"]:focus-visible + span {
 }
 
 .heart svg {
-  color: var(--alternate-primary);
-  stroke: var(--primary);
+  color: var(--solution-4-250);
+  stroke: var(--solution-4-350);
   stroke-width: 3px;
   stroke-linejoin: round;
   overflow: visible;
@@ -198,6 +196,100 @@ input[type="checkbox"]:focus-visible + span {
 
 .buttons .button {
   width: 10rem;
+}
+
+#result {
+  margin-top: 2rem;
+  padding: 2rem;
+  display: flex;
+  width: 100%;
+  background-color: var(--neutral-100);
+  border: 3px solid var(--neutral-200);
+  border-radius: 0.5rem;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+#result h2 {
+  font-size: 2.5rem;
+  font-family: "Poltawski Novi", serif;
+  margin: 0;
+}
+
+#result p {
+  font-size: 1.2rem;
+}
+
+@keyframes scroll-gradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 500% 0%;
+  }
+}
+
+#result #share {
+  min-width: 10rem;
+  border-color: transparent;
+  position: relative;
+  transition: 1s;
+  z-index: 0;
+}
+
+#result #share::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 0.5rem;
+  border: 3px solid transparent;
+  background: linear-gradient(
+        to right,
+        var(--solution-1-150),
+        var(--solution-2-150),
+        var(--solution-3-150),
+        var(--solution-4-150),
+        var(--solution-1-150)
+      )
+      padding-box,
+    linear-gradient(
+        to right,
+        var(--solution-1-250),
+        var(--solution-2-250),
+        var(--solution-3-250),
+        var(--solution-4-250),
+        var(--solution-1-250)
+      )
+      border-box;
+  animation: scroll-gradient 20s linear infinite;
+  background-size: 500% 100%;
+  z-index: -1;
+}
+
+#result #share::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 0.5rem;
+  border: 3px solid transparent;
+  background: linear-gradient(
+      to right,
+      var(--solution-1-200),
+      var(--solution-2-200),
+      var(--solution-3-200),
+      var(--solution-4-200),
+      var(--solution-1-200)
+    )
+    content-box;
+  opacity: 0;
+  z-index: -1;
+  animation: scroll-gradient 20s linear infinite;
+  background-size: 500% 100%;
+  transition: opacity 0.5s ease;
+}
+
+#result #share:hover::after {
+  opacity: 1;
 }
 
 .toast-container {

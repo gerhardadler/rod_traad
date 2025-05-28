@@ -39,7 +39,11 @@ export class UI {
   draw(gameState) {
     this.puzzle.draw(gameState);
     this.gameBottom.draw(gameState);
-    this.result.draw(gameState.isGameWon(), gameState.isGameLost());
+    this.result.draw(
+      gameState.isGameWon(),
+      gameState.isGameLost(),
+      gameState.guesses
+    );
   }
 
   async animateError(words, mistakes, toastMessage = undefined) {

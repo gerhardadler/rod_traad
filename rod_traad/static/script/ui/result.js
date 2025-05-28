@@ -3,16 +3,19 @@ import { animateElement } from "../utils.js";
 export class Result {
   constructor() {
     this.el = document.querySelector("#result");
+    this.titleEl = this.el.querySelector("h2");
+    this.subtitleEl = this.el.querySelector("p");
+    this.guessesEl = this.el.querySelector("#guesses");
+
+    this.originalDisplay = getComputedStyle(this.el).display;
   }
 
   setTitle(title) {
-    const titleEl = this.el.querySelector("h2");
-    titleEl.textContent = title;
+    this.titleEl.textContent = title;
   }
 
   setText(subtitle) {
-    const subtitleEl = this.el.querySelector("p");
-    subtitleEl.textContent = subtitle;
+    this.subtitleEl.textContent = subtitle;
   }
 
   setWinContent() {
@@ -25,20 +28,33 @@ export class Result {
     this.setText("Prøv igjen i morgen!");
   }
 
-  draw(isGameWon, isGameLost) {
+  draw(isGameWon, isGameLost, guesses) {
     if (isGameWon) {
       this.setWinContent();
-      this.el.style.display = "flex";
+      this.el.style.display = this.originalDisplay;
     } else if (isGameLost) {
       this.setLoseContent();
-      this.el.style.display = "flex";
+      this.el.style.display = this.originalDisplay;
     } else {
       this.el.style.display = "none";
+    }
+
+    this.guessesEl.innerHTML = ""; // Clear previous guesses
+
+    for (const guess of guesses) {
+      for (const word of guess) {
+        const solutionIndex = Object.values(solutions).findIndex(
+          (solutionWords) => solutionWords.includes(word)
+        );
+        const guessEl = document.createElement("div");
+        guessEl.classList.add(`guess-${solutionIndex + 1}`);
+        this.guessesEl.appendChild(guessEl);
+      }
     }
   }
 
   async animateShow() {
-    this.el.style.display = "flex";
+    this.el.style.display = this.originalDisplay;
     return animateElement(this.el, "fade-in", 500, "ease-in-out");
   }
 

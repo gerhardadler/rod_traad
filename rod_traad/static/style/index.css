@@ -155,6 +155,7 @@ input[type="checkbox"]:focus-visible + span {
   width: 100%;
   display: grid;
   place-items: center;
+  margin-bottom: 2rem;
 }
 
 .bottom > * {
@@ -199,15 +200,20 @@ input[type="checkbox"]:focus-visible + span {
 }
 
 #result {
+  display: flex;
+  gap: 3rem;
   margin-top: 2rem;
   padding: 2rem;
-  display: flex;
   width: 100%;
   background-color: var(--neutral-100);
   border: 3px solid var(--neutral-200);
   border-radius: 0.5rem;
+}
+
+#result .result-left {
+  flex: 1;
+  display: flex;
   flex-direction: column;
-  gap: 1.5rem;
 }
 
 #result h2 {
@@ -230,7 +236,7 @@ input[type="checkbox"]:focus-visible + span {
 }
 
 #result #share {
-  min-width: 10rem;
+  margin-top: auto;
   border-color: transparent;
   position: relative;
   transition: 1s;
@@ -290,6 +296,46 @@ input[type="checkbox"]:focus-visible + span {
 
 #result #share:hover::after {
   opacity: 1;
+}
+
+#result .guesses-title {
+  margin-top: 0;
+  margin-bottom: 0.8em;
+  font-size: 1.5rem;
+  font-family: "Poltawski Novi", serif;
+}
+
+#result #guesses {
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.2rem;
+}
+
+#result #guesses div {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+}
+
+#result #guesses .guess-1 {
+  background: var(--solution-1-250);
+  border: 3px solid var(--solution-1-350);
+}
+
+#result #guesses .guess-2 {
+  background: var(--solution-2-250);
+  border: 3px solid var(--solution-2-350);
+}
+
+#result #guesses .guess-3 {
+  background: var(--solution-3-250);
+  border: 3px solid var(--solution-3-350);
+}
+
+#result #guesses .guess-4 {
+  background: var(--solution-4-250);
+  border: 3px solid var(--solution-4-350);
 }
 
 .toast-container {

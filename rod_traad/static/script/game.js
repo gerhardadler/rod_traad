@@ -3,9 +3,8 @@ import { UI } from "./ui/ui.js";
 import { MAX_MISTAKES } from "./config.js";
 
 export class GameState {
-  constructor(puzzleDate, solved, guesses, selected = null, unsolved = null) {
+  constructor(puzzleDate, guesses, selected = null, unsolved = null) {
     this.puzzleDate = puzzleDate || null;
-    this.solved = solved || [];
     this.guesses = guesses || [];
 
     // not part of the saved state, used for UI interactions
@@ -25,9 +24,9 @@ export class GameState {
       if (!savedState) return new GameState();
 
       const parsed = JSON.parse(savedState);
-      const { puzzleDate = null, solved = {}, guesses = [] } = parsed;
+      const { puzzleDate = null, guesses = [] } = parsed;
 
-      return new GameState(puzzleDate, solved, guesses);
+      return new GameState(puzzleDate, guesses);
     } catch (error) {
       console.warn("Failed to parse game state from localStorage:", error);
       return new GameState();
@@ -38,7 +37,6 @@ export class GameState {
     try {
       const state = JSON.stringify({
         puzzleDate: this.puzzleDate,
-        solved: this.solved,
         guesses: this.guesses,
       });
       localStorage.setItem("gameState", state);
@@ -50,7 +48,6 @@ export class GameState {
   clone() {
     return new GameState(
       this.puzzleDate,
-      JSON.parse(JSON.stringify(this.solved)),
       JSON.parse(JSON.stringify(this.guesses)),
       [...this.selected],
       [...this.unsolved]
@@ -58,7 +55,30 @@ export class GameState {
   }
 
   get mistakes() {
-    return this.guesses.length;
+    let out = 0;
+    for (const guess of this.guesses) {
+      const isCorrectGuess = Object.values(solutions).some((solution) =>
+        areArraysEqual(guess, solution)
+      );
+      if (!isCorrectGuess) {
+        out++;
+      }
+    }
+    return out;
+  }
+
+  get solved() {
+    const solved = [];
+    for (const guess of this.guesses) {
+      for (const [index, [name, solution]] of Object.entries(
+        solutions
+      ).entries()) {
+        if (areArraysEqual(guess, solution)) {
+          solved.push({ index: index + 1, name, words: solution });
+        }
+      }
+    }
+    return solved;
   }
 
   isGameOver() {
@@ -132,10 +152,13 @@ export class Game {
       if (difference.length === 0) {
         correct = true;
         this.gameState.selected = [];
-        const solvedGroup = { index: index + 1, name, words: solution };
-        this.gameState.solved.push(solvedGroup);
+        this.gameState.guesses.push(solution);
         this.gameState.saveToLocalStorage();
-        await this.ui.puzzle.animateSolve(this.gameState.unsolved, solvedGroup);
+        await this.ui.puzzle.animateSolve(this.gameState.unsolved, {
+          index: parseInt(index) + 1,
+          name: name,
+          words: solution,
+        });
         this.ui.draw(this.gameState);
         break; // assuming only one correct match is possible
       } else if (difference.length === 1) {

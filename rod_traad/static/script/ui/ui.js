@@ -70,9 +70,7 @@ export class UI {
   async animateGameOver(gameState) {
     this.puzzle.deselectAll();
     await this.gameBottom.animateHide();
-
-    this.result.setLoseContent();
-    await this.result.animateShow();
+    this.gameBottom.el.style.display = "none";
 
     const fakeGameState = gameState.clone();
     fakeGameState.guesses = []; // so puzzle doesnt think game is over
@@ -80,11 +78,7 @@ export class UI {
     let i = 0;
     for (const [name, solution] of Object.entries(solutions)) {
       if (!fakeGameState.solved.some((s) => s.name === name)) {
-        fakeGameState.solved.push({
-          index: i + 1,
-          name: name,
-          words: solution,
-        });
+        fakeGameState.guesses.push(solution);
         await this.puzzle.animateSolve(fakeGameState.unsolved, {
           index: i + 1,
           name: name,
@@ -94,6 +88,10 @@ export class UI {
       }
       i++;
     }
+
+    this.result.updateGuesses(gameState.guesses);
+    this.result.setLoseContent();
+    await this.result.animateShow();
   }
 
   addToast(message) {

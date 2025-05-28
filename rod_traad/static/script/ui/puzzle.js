@@ -110,7 +110,6 @@ export class Puzzle {
   }
 
   async animateSolve(unsolved, { index, name, words }) {
-    console.log(unsolved, index, name, words);
     // make items jump
     await this.animateJump(words);
 
@@ -139,8 +138,6 @@ export class Puzzle {
       unsolved[unsolved.indexOf(wordToMove)] = topWord;
       unsolved[i] = wordToMove;
     });
-
-    console.log(unsolved);
 
     await Promise.all(
       moves.map((move) => this.animateMove(move.word, move.index))

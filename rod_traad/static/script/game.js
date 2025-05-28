@@ -179,6 +179,8 @@ export class Game {
       this.ui.gameBottom.mistakes.draw(this.gameState.mistakes);
 
       if (this.gameState.isGameLost()) {
+        this.ui.addToast("Du tapte!");
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         await this.ui.animateGameOver(this.gameState);
         this.ui.draw(this.gameState);
       }

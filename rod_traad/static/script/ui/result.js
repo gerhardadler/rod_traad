@@ -28,17 +28,7 @@ export class Result {
     this.setText("Prøv igjen i morgen!");
   }
 
-  draw(isGameWon, isGameLost, guesses) {
-    if (isGameWon) {
-      this.setWinContent();
-      this.el.style.display = this.originalDisplay;
-    } else if (isGameLost) {
-      this.setLoseContent();
-      this.el.style.display = this.originalDisplay;
-    } else {
-      this.el.style.display = "none";
-    }
-
+  updateGuesses(guesses) {
     this.guessesEl.innerHTML = ""; // Clear previous guesses
 
     for (const guess of guesses) {
@@ -51,6 +41,20 @@ export class Result {
         this.guessesEl.appendChild(guessEl);
       }
     }
+  }
+
+  draw(isGameWon, isGameLost, guesses) {
+    if (isGameWon) {
+      this.setWinContent();
+      this.el.style.display = this.originalDisplay;
+    } else if (isGameLost) {
+      this.setLoseContent();
+      this.el.style.display = this.originalDisplay;
+    } else {
+      this.el.style.display = "none";
+    }
+
+    this.updateGuesses(guesses);
   }
 
   async animateShow() {

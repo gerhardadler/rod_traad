@@ -25,31 +25,31 @@ export class Puzzle {
       .getPropertyValue("gap");
   }
 
-  draw(gameState) {
+  draw(solved, unsolved, isGameOver, selected) {
     this.solvedItems = [];
     this.wordItems = [];
     this.solvedContainer.innerHTML = "";
     this.unsolvedContainer.innerHTML = "";
 
-    gameState.solved.forEach(({ index, name, words }) => {
+    solved.forEach(({ index, name, words }) => {
       const solvedItem = new Solved(index, name, words);
       this.solvedContainer.appendChild(solvedItem.el);
     });
 
-    if (gameState.isGameOver()) {
+    if (isGameOver) {
       // draw the rest of the solutions as solved items
       Object.entries(solutions).forEach(([name, solutionWords], index) => {
-        if (gameState.solved.some((s) => s.name === name)) return;
+        if (solved.some((s) => s.name === name)) return;
         const solvedItem = new Solved(index + 1, name, solutionWords);
         this.solvedContainer.appendChild(solvedItem.el);
       });
     } else {
-      gameState.unsolved.forEach((word) => {
+      unsolved.forEach((word) => {
         const wordItem = new WordItem(
           word,
           this.toggleWordCallback,
           this.deselectWordCallback,
-          gameState.selected.includes(word)
+          selected.includes(word)
         );
         this.wordItems.push(wordItem);
         this.unsolvedContainer.appendChild(wordItem.el);

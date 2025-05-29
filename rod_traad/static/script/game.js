@@ -159,7 +159,6 @@ export class Game {
           name: name,
           words: solution,
         });
-        this.ui.draw(this.gameState);
         break; // assuming only one correct match is possible
       } else if (difference.length === 1) {
         oneAway = true;
@@ -177,13 +176,15 @@ export class Game {
         toastMessage
       );
       this.ui.gameBottom.mistakes.draw(this.gameState.mistakes);
-
-      if (this.gameState.isGameLost()) {
-        this.ui.addToast("Du tapte!");
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        await this.ui.animateGameOver(this.gameState);
-        this.ui.draw(this.gameState);
-      }
     }
+    if (this.gameState.isGameLost()) {
+      this.ui.addToast("Du tapte!");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await this.ui.animateGameLose(this.gameState);
+    }
+    if (this.gameState.isGameWon()) {
+      await this.ui.animateGameWin(this.gameState);
+    }
+    this.ui.draw(this.gameState);
   }
 }

@@ -37,7 +37,12 @@ export class UI {
   }
 
   draw(gameState) {
-    this.puzzle.draw(gameState);
+    this.puzzle.draw(
+      gameState.solved,
+      gameState.unsolved,
+      gameState.isGameOver(),
+      gameState.selected
+    );
     this.gameBottom.draw(gameState);
     this.result.draw(
       gameState.isGameWon(),
@@ -67,13 +72,12 @@ export class UI {
     this.puzzle.temporarilyDisableButtons(promise);
   }
 
-  async animateGameOver(gameState) {
+  async animateGameLose(gameState) {
     this.puzzle.deselectAll();
     await this.gameBottom.animateHide();
     this.gameBottom.el.style.display = "none";
 
     const fakeGameState = gameState.clone();
-    fakeGameState.guesses = []; // so puzzle doesnt think game is over
     // animate all solutions
     let i = 0;
     for (const [name, solution] of Object.entries(solutions)) {
@@ -84,13 +88,28 @@ export class UI {
           name: name,
           words: solution,
         });
-        this.puzzle.draw(fakeGameState);
+        this.puzzle.draw(
+          fakeGameState.solved,
+          fakeGameState.unsolved,
+          false,
+          []
+        );
       }
       i++;
     }
 
     this.result.updateGuesses(gameState.guesses);
     this.result.setLoseContent();
+    await this.result.animateShow();
+  }
+
+  async animateGameWin(gameState) {
+    this.puzzle.deselectAll();
+    await this.gameBottom.animateHide();
+    this.gameBottom.el.style.display = "none";
+
+    this.result.updateGuesses(gameState.guesses);
+    this.result.setWinContent();
     await this.result.animateShow();
   }
 

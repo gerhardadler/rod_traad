@@ -19,7 +19,12 @@ export class UI {
     this.gameBottom = new GameBottom(
       makeGuessCallback,
       gameState,
-      this.temporarilyDisableButtons.bind(this)
+      this.temporarilyDisableButtons.bind(this),
+      () =>
+        this.puzzle.shuffle(gameState.unsolved).then(() => {
+          this.draw(gameState);
+        }),
+      this.puzzle.deselectAll.bind(this.puzzle)
     );
 
     this.helpButton = document.querySelector("#help-button");

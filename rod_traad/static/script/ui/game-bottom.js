@@ -3,7 +3,13 @@ import { Button } from "./button.js";
 import { Mistakes } from "./mistakes.js";
 
 export class GameBottom {
-  constructor(makeGuessCallback, gameState, temporarilyDisableButtonsCallback) {
+  constructor(
+    makeGuessCallback,
+    gameState,
+    temporarilyDisableButtonsCallback,
+    shuffleCallback,
+    deselectAllCallback
+  ) {
     this.el = document.querySelector("#game-bottom");
 
     this.mistakes = new Mistakes();
@@ -17,16 +23,14 @@ export class GameBottom {
 
     this.shuffleButton = Button.fromSelector("#shuffle");
     this.shuffleButton.el.addEventListener("click", async () => {
-      const shufflePromise = this.puzzle
-        .shuffle(gameState.unsolved)
-        .then(() => this.draw(gameState));
+      const shufflePromise = shuffleCallback();
 
       temporarilyDisableButtonsCallback(shufflePromise);
     });
 
     this.deselectButton = Button.fromSelector("#deselect");
     this.deselectButton.el.addEventListener("click", () => {
-      this.puzzle.deselectAll();
+      deselectAllCallback();
     });
   }
 

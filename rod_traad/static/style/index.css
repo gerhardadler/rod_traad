@@ -13,6 +13,7 @@
   border: 3px solid var(--default-color-200);
   transition: 0.5s ease;
   user-select: none;
+  cursor: pointer;
 }
 
 .actions button:hover {

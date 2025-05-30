@@ -1,3 +1,24 @@
+.actions {
+  position: absolute;
+  padding: 0.5rem;
+}
+
+.actions button {
+  padding-inline: 0.8em;
+  aspect-ratio: 1;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 100%;
+  background: var(--default-color-100);
+  border: 3px solid var(--default-color-200);
+  transition: 0.5s ease;
+  user-select: none;
+}
+
+.actions button:hover {
+  background: var(--default-color-150);
+}
+
 .transition {
   transition: 0.5s ease;
 }
@@ -356,4 +377,63 @@ input[type="checkbox"]:focus-visible + span {
   padding: 1em 1.5em;
   border-radius: 0.5em;
   box-shadow: 0 4px 10px rgba(23, 23, 26, 0.178);
+}
+
+#help-dialog {
+  color: unset;
+  box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  background-color: var(--neutral-100);
+  border: 3px solid var(--neutral-200) !important;
+  border-radius: 0.5rem;
+  padding: 1.6rem;
+  width: 100%;
+  max-width: 700px;
+}
+
+#help-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+#help-dialog h2 {
+  font-size: 1.8rem;
+  font-family: "Poltawski Novi", serif;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+#help-dialog ul,
+li {
+  all: revert;
+}
+
+#help-dialog h3 {
+  margin-bottom: 0rem;
+  margin-top: 2rem;
+}
+
+#help-dialog p {
+  margin-block: 1.5em;
+}
+
+#help-dialog .solution-tags {
+  list-style: none;
+  padding: 0;
+}
+
+#help-dialog .solution-tags li {
+  display: flex;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+#help-dialog .tag {
+  display: inline-block;
+  padding: 0.2em 0.6em;
+  font-size: 0.9rem;
+  width: 6rem;
+  text-align: center;
+  border-radius: 0.3rem;
+  background-color: var(--default-color-250);
+  color: var(--text-1);
+  margin-right: 0.5rem;
 }

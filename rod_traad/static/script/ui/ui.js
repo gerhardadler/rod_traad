@@ -1,6 +1,4 @@
 import { Puzzle } from "./puzzle.js";
-import { Mistakes } from "./mistakes.js";
-import { Button } from "./button.js";
 import { Result } from "./result.js";
 import { GameBottom } from "./game-bottom.js";
 
@@ -23,6 +21,12 @@ export class UI {
       gameState,
       this.temporarilyDisableButtons.bind(this)
     );
+
+    this.helpButton = document.querySelector("#help-button");
+    this.helpButton.addEventListener("click", () => {
+      document.querySelector("#help-dialog").showModal();
+    });
+
     this.result = new Result();
   }
 

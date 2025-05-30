@@ -3,7 +3,12 @@ import { GameState } from "./game.js";
 
 function setupGame() {
   let gameState = GameState.fromLocalStorage();
-  if (gameState.puzzleDate != puzzleDate) {
+
+  if (gameState.puzzleDate == null) {
+    document.querySelector("#help-dialog").showModal();
+  }
+
+  if (gameState.puzzleDate != puzzleDate || true) {
     gameState = new GameState(puzzleDate);
     gameState.saveToLocalStorage();
   }

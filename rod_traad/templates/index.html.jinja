@@ -21,6 +21,9 @@
 </head>
 
 <body class="no-animate">
+    <div class="actions">
+        <button id="help-button">?</button>
+    </div>
     <main>
         <div class="content transition fade-in">
             <h1>
@@ -61,6 +64,34 @@
             </div>
         </div>
     </main>
+    <dialog id="help-dialog">
+        <h2>Hvordan spille</h2>
+        <p>Målet er å finne fire tråder (grupper) med fire ord som hører sammen.</p>
+        <ul>
+            <li>Klikk på ordene for å velge dem.</li>
+            <li>Når du har valgt fire ord, klikk "Bekreft".</li>
+            <li>Du har fire liv, så vær varsom.</li>
+        </ul>
+        <h3>Kategori eksempler</h3>
+        <ul>
+            <li>FUGLER: svale, spurv, kråke, gjøk</li>
+            <li>VIKTIG: kritisk, nødvendig, sentral, avgjørende</li>
+            <li>__ LYS: te, sol, blå, nær</li>
+        </ul>
+        <p>Kategoriene vil alltid være mer spesifikke enn f.eks "VERB", "NAVN" eller "ORD PÅ 4 BOKSTAVER".</p>
+        <p>Hvert brett har tråder med fire ulike vansklighetsgrader:</p>
+        <ul class="solution-tags">
+            <li><span class="tag solution-1">GRØNN</span>Lett</li>
+            <li><span class="tag solution-2">BLÅ</span>Middels</li>
+            <li><span class="tag solution-3">LILLA</span>Vrien</li>
+            <li><span class="tag solution-4">RØD</span>Veldig vrien</li>
+        </ul>
+
+        <p>Lykke til!</p>
+        <form method="dialog">
+            <button class="button neutral">Lukk</button>
+        </form>
+    </dialog>
     <script>
         const puzzleData = JSON.parse('{{ puzzle.model_dump_json() | safe}}');
         const solutions = puzzleData.solutions;

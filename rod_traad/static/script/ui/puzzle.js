@@ -53,6 +53,7 @@ export class Puzzle {
         );
         this.wordItems.push(wordItem);
         this.unsolvedContainer.appendChild(wordItem.el);
+        wordItem.scaleText();
       });
     }
   }

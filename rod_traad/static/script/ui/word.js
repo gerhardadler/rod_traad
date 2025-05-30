@@ -1,6 +1,8 @@
 import { animateElement } from "../utils.js";
 import { Button } from "./button.js";
 
+const cachedFontSize = {};
+
 export class WordItem {
   constructor(word, toggleWordCallback, deselectWordCallback, checked) {
     this.word = word;
@@ -44,6 +46,22 @@ export class WordItem {
     });
 
     this.el.addEventListener("click", (e) => e.preventDefault());
+  }
+
+  scaleText() {
+    if (cachedFontSize[this.word]) {
+      this.span.style.fontSize = cachedFontSize[this.word];
+      return;
+    }
+    let fontSize = 24;
+    this.span.style.fontSize = `${fontSize}px`;
+    while (this.span.scrollWidth > this.span.clientWidth && fontSize > 10) {
+      fontSize--;
+      this.span.style.fontSize = `${fontSize}px`;
+    }
+    fontSize = Math.max(10, fontSize - 4);
+    this.span.style.fontSize = `${fontSize}px`;
+    cachedFontSize[this.word] = this.span.style.fontSize;
   }
 
   deselect() {

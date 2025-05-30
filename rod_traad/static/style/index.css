@@ -70,11 +70,12 @@ h1 .date {
   display: flex;
   flex-direction: column;
   position: relative;
+  --puzzle-gap: 0.5rem;
 }
 
 #puzzle .solved-container {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--puzzle-gap);
   flex-direction: column;
 }
 
@@ -83,7 +84,7 @@ and unsolved containers without having extra spacing above or below either conta
 ---> */
 
 #puzzle .solved-container .solved:last-child {
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--puzzle-gap);
 }
 
 #puzzle .solved-container .solved:nth-child(4) {
@@ -96,8 +97,12 @@ and unsolved containers without having extra spacing above or below either conta
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: 5.5rem;
-  gap: 0.5rem;
+  gap: var(--puzzle-gap);
   position: relative;
+}
+
+.word {
+  overflow: hidden;
 }
 
 .word span {
@@ -113,6 +118,7 @@ and unsolved containers without having extra spacing above or below either conta
   border: 3px solid var(--neutral-200);
   transition: 0.3s ease;
   user-select: none;
+  text-overflow: ellipsis;
 }
 
 .word:hover input[type="checkbox"]:not(:disabled):not(:checked) + span {
@@ -165,12 +171,12 @@ input[type="checkbox"]:focus-visible + span {
 
 .solved h3 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 
 .solved p {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.2em;
 }
 
 .bottom {
@@ -214,6 +220,8 @@ input[type="checkbox"]:focus-visible + span {
 .buttons {
   margin-top: 1.5rem;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 0.6rem;
 }
 
@@ -387,8 +395,9 @@ input[type="checkbox"]:focus-visible + span {
   border: 3px solid var(--neutral-200) !important;
   border-radius: 0.5rem;
   padding: 1.6rem;
-  width: 100%;
+  width: calc(100% - 1rem);
   max-width: 700px;
+  margin-inline: 0.5rem;
 }
 
 #help-dialog::backdrop {
@@ -437,4 +446,33 @@ li {
   background-color: var(--default-color-250);
   color: var(--text-1);
   margin-right: 0.5rem;
+}
+
+@media screen and (max-width: 600px) {
+  #puzzle {
+    --puzzle-gap: 0.3rem;
+  }
+
+  .solved {
+    font-size: 0.8rem;
+  }
+
+  h1 {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  h1 .logo {
+    height: 3.5rem;
+  }
+
+  h1 .date {
+    transform: translateY(0.2rem);
+    font-size: 1.5rem;
+  }
+
+  #result {
+    flex-direction: column;
+  }
 }

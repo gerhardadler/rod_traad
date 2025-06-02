@@ -49,18 +49,45 @@ export class WordItem {
   }
 
   scaleText() {
+    const getTextWidth = () => {
+      const range = document.createRange();
+      range.selectNodeContents(this.span);
+
+      const rect = range.getBoundingClientRect();
+      return rect.width;
+    };
+
     if (cachedFontSize[this.word]) {
       this.span.style.fontSize = cachedFontSize[this.word];
       return;
     }
-    let fontSize = 24;
-    this.span.style.fontSize = `${fontSize}px`;
-    while (this.span.scrollWidth > this.span.clientWidth && fontSize > 10) {
-      fontSize--;
-      this.span.style.fontSize = `${fontSize}px`;
+
+    // Get computed font size and unit
+    const computedStyle = window.getComputedStyle(this.span);
+    const fontSizeMatch = computedStyle.fontSize.match(/^([\d.]+)([a-z%]+)$/i);
+
+    if (!fontSizeMatch) return;
+
+    let currentSize = parseFloat(fontSizeMatch[1]);
+    const unit = fontSizeMatch[2];
+
+    // Scale factor (e.g., 0.95 for 95%)
+    const scaleFactor = 0.95;
+
+    // Try reducing font size until it fits
+    while (getTextWidth() > this.span.clientWidth && currentSize > 5) {
+      currentSize *= scaleFactor;
+      this.span.style.fontSize = `${currentSize}${unit}`;
     }
-    fontSize = Math.max(10, fontSize - 4);
-    this.span.style.fontSize = `${fontSize}px`;
+
+    console.log(Math.abs(getTextWidth() / this.span.clientWidth));
+
+    if (Math.abs(getTextWidth() / this.span.clientWidth) > 0.9) {
+      // add padding to ensure it fits well
+      currentSize *= 0.85;
+    }
+
+    this.span.style.fontSize = `${currentSize}${unit}`;
     cachedFontSize[this.word] = this.span.style.fontSize;
   }
 

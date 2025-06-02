@@ -10,7 +10,7 @@
   font-weight: 600;
   border-radius: 100%;
   background: var(--default-color-100);
-  border: 3px solid var(--default-color-200);
+  border: var(--border-width) solid var(--default-color-200);
   transition: 0.5s ease;
   user-select: none;
   cursor: pointer;
@@ -115,7 +115,7 @@ and unsolved containers without having extra spacing above or below either conta
   height: 100%;
   border-radius: 0.5rem;
   background: var(--neutral-100);
-  border: 3px solid var(--neutral-200);
+  border: var(--border-width) solid var(--neutral-200);
   transition: 0.3s ease;
   user-select: none;
   text-overflow: ellipsis;
@@ -134,7 +134,7 @@ and unsolved containers without having extra spacing above or below either conta
 /* Checked (active) state */
 input[type="checkbox"]:checked + span {
   background-color: var(--neutral-250);
-  border: 3px solid var(--neutral-350);
+  border: var(--border-width) solid var(--neutral-350);
 }
 /* Triggered when mouse is down */
 .shrink {
@@ -164,7 +164,7 @@ input[type="checkbox"]:focus-visible + span {
   background: var(--default-color-250);
   text-align: center;
   height: 5.5rem;
-  border: 3px solid var(--default-color-350);
+  border: var(--border-width) solid var(--default-color-350);
   border-radius: 0.5rem;
   /* color: var(--text-1); */
 }
@@ -210,7 +210,7 @@ input[type="checkbox"]:focus-visible + span {
 .heart svg {
   color: var(--solution-4-250);
   stroke: var(--solution-4-350);
-  stroke-width: 3px;
+  stroke-width: var(--border-width);
   stroke-linejoin: round;
   overflow: visible;
   width: 100%;
@@ -236,7 +236,7 @@ input[type="checkbox"]:focus-visible + span {
   padding: 2rem;
   width: 100%;
   background-color: var(--neutral-100);
-  border: 3px solid var(--neutral-200);
+  border: var(--border-width) solid var(--neutral-200);
   border-radius: 0.5rem;
 }
 
@@ -276,9 +276,9 @@ input[type="checkbox"]:focus-visible + span {
 #result #share::before {
   content: "";
   position: absolute;
-  inset: -3px;
+  inset: calc(0px - var(--border-width));
   border-radius: 0.5rem;
-  border: 3px solid transparent;
+  border: var(--border-width) solid transparent;
   background: linear-gradient(
         to right,
         var(--solution-1-150),
@@ -305,9 +305,9 @@ input[type="checkbox"]:focus-visible + span {
 #result #share::after {
   content: "";
   position: absolute;
-  inset: -3px;
+  inset: calc(0px - var(--border-width));
   border-radius: 0.5rem;
-  border: 3px solid transparent;
+  border: var(--border-width) solid transparent;
   background: linear-gradient(
       to right,
       var(--solution-1-200),
@@ -340,6 +340,8 @@ input[type="checkbox"]:focus-visible + span {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.2rem;
+  width: fit-content;
+  margin-inline: auto;
 }
 
 #result #guesses div {
@@ -350,22 +352,22 @@ input[type="checkbox"]:focus-visible + span {
 
 #result #guesses .guess-1 {
   background: var(--solution-1-250);
-  border: 3px solid var(--solution-1-350);
+  border: var(--border-width) solid var(--solution-1-350);
 }
 
 #result #guesses .guess-2 {
   background: var(--solution-2-250);
-  border: 3px solid var(--solution-2-350);
+  border: var(--border-width) solid var(--solution-2-350);
 }
 
 #result #guesses .guess-3 {
   background: var(--solution-3-250);
-  border: 3px solid var(--solution-3-350);
+  border: var(--border-width) solid var(--solution-3-350);
 }
 
 #result #guesses .guess-4 {
   background: var(--solution-4-250);
-  border: 3px solid var(--solution-4-350);
+  border: var(--border-width) solid var(--solution-4-350);
 }
 
 .toast-container {
@@ -392,12 +394,12 @@ input[type="checkbox"]:focus-visible + span {
   color: unset;
   box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   background-color: var(--neutral-100);
-  border: 3px solid var(--neutral-200) !important;
+  border: var(--border-width) solid var(--neutral-200) !important;
   border-radius: 0.5rem;
   padding: 1.6rem;
   width: calc(100% - 1rem);
-  max-width: 700px;
-  margin-inline: 0.5rem;
+  width: 700px;
+  max-width: calc(100vw - 0.5rem * 2);
 }
 
 #help-dialog::backdrop {
@@ -449,12 +451,20 @@ li {
 }
 
 @media screen and (max-width: 600px) {
+  :root {
+    --border-width: 2.5px;
+  }
+
   #puzzle {
     --puzzle-gap: 0.3rem;
   }
 
   .solved {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .word span {
+    font-size: 1.1rem;
   }
 
   h1 {

@@ -48,6 +48,8 @@
   --solution-4-300: hsl(353, 69%, 58%);
   --solution-4-350: hsl(353, 69%, 48%);
   --solution-4-400: hsl(353, 74%, 40%);
+
+  --border-width: 3px;
 }
 
 * {
@@ -55,7 +57,7 @@
 }
 
 *:focus-visible {
-  outline: 3px solid var(--solution-2);
+  outline: var(--border-width) solid var(--solution-2);
 }
 
 html {

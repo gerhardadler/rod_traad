@@ -10,11 +10,10 @@ from rod_traad.routers import index, api
 
 def date_format(value: date | Any):
     if isinstance(value, date):
-        weekday = value.strftime('%A')
-        date_ = value.strftime('%d')
+        date_ = value.strftime('%d').lstrip('0')
         month_abbreviated = value.strftime('%b').rstrip('.')
         year = value.strftime('%Y')
-        return f'{weekday}, {date_}. {month_abbreviated}, {year}'
+        return f'{date_}. {month_abbreviated} {year}'
     return value
 
 

@@ -1,30 +1,18 @@
-import datetime
-import tomllib
-
-from pydantic import BaseModel
-
-from rod_traad.config import TIMEZONE
-
-
-class PuzzleData(BaseModel):
-    author: str
-
-    grid: list[list[str]]
-    solutions: dict[str, list[str]]
-
-
-def get_puzzle(date: datetime.date):
+def get_empty_puzzle_data():
     """
-    Fetch the puzzle for the given date.
+    Returns an empty puzzle data structure.
     """
-    with open(f"puzzles/{date}.toml", "rb") as file:
-        puzzle_data = tomllib.load(file)
-
-    return PuzzleData.model_validate(puzzle_data)
-
-
-def get_puzzle_today():
-    """
-    Fetch the puzzle for today.
-    """
-    return get_puzzle(datetime.datetime.now(TIMEZONE).date())
+    return {
+        'grid': [
+            ['A', 'B', 'C', 'D'],
+            ['E', 'F', 'G', 'H'],
+            ['I', 'J', 'K', 'L'],
+            ['M', 'N', 'O', 'P'],
+        ],
+        'solutions': {
+            'SOLUTION_1': ['A', 'B', 'C', 'D'],
+            'SOLUTION_2': ['E', 'F', 'G', 'H'],
+            'SOLUTION_3': ['I', 'J', 'K', 'L'],
+            'SOLUTION_4': ['M', 'N', 'O', 'P'],
+        },
+    }

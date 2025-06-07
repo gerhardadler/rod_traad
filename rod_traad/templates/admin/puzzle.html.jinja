@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="no">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    {#
+    <link rel="stylesheet" href="/static/style/global.css"> #}
+
+    <title>Rød tråd - Admin</title>
+</head>
+
+<body>
+    <h1>Brett {{ puzzle.id if puzzle.id is not none else 'NY' }} - {{ puzzle.date|date_format }}</h1>
+
+    <nav>
+        <a href="/admin/puzzles">Alle brett</a>
+    </nav>
+
+    <br>
+
+    {% if puzzle.id is not none %}
+    <a href="/admin/puzzles/{{ puzzle.id }}/delete"
+        onclick="return confirm('Er du sikker på at du vil slette dette brettet?')">Slett brett</a>
+    {% endif %}
+
+    <br><br>
+
+    <form method="post" action="/admin/puzzles/{{ puzzle.id if puzzle.id is not none else 'new'}}">
+        <label for="date">Dato:</label>
+        <input type="date" id="date" name="date" value="{{ puzzle.date.isoformat() }}" required>
+
+        <br>
+
+        <label for="data">Data:</label>
+        <textarea id="data" name="data" rows="54" cols="80" required>{{ puzzle.data|tojson(indent=2) }}</textarea>
+
+        <br>
+
+        <button type="submit">Lagre</button>
+    </form>
+</body>
+
+</html>

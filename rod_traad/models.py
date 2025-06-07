@@ -1,8 +1,9 @@
 import logging
 import datetime
-from typing import Any
+import tomllib
+from typing import Annotated, Any
 import uuid
-from pydantic import BaseModel
+from pydantic import BaseModel, BeforeValidator, Json
 from sqlalchemy import Column, Engine
 from sqlmodel import JSON, Field, Relationship, SQLModel, create_engine, text
 from rod_traad.config import SQLITE_DB
@@ -33,12 +34,19 @@ class Detail(BaseModel):
     detail: str
 
 
-class Puzzle(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
+class PuzzleBase(SQLModel):
     date: datetime.date
     data: dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
 
+
+class Puzzle(PuzzleBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
     sessions: list["GameSession"] = Relationship(back_populates="puzzle")
+
+
+class PuzzleUpdate(PuzzleBase):
+    date: datetime.date
+    data: Json[dict[str, Any]] = Field(default_factory=dict)
 
 
 class User(SQLModel, table=True):

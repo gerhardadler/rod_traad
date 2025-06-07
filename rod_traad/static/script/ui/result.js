@@ -32,7 +32,7 @@ export class Result {
     this.guessesEl.innerHTML = ""; // Clear previous guesses
 
     for (const guess of guesses) {
-      for (const word of guess) {
+      for (const word of guess.words) {
         const solutionIndex = Object.values(solutions).findIndex(
           (solutionWords) => solutionWords.includes(word)
         );

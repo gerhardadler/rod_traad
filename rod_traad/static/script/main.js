@@ -8,7 +8,7 @@ function setupGame() {
     document.querySelector("#help-dialog").showModal();
   }
 
-  if (gameState.puzzleDate != puzzleDate || true) {
+  if (gameState.puzzleDate != puzzleDate) {
     gameState = new GameState(puzzleDate);
     gameState.saveToLocalStorage();
   }

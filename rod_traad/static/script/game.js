@@ -1,6 +1,7 @@
 import { areArraysEqual } from "./utils.js";
 import { UI } from "./ui/ui.js";
 import { MAX_MISTAKES } from "./config.js";
+import { updateGameSessionToday } from "./api.js";
 
 export class GameState {
   constructor(puzzleDate, guesses, selected = null, unsolved = null) {
@@ -57,10 +58,7 @@ export class GameState {
   get mistakes() {
     let out = 0;
     for (const guess of this.guesses) {
-      const isCorrectGuess = Object.values(solutions).some((solution) =>
-        areArraysEqual(guess, solution)
-      );
-      if (!isCorrectGuess) {
+      if (!guess.correct) {
         out++;
       }
     }
@@ -73,7 +71,7 @@ export class GameState {
       for (const [index, [name, solution]] of Object.entries(
         solutions
       ).entries()) {
-        if (areArraysEqual(guess, solution)) {
+        if (areArraysEqual(guess.words, solution)) {
           solved.push({ index: index + 1, name, words: solution });
         }
       }
@@ -132,7 +130,7 @@ export class Game {
   async makeGuess() {
     if (
       this.gameState.guesses.some((guess) =>
-        areArraysEqual(guess, this.gameState.selected)
+        areArraysEqual(guess.words, this.gameState.selected)
       ) ||
       this.gameState.selected.length !== 4
     ) {
@@ -152,7 +150,9 @@ export class Game {
       if (difference.length === 0) {
         correct = true;
         this.gameState.selected = [];
-        this.gameState.guesses.push(solution);
+        this.gameState.guesses.push({ words: solution, correct: true });
+        const response = await updateGameSessionToday(this.gameState.guesses);
+        this.gameState.guesses = response.guesses;
         this.gameState.saveToLocalStorage();
         await this.ui.puzzle.animateSolve(this.gameState.unsolved, {
           index: parseInt(index) + 1,
@@ -165,7 +165,12 @@ export class Game {
       }
     }
     if (!correct) {
-      this.gameState.guesses.push(this.gameState.selected);
+      this.gameState.guesses.push({
+        words: this.gameState.selected,
+        correct: false,
+      });
+      const response = await updateGameSessionToday(this.gameState.guesses);
+      this.gameState.guesses = response.guesses;
       this.gameState.saveToLocalStorage();
 
       const toastMessage =

@@ -91,7 +91,7 @@ export class UI {
     let i = 0;
     for (const [name, solution] of Object.entries(solutions)) {
       if (!fakeGameState.solved.some((s) => s.name === name)) {
-        fakeGameState.guesses.push(solution);
+        fakeGameState.guesses.push({ words: solution, correct: true });
         await this.puzzle.animateSolve(fakeGameState.unsolved, {
           index: i + 1,
           name: name,

@@ -6,11 +6,61 @@ from sqlalchemy import Engine
 from sqlmodel import Session, select
 
 from rod_traad.dependencies import SessionDependency, UserDependency
-from rod_traad.models import GameSession, GameSessionPublic, GameSessionUpdate, User
+from rod_traad.models import (
+    Detail,
+    GameSession,
+    GameSessionPublic,
+    GameSessionUpdate,
+    Puzzle,
+    User,
+    is_game_session_complete,
+)
 
 
 def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
     router = APIRouter(prefix='/game-session')
+
+    @router.get('/today', response_model=GameSessionPublic)
+    def get_game_session_today(
+        session: Annotated[Session, Depends(SessionDependency(engine))],
+        user: Annotated[User, Depends(UserDependency(engine))],
+    ):
+        today = datetime.datetime.now(datetime.UTC).date()
+        query = select(Puzzle).where(
+            Puzzle.date == today,
+        )
+        puzzle = session.exec(query).first()
+
+        if not puzzle:
+            raise HTTPException(status_code=404, detail="Puzzle for today not found.")
+
+        assert puzzle.id is not None
+
+        return get_game_session(session, user, puzzle.id)
+
+    @router.put('/today', response_model=GameSessionPublic)
+    def update_game_session_today(
+        session: Annotated[Session, Depends(SessionDependency(engine))],
+        user: Annotated[User, Depends(UserDependency(engine))],
+        game_session: GameSessionUpdate,
+    ):
+        today = datetime.datetime.now(datetime.UTC).date()
+        query = select(Puzzle).where(
+            Puzzle.date == today,
+        )
+        puzzle = session.exec(query).first()
+
+        if not puzzle:
+            raise HTTPException(status_code=404, detail="Puzzle for today not found.")
+
+        assert puzzle.id is not None
+
+        return update_game_session(
+            session,
+            user,
+            puzzle.id,
+            game_session,
+        )
 
     @router.get(
         '/',
@@ -35,13 +85,19 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
 
         return game_session
 
-    @router.put('/')
+    @router.put('/', response_model=GameSessionPublic)
     def update_game_session(
         session: Annotated[Session, Depends(SessionDependency(engine))],
         user: Annotated[User, Depends(UserDependency(engine))],
+        puzzle_id: int,
         game_session: GameSessionUpdate,
     ):
-        existing_session = session.get(GameSession, game_session.id)
+        existing_session = session.exec(
+            select(GameSession).where(
+                GameSession.user_id == user.id,
+                GameSession.puzzle_id == puzzle_id,
+            )
+        ).first()
 
         if not existing_session:
             raise HTTPException(404, "Game session not found.")
@@ -54,7 +110,9 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
         if game_session.guesses is not None:
             existing_session.guesses = game_session.guesses
 
-        existing_session.end_time = datetime.datetime.now(datetime.UTC)
+        if is_game_session_complete(existing_session):
+            existing_session.end_time = datetime.datetime.now(datetime.UTC)
+
         session.add(existing_session)
         session.commit()
         session.refresh(existing_session)

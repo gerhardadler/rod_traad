@@ -2,6 +2,7 @@ import logging
 import datetime
 from typing import Any
 import uuid
+from pydantic import BaseModel
 from sqlalchemy import Column, Engine
 from sqlmodel import JSON, Field, Relationship, SQLModel, create_engine, text
 from rod_traad.config import SQLITE_DB
@@ -26,6 +27,10 @@ def setup_engine():
     create_db_and_tables(engine)
 
     return engine
+
+
+class Detail(BaseModel):
+    detail: str
 
 
 class Puzzle(SQLModel, table=True):
@@ -60,7 +65,6 @@ class GameSession(GameSessionBase, table=True):
 
 
 class GameSessionUpdate(GameSessionBase):
-    id: int
     guesses: list["Guess"] | None = None
 
 
@@ -68,6 +72,26 @@ class GameSessionPublic(GameSessionBase):
     id: int = Field(default=None, primary_key=True)
     puzzle: Puzzle
     guesses: list["Guess"] = []
+
+
+def is_game_session_won(
+    session: GameSession | GameSessionPublic,
+) -> bool:
+    correct_guesses = sum(guess.correct for guess in session.guesses)
+    return correct_guesses >= 4
+
+
+def is_game_session_lost(
+    session: GameSession | GameSessionPublic,
+) -> bool:
+    incorrect_guesses = sum(not guess.correct for guess in session.guesses)
+    return incorrect_guesses >= 4
+
+
+def is_game_session_complete(
+    session: GameSession | GameSessionPublic,
+) -> bool:
+    return is_game_session_won(session) or is_game_session_lost(session)
 
 
 class GuessBase(SQLModel):

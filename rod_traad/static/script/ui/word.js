@@ -80,8 +80,6 @@ export class WordItem {
       this.span.style.fontSize = `${currentSize}${unit}`;
     }
 
-    console.log(Math.abs(getTextWidth() / this.span.clientWidth));
-
     if (Math.abs(getTextWidth() / this.span.clientWidth) > 0.9) {
       // add padding to ensure it fits well
       currentSize *= 0.85;

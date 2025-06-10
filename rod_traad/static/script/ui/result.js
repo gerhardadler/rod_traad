@@ -1,5 +1,33 @@
 import { animateElement } from "../utils.js";
 
+function getGuessesEmojis(guesses) {
+  const emojiRows = [];
+  for (const guess of guesses) {
+    const emojis = [];
+    guess.words.map((word) => {
+      const solutionIndex = Object.values(solutions).findIndex(
+        (solutionWords) => solutionWords.includes(word)
+      );
+      switch (solutionIndex) {
+        case 0:
+          emojis.push("🟩");
+          break;
+        case 1:
+          emojis.push("🟦");
+          break;
+        case 2:
+          emojis.push("🟪");
+          break;
+        case 3:
+          emojis.push("🟥");
+          break;
+      }
+    });
+    emojiRows.push(emojis.join(""));
+  }
+  return emojiRows.join("\n");
+}
+
 export class Result {
   constructor() {
     this.el = document.querySelector("#result");
@@ -8,6 +36,43 @@ export class Result {
     this.guessesEl = this.el.querySelector("#guesses");
 
     this.originalDisplay = getComputedStyle(this.el).display;
+
+    this.shareData = {
+      title: document.title,
+      text: "",
+      url: window.location.href,
+    };
+
+    this.shareButton = this.el.querySelector("#share");
+    this.shareButton.addEventListener("click", async () => {
+      console.log("Share button clicked");
+
+      if (navigator.share) {
+        try {
+          await navigator.share(this.shareData);
+        } catch (err) {
+          console.error("Error when sharing:", err);
+        }
+      } else {
+        try {
+          await navigator.clipboard.writeText(
+            this.shareData.text + " " + this.shareData.url
+          );
+
+          // Show tooltip
+          tooltip.style.visibility = "visible";
+          tooltip.style.opacity = "1";
+
+          // Hide after 2 seconds
+          setTimeout(() => {
+            tooltip.style.opacity = "0";
+            tooltip.style.visibility = "hidden";
+          }, 2000);
+        } catch (err) {
+          console.error("Kunne ikke kopiere lenken:", err);
+        }
+      }
+    });
   }
 
   setTitle(title) {
@@ -41,6 +106,16 @@ export class Result {
         this.guessesEl.appendChild(guessEl);
       }
     }
+
+    this.shareData.text = "";
+
+    if (guesses.filter((g) => g.correct).length >= 4) {
+      this.shareData.text = "Jeg vant i Rød Tråd!\n";
+    } else if (guesses.length >= 4) {
+      this.shareData.text = "Jeg tapte i Rød Tråd...\n";
+    }
+    this.shareData.text += `${getGuessesEmojis(guesses)}\n`;
+    this.shareData.text += `Prøv selv:`; // url is automatically appended
   }
 
   draw(isGameWon, isGameLost, guesses) {

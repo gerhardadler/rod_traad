@@ -5,6 +5,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import Engine
 from sqlmodel import Session, select
 
+from rod_traad import config
 from rod_traad.dependencies import SessionDependency, UserDependency
 from rod_traad.models import (
     Detail,
@@ -25,7 +26,7 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
         session: Annotated[Session, Depends(SessionDependency(engine))],
         user: Annotated[User, Depends(UserDependency(engine))],
     ):
-        today = datetime.datetime.now(datetime.UTC).date()
+        today = datetime.datetime.now(config.TIMEZONE).date()
         query = select(Puzzle).where(
             Puzzle.date == today,
         )
@@ -44,7 +45,7 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
         user: Annotated[User, Depends(UserDependency(engine))],
         game_session: GameSessionUpdate,
     ):
-        today = datetime.datetime.now(datetime.UTC).date()
+        today = datetime.datetime.now(config.TIMEZONE).date()
         query = select(Puzzle).where(
             Puzzle.date == today,
         )

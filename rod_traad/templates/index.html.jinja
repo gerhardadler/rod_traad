@@ -64,6 +64,10 @@
         </div>
     </main>
     <dialog id="help-dialog">
+        <button class="close-icon" onclick="document.getElementById('help-dialog').close()" aria-label="Lukk">
+            {% include "snippets/x.svg.jinja" %}
+        </button>
+
         <h2>Hvordan spille</h2>
         <p>Målet er å finne fire tråder (grupper) med fire ord som hører sammen.</p>
         <ul>
@@ -87,9 +91,7 @@
         </ul>
 
         <p>Lykke til!</p>
-        <form method="dialog">
-            <button class="button neutral">Lukk</button>
-        </form>
+        <button class="button neutral" onclick="document.getElementById('help-dialog').close()">Lukk</button>
     </dialog>
     <script>
         const puzzleData = JSON.parse('{{ game_session.puzzle.data|tojson}}');

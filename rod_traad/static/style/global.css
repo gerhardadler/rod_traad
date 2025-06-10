@@ -1,6 +1,6 @@
 :root {
   --text-1: #333448;
-  --text-2: #34353f;
+  --text-2: #505263;
   --opposite-text-1: #ffffff;
 
   --background: #eceef4;
@@ -63,6 +63,10 @@
 html {
   color: var(--text-1);
   font-family: Inter, Helvetica, Arial, Verdana, sans-serif;
+}
+
+body:has(dialog[open]) {
+  overflow: hidden;
 }
 
 input {

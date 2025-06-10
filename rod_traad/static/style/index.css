@@ -435,10 +435,24 @@ input[type="checkbox"]:focus-visible + span {
   background-color: var(--neutral-100);
   border: var(--border-width) solid var(--neutral-200) !important;
   border-radius: 0.5rem;
-  padding: 1.6rem;
-  width: calc(100% - 1rem);
-  width: 700px;
-  max-width: calc(100vw - 0.5rem * 2);
+  padding: 1rem;
+  width: calc(100% - 2rem);
+  position: absolute;
+  max-width: 700px;
+}
+
+#help-dialog .close-icon {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  padding: 0.2rem;
+  cursor: pointer;
+}
+
+#help-dialog .close-icon svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--text-2);
 }
 
 #help-dialog::backdrop {

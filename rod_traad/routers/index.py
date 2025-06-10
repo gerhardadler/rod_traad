@@ -18,9 +18,14 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
         session: Annotated[Session, Depends(SessionDependency(engine))],
         user: Annotated[User, Depends(UserDependency(engine))],
         request: Request,
+        puzzle_id: int | None = None,
     ):
-        today = datetime.now(TIMEZONE).date()
-        puzzle = session.exec(select(Puzzle).where(Puzzle.date == today)).first()
+        if puzzle_id:
+            puzzle = session.get(Puzzle, puzzle_id)
+        else:
+            today = datetime.now(TIMEZONE).date()
+            puzzle = session.exec(select(Puzzle).where(Puzzle.date == today)).first()
+
         if not puzzle:
             raise HTTPException(status_code=404, detail="Puzzle for today not found.")
 

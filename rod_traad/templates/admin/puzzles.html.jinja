@@ -1,3 +1,12 @@
+{% macro puzzle_item(puzzle) %}
+<li>
+    <a href="/admin/puzzles/{{ puzzle.id }}">nr. {{ puzzle.number }} (id:{{ puzzle.id }}) - {{ puzzle.date|date_format
+        }}</a>
+    <a href="/?puzzle_id={{ puzzle.id }}">Test</a>
+    <a href="/admin/puzzles/{{ puzzle.id }}/delete"
+        onclick="return confirm('Er du sikker på at du vil slette dette brettet?')">Slett</a>
+</li>
+{% endmacro %}
 <!DOCTYPE html>
 <html lang="no">
 
@@ -23,30 +32,22 @@
 
     <h2>Gamle brett</h2>
     <ul>
-        {% for puzzle in puzzles if puzzle.date < today %} <li>
-            <a href="/admin/puzzles/{{ puzzle.id }}">nr. {{ puzzle.number}} (id:{{ puzzle.id }}) - {{
-                puzzle.date|date_format }}</a>
-            </li>
-            {% endfor %}
+        {% for puzzle in puzzles if puzzle.date < today %} {#>#}{#</>#}
+        {{ puzzle_item(puzzle) }}
+        {% endfor %}
     </ul>
 
     <h2>Dagens brett</h2>
     <ul>
         {% for puzzle in puzzles if puzzle.date == today %}
-        <li>
-            <a href="/admin/puzzles/{{ puzzle.id }}">nr. {{ puzzle.number}} (id:{{ puzzle.id }}) - {{
-                puzzle.date|date_format }}</a>
-        </li>
+        {{ puzzle_item(puzzle) }}
         {% endfor %}
     </ul>
 
     <h2>Kommende brett</h2>
     <ul>
         {% for puzzle in puzzles if puzzle.date > today %}
-        <li>
-            <a href="/admin/puzzles/{{ puzzle.id }}">nr. {{ puzzle.number}} (id:{{ puzzle.id }}) - {{
-                puzzle.date|date_format }}</a>
-        </li>
+        {{ puzzle_item(puzzle) }}
         {% endfor %}
     </ul>
 </body>

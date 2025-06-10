@@ -1,9 +1,11 @@
 import os
+from dotenv import load_dotenv
 
-import logging
 from zoneinfo import ZoneInfo
 
-logger = logging.getLogger(__name__)
+
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
 SQLITE_DB = os.getenv('SQLITE_DB', 'database.db')
 ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')

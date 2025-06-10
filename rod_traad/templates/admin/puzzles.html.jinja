@@ -24,7 +24,8 @@
     <h2>Gamle brett</h2>
     <ul>
         {% for puzzle in puzzles if puzzle.date < today %} <li>
-            <a href="/admin/puzzles/{{ puzzle.id }}">{{ puzzle.id }} - {{ puzzle.date|date_format }}</a>
+            <a href="/admin/puzzles/{{ puzzle.id }}">nr. {{ puzzle.number}} (id:{{ puzzle.id }}) - {{
+                puzzle.date|date_format }}</a>
             </li>
             {% endfor %}
     </ul>
@@ -33,7 +34,8 @@
     <ul>
         {% for puzzle in puzzles if puzzle.date == today %}
         <li>
-            <a href="/admin/puzzles/{{ puzzle.id }}">{{ puzzle.id }} - {{ puzzle.date|date_format }}</a>
+            <a href="/admin/puzzles/{{ puzzle.id }}">nr. {{ puzzle.number}} (id:{{ puzzle.id }}) - {{
+                puzzle.date|date_format }}</a>
         </li>
         {% endfor %}
     </ul>
@@ -42,7 +44,8 @@
     <ul>
         {% for puzzle in puzzles if puzzle.date > today %}
         <li>
-            <a href="/admin/puzzles/{{ puzzle.id }}">{{ puzzle.id }} - {{ puzzle.date|date_format }}</a>
+            <a href="/admin/puzzles/{{ puzzle.id }}">nr. {{ puzzle.number}} (id:{{ puzzle.id }}) - {{
+                puzzle.date|date_format }}</a>
         </li>
         {% endfor %}
     </ul>

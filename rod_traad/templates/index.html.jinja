@@ -63,6 +63,10 @@
             </div>
         </div>
     </main>
+    <footer>
+        <p>Rød tråd nr. {{ game_session.puzzle.number }}</p>
+        <p>Laget av: Gerhard Adler Skartveit</p>
+    </footer>
     <dialog id="help-dialog">
         <button class="close-icon" onclick="document.getElementById('help-dialog').close()" aria-label="Lukk">
             {% include "snippets/x.svg.jinja" %}

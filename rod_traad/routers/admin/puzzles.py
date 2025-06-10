@@ -6,7 +6,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import AfterValidator
 from sqlalchemy import Engine
-from sqlmodel import Session, select
+from sqlmodel import Session, col, select
 
 from rod_traad.config import TIMEZONE
 from rod_traad.dependencies import SessionDependency, UserDependency
@@ -36,8 +36,17 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
     @router.get('/new')
     def get_new_puzzle(
         request: Request,
+        session: Annotated[Session, Depends(SessionDependency(engine))],
     ):
         today = datetime.now(TIMEZONE).date()
+
+        current_number = session.exec(
+            select(Puzzle.number)
+            .where(col(Puzzle.number).is_not(None))
+            .order_by(col(Puzzle.number).desc())
+        ).first()
+
+        next_number = (current_number or 0) + 1
 
         return templates.TemplateResponse(
             'admin/puzzle.html.jinja',
@@ -45,6 +54,7 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
                 'request': request,
                 'today': today,
                 'puzzle': Puzzle(
+                    number=next_number,
                     date=today,
                     data=get_empty_puzzle_data(),
                 ),
@@ -93,6 +103,7 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
         puzzle: Annotated[PuzzleUpdate, Form()],
     ):
         new_puzzle = Puzzle(
+            number=puzzle.number,
             date=puzzle.date,
             data=puzzle.data,
         )
@@ -120,6 +131,7 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
         if not existing_puzzle:
             raise HTTPException(status_code=404, detail="Puzzle not found.")
 
+        existing_puzzle.number = puzzle.number
         existing_puzzle.date = puzzle.date
         existing_puzzle.data = puzzle.data
         session.commit()

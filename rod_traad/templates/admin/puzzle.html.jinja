@@ -12,7 +12,8 @@
 </head>
 
 <body>
-    <h1>Brett {{ puzzle.id if puzzle.id is not none else 'NY' }} - {{ puzzle.date|date_format }}</h1>
+    <h1>Brett nr. {{ puzzle.number }} (id: {{ puzzle.id if puzzle.id is not none else 'NY' }}) - {{
+        puzzle.date|date_format }}</h1>
 
     <nav>
         <a href="/admin/puzzles">Alle brett</a>
@@ -28,6 +29,10 @@
     <br><br>
 
     <form method="post" action="/admin/puzzles/{{ puzzle.id if puzzle.id is not none else 'new'}}">
+        <label for="number">Nummer:</label>
+        <input type="text" id="number" name="number" value="{{ puzzle.number if puzzle.number is not none else '' }}">
+
+
         <label for="date">Dato:</label>
         <input type="date" id="date" name="date" value="{{ puzzle.date.isoformat() }}" required>
 

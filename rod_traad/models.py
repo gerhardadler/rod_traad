@@ -25,9 +25,13 @@ def setup_engine():
     connect_args = {'check_same_thread': False}
     engine = create_engine(sqlite_url, connect_args=connect_args)
 
-    create_db_and_tables(engine)
-
     return engine
+
+
+def empty_string_to_none(value: Any) -> Any:
+    if isinstance(value, str) and value.strip() == "":
+        return None
+    return value
 
 
 class Detail(BaseModel):
@@ -41,10 +45,12 @@ class PuzzleBase(SQLModel):
 
 class Puzzle(PuzzleBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
+    number: int | None = Field(default=None, nullable=True, unique=True)
     sessions: list["GameSession"] = Relationship(back_populates="puzzle")
 
 
 class PuzzleUpdate(PuzzleBase):
+    number: Annotated[int | None, BeforeValidator(empty_string_to_none)] = None
     date: datetime.date
     data: Json[dict[str, Any]] = Field(default_factory=dict)
 

@@ -1,10 +1,34 @@
+.tooltip {
+  visibility: hidden;
+  background-color: var(--text-1);
+  color: var(--opposite-text-1);
+  text-align: center;
+  border-radius: 4px;
+  padding: 4px 8px;
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 1;
+  opacity: 0;
+  transition: 0.3s;
+  font-size: 0.8rem;
+}
+
 .actions {
+  right: 0;
   position: absolute;
   padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .actions button {
-  padding-inline: 0.8em;
+  width: 3rem;
+  display: grid;
+  place-items: center;
   aspect-ratio: 1;
   font-size: 1.2rem;
   font-weight: 600;
@@ -14,6 +38,18 @@
   transition: 0.5s ease;
   user-select: none;
   cursor: pointer;
+}
+
+.actions button .tooltip {
+  bottom: 0%;
+  left: -150%;
+  transform: translateY(-50%) translateX(-50%);
+}
+
+.actions button svg {
+  width: 1em;
+  height: 1em;
+  color: var(--text-1);
 }
 
 .actions button:hover {
@@ -265,15 +301,14 @@ input[type="checkbox"]:focus-visible + span {
   }
 }
 
-#result #share {
+#result .share-button {
   margin-top: auto;
   border-color: transparent;
-  position: relative;
   transition: 1s;
   z-index: 0;
 }
 
-#result #share::before {
+#result .share-button::before {
   content: "";
   position: absolute;
   inset: calc(0px - var(--border-width));
@@ -302,7 +337,7 @@ input[type="checkbox"]:focus-visible + span {
   z-index: -1;
 }
 
-#result #share::after {
+#result .share-button::after {
   content: "";
   position: absolute;
   inset: calc(0px - var(--border-width));
@@ -324,26 +359,12 @@ input[type="checkbox"]:focus-visible + span {
   transition: opacity 0.5s ease;
 }
 
-#result #share:hover::after {
+#result .share-button:hover::after {
   opacity: 1;
 }
 
-#result #share #tooltip {
-  visibility: hidden;
-  background-color: var(--text-1);
-  color: var(--opposite-text-1);
-  text-align: center;
-  border-radius: 4px;
-  padding: 4px 8px;
-  position: absolute;
-  bottom: 125%;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  z-index: 1;
-  opacity: 0;
-  transition: 0.3s;
-  font-size: 0.8rem;
+.share-button {
+  position: relative;
 }
 
 #result .guesses-title {
@@ -489,6 +510,7 @@ li {
     flex-direction: column;
     align-items: center;
     gap: 0;
+    margin: 0.8rem;
   }
 
   h1 .logo {
@@ -497,7 +519,7 @@ li {
 
   h1 .date {
     transform: translateY(0.2rem);
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 
   #result {

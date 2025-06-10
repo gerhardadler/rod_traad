@@ -1,6 +1,7 @@
 import { Puzzle } from "./puzzle.js";
 import { Result } from "./result.js";
 import { GameBottom } from "./game-bottom.js";
+import { share } from "./share.js";
 
 export class UI {
   constructor(
@@ -30,6 +31,14 @@ export class UI {
     this.helpButton = document.querySelector("#help-button");
     this.helpButton.addEventListener("click", () => {
       document.querySelector("#help-dialog").showModal();
+    });
+    this.shareButton = document.querySelector(".share-button");
+    this.shareButton.addEventListener("click", () => {
+      share(this.shareButton, {
+        title: document.title,
+        text: "Sjekk ut Rød tråd!",
+        url: window.location.href,
+      });
     });
 
     this.result = new Result();

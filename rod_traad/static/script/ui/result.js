@@ -1,4 +1,5 @@
 import { animateElement } from "../utils.js";
+import { share } from "./share.js";
 
 function getGuessesEmojis(guesses) {
   const emojiRows = [];
@@ -43,36 +44,10 @@ export class Result {
       url: window.location.href,
     };
 
-    this.shareButton = this.el.querySelector("#share");
-    this.shareButton.addEventListener("click", async () => {
-      console.log("Share button clicked");
-
-      if (navigator.share) {
-        try {
-          await navigator.share(this.shareData);
-        } catch (err) {
-          console.error("Error when sharing:", err);
-        }
-      } else {
-        try {
-          await navigator.clipboard.writeText(
-            this.shareData.text + " " + this.shareData.url
-          );
-
-          // Show tooltip
-          tooltip.style.visibility = "visible";
-          tooltip.style.opacity = "1";
-
-          // Hide after 2 seconds
-          setTimeout(() => {
-            tooltip.style.opacity = "0";
-            tooltip.style.visibility = "hidden";
-          }, 2000);
-        } catch (err) {
-          console.error("Kunne ikke kopiere lenken:", err);
-        }
-      }
-    });
+    this.shareButton = this.el.querySelector(".share-button");
+    this.shareButton.addEventListener("click", async () =>
+      share(this.shareButton, this.shareData)
+    );
   }
 
   setTitle(title) {

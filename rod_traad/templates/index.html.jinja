@@ -23,6 +23,9 @@
 <body class="no-animate">
     <div class="actions">
         <button id="help-button">?</button>
+        <button class="share-button">{% include "snippets/share.svg.jinja" %}
+            <span class="tooltip">Lenke kopiert!</span>
+        </button>
     </div>
     <main>
         <div class="content transition fade-in">
@@ -39,17 +42,17 @@
                 <div id="game-bottom">
                     <div id="mistakes"> </div>
                     <div class="buttons">
+                        <button id="submit" class="button neutral">Bekreft</button>
                         <button id="shuffle" class="button neutral">Stokk om</button>
                         <button id="deselect" class="button neutral">Fjern valg</button>
-                        <button id="submit" class="button neutral">Bekreft</button>
                     </div>
                 </div>
                 <div id="result">
                     <div class="result-left">
                         <h2>Du tapte...</h2>
                         <p>Prøv igjen i morgen!</p>
-                        <button id="share" class="button">Del spillet!
-                            <span id="tooltip">Lenke kopiert!</span>
+                        <button class="share-button button">Del spillet!
+                            <span class="tooltip">Lenke kopiert!</span>
                         </button>
                     </div>
                     <div class="result-right">

@@ -25,6 +25,8 @@ def setup_engine():
     connect_args = {'check_same_thread': False}
     engine = create_engine(sqlite_url, connect_args=connect_args)
 
+    create_db_and_tables(engine)
+
     return engine
 
 

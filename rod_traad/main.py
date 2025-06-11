@@ -6,6 +6,7 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlmodel import Session
+from rod_traad import config
 from rod_traad.middleware import create_user_id_middleware
 from rod_traad.models import User, setup_engine
 from rod_traad.routers import index, api, admin
@@ -22,6 +23,7 @@ def date_format(value: date | Any):
 
 def datetime_format(value: datetime | Any):
     if isinstance(value, datetime):
+        value = value.astimezone(config.TIMEZONE)
         return value.strftime('%d.%m.%Y %H:%M')
     return value
 

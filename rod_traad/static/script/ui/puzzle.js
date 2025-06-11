@@ -25,7 +25,7 @@ export class Puzzle {
       .getPropertyValue("gap");
   }
 
-  draw(solved, unsolved, isGameOver, selected) {
+  draw(solved, unsolved, isGameOver, selected, solutions) {
     this.solvedItems = [];
     this.wordItems = [];
     this.solvedContainer.innerHTML = "";

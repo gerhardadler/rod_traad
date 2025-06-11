@@ -59,13 +59,15 @@ export class UI {
       gameState.solved,
       gameState.unsolved,
       gameState.isGameOver(),
-      gameState.selected
+      gameState.selected,
+      gameState.gameSession.puzzle.data.solutions
     );
     this.gameBottom.draw(gameState);
     this.result.draw(
       gameState.isGameWon(),
       gameState.isGameLost(),
-      gameState.guesses
+      gameState.gameSession.guesses,
+      gameState.gameSession.puzzle.data.solutions
     );
   }
 
@@ -98,9 +100,14 @@ export class UI {
     const fakeGameState = gameState.clone();
     // animate all solutions
     let i = 0;
-    for (const [name, solution] of Object.entries(solutions)) {
+    for (const [name, solution] of Object.entries(
+      fakeGameState.gameSession.puzzle.data.solutions
+    )) {
       if (!fakeGameState.solved.some((s) => s.name === name)) {
-        fakeGameState.guesses.push({ words: solution, correct: true });
+        fakeGameState.gameSession.guesses.push({
+          words: solution,
+          correct: true,
+        });
         await this.puzzle.animateSolve(fakeGameState.unsolved, {
           index: i + 1,
           name: name,
@@ -110,13 +117,17 @@ export class UI {
           fakeGameState.solved,
           fakeGameState.unsolved,
           false,
-          []
+          [],
+          fakeGameState.gameSession.puzzle.data.solutions
         );
       }
       i++;
     }
 
-    this.result.updateGuesses(gameState.guesses);
+    this.result.updateGuesses(
+      gameState.gameSession.guesses,
+      gameState.gameSession.puzzle.data.solutions
+    );
     this.result.setLoseContent();
     await this.result.animateShow();
   }
@@ -126,7 +137,10 @@ export class UI {
     await this.gameBottom.animateHide();
     this.gameBottom.el.style.display = "none";
 
-    this.result.updateGuesses(gameState.guesses);
+    this.result.updateGuesses(
+      gameState.gameSession.guesses,
+      gameState.gameSession.puzzle.data.solutions
+    );
     this.result.setWinContent();
     await this.result.animateShow();
   }

@@ -1,5 +1,5 @@
-export function updateGameSessionToday(guesses) {
-  return fetch("/api/game-session/today", {
+export function updateGameSession(puzzle_id, guesses) {
+  return fetch(`/api/game-session/?puzzle_id=${puzzle_id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

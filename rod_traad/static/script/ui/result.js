@@ -1,7 +1,7 @@
 import { animateElement } from "../utils.js";
 import { share } from "./share.js";
 
-function getGuessesEmojis(guesses) {
+function getGuessesEmojis(guesses, solutions) {
   const emojiRows = [];
   for (const guess of guesses) {
     const emojis = [];
@@ -68,7 +68,7 @@ export class Result {
     this.setText("Prøv igjen i morgen!");
   }
 
-  updateGuesses(guesses) {
+  updateGuesses(guesses, solutions) {
     this.guessesEl.innerHTML = ""; // Clear previous guesses
 
     for (const guess of guesses) {
@@ -89,11 +89,11 @@ export class Result {
     } else if (guesses.length >= 4) {
       this.shareData.text = "Jeg tapte i Rød Tråd...\n";
     }
-    this.shareData.text += `${getGuessesEmojis(guesses)}\n`;
+    this.shareData.text += `${getGuessesEmojis(guesses, solutions)}\n`;
     this.shareData.text += `Prøv selv:`; // url is automatically appended
   }
 
-  draw(isGameWon, isGameLost, guesses) {
+  draw(isGameWon, isGameLost, guesses, solutions) {
     if (isGameWon) {
       this.setWinContent();
       this.el.style.display = this.originalDisplay;
@@ -104,7 +104,7 @@ export class Result {
       this.el.style.display = "none";
     }
 
-    this.updateGuesses(guesses);
+    this.updateGuesses(guesses, solutions);
   }
 
   async animateShow() {

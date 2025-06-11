@@ -1,55 +1,26 @@
 import { areArraysEqual } from "./utils.js";
 import { UI } from "./ui/ui.js";
 import { MAX_MISTAKES } from "./config.js";
-import { updateGameSessionToday } from "./api.js";
+import { updateGameSession } from "./api.js";
 
 export class GameState {
-  constructor(puzzleDate, guesses, selected = null, unsolved = null) {
-    this.puzzleDate = puzzleDate || null;
-    this.guesses = guesses || [];
+  constructor(gameSession, selected = null, unsolved = null) {
+    this.gameSession = gameSession;
 
     // not part of the saved state, used for UI interactions
     this.selected = selected || [];
     this.unsolved =
       unsolved ||
-      puzzleData.grid
+      gameSession.puzzle.data.grid
         .flat()
         .filter(
           (word) => !this.solved.some((solved) => solved.words.includes(word))
         );
   }
 
-  static fromLocalStorage() {
-    try {
-      const savedState = localStorage.getItem("gameState");
-      if (!savedState) return new GameState();
-
-      const parsed = JSON.parse(savedState);
-      const { puzzleDate = null, guesses = [] } = parsed;
-
-      return new GameState(puzzleDate, guesses);
-    } catch (error) {
-      console.warn("Failed to parse game state from localStorage:", error);
-      return new GameState();
-    }
-  }
-
-  saveToLocalStorage() {
-    try {
-      const state = JSON.stringify({
-        puzzleDate: this.puzzleDate,
-        guesses: this.guesses,
-      });
-      localStorage.setItem("gameState", state);
-    } catch (error) {
-      console.error("Failed to save game state to localStorage:", error);
-    }
-  }
-
   clone() {
     return new GameState(
-      this.puzzleDate,
-      JSON.parse(JSON.stringify(this.guesses)),
+      JSON.parse(JSON.stringify(this.gameSession)),
       [...this.selected],
       [...this.unsolved]
     );
@@ -57,7 +28,7 @@ export class GameState {
 
   get mistakes() {
     let out = 0;
-    for (const guess of this.guesses) {
+    for (const guess of this.gameSession.guesses) {
       if (!guess.correct) {
         out++;
       }
@@ -67,9 +38,9 @@ export class GameState {
 
   get solved() {
     const solved = [];
-    for (const guess of this.guesses) {
+    for (const guess of this.gameSession.guesses) {
       for (const [index, [name, solution]] of Object.entries(
-        solutions
+        this.gameSession.puzzle.data.solutions
       ).entries()) {
         if (areArraysEqual(guess.words, solution)) {
           solved.push({ index: index + 1, name, words: solution });
@@ -84,7 +55,10 @@ export class GameState {
   }
 
   isGameWon() {
-    return this.solved.length === Object.keys(solutions).length;
+    return (
+      this.solved.length ===
+      Object.keys(this.gameSession.puzzle.data.solutions).length
+    );
   }
 
   isGameLost() {
@@ -129,7 +103,7 @@ export class Game {
 
   async makeGuess() {
     if (
-      this.gameState.guesses.some((guess) =>
+      this.gameState.gameSession.guesses.some((guess) =>
         areArraysEqual(guess.words, this.gameState.selected)
       ) ||
       this.gameState.selected.length !== 4
@@ -141,7 +115,7 @@ export class Game {
     let oneAway = false;
 
     for (const [index, [name, solution]] of Object.entries(
-      solutions
+      this.gameState.gameSession.puzzle.data.solutions
     ).entries()) {
       const difference = solution.filter(
         (item) => !this.gameState.selected.includes(item)
@@ -150,10 +124,15 @@ export class Game {
       if (difference.length === 0) {
         correct = true;
         this.gameState.selected = [];
-        this.gameState.guesses.push({ words: solution, correct: true });
-        const response = await updateGameSessionToday(this.gameState.guesses);
-        this.gameState.guesses = response.guesses;
-        this.gameState.saveToLocalStorage();
+        this.gameState.gameSession.guesses.push({
+          words: solution,
+          correct: true,
+        });
+        const response = await updateGameSession(
+          this.gameState.gameSession.puzzle.id,
+          this.gameState.gameSession.guesses
+        );
+        this.gameState.gameSession = response;
         await this.ui.puzzle.animateSolve(this.gameState.unsolved, {
           index: parseInt(index) + 1,
           name: name,
@@ -165,13 +144,15 @@ export class Game {
       }
     }
     if (!correct) {
-      this.gameState.guesses.push({
+      this.gameState.gameSession.guesses.push({
         words: this.gameState.selected,
         correct: false,
       });
-      const response = await updateGameSessionToday(this.gameState.guesses);
-      this.gameState.guesses = response.guesses;
-      this.gameState.saveToLocalStorage();
+      const response = await updateGameSession(
+        this.gameState.gameSession.puzzle.id,
+        this.gameState.gameSession.guesses
+      );
+      this.gameState.gameSession = response;
 
       const toastMessage =
         oneAway && !this.gameState.isGameLost() ? "Én unna!" : undefined;

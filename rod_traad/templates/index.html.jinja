@@ -98,9 +98,7 @@
         <button class="button neutral" onclick="document.getElementById('help-dialog').close()">Lukk</button>
     </dialog>
     <script>
-        const puzzleData = JSON.parse('{{ game_session.puzzle.data|tojson}}');
-        const solutions = puzzleData.solutions;
-        const puzzleDate = "{{ game_session.puzzle.date }}";
+        const gameSession = JSON.parse('{{ game_session.model_dump_json()|safe }}');
     </script>
 </body>
 

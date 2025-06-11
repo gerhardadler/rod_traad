@@ -18,6 +18,18 @@ export class GameState {
         );
   }
 
+  async updateGameSession() {
+    let response;
+    try {
+      response = await updateGameSession(this.gameSession.id, this.gameSession);
+    } catch (error) {
+      console.error("Failed to update game session:", error);
+      return;
+    }
+    // success
+    this.gameSession = response;
+  }
+
   clone() {
     return new GameState(
       JSON.parse(JSON.stringify(this.gameSession)),
@@ -128,11 +140,7 @@ export class Game {
           words: solution,
           correct: true,
         });
-        const response = await updateGameSession(
-          this.gameState.gameSession.puzzle.id,
-          this.gameState.gameSession.guesses
-        );
-        this.gameState.gameSession = response;
+        this.gameState.updateGameSession();
         await this.ui.puzzle.animateSolve(this.gameState.unsolved, {
           index: parseInt(index) + 1,
           name: name,
@@ -148,11 +156,7 @@ export class Game {
         words: this.gameState.selected,
         correct: false,
       });
-      const response = await updateGameSession(
-        this.gameState.gameSession.puzzle.id,
-        this.gameState.gameSession.guesses
-      );
-      this.gameState.gameSession = response;
+      this.gameState.updateGameSession();
 
       const toastMessage =
         oneAway && !this.gameState.isGameLost() ? "Én unna!" : undefined;

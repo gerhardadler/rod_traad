@@ -1,12 +1,10 @@
-export function updateGameSession(puzzle_id, guesses) {
-  return fetch(`/api/game-session/?puzzle_id=${puzzle_id}`, {
+export async function updateGameSession(gameSessionId, gameSession) {
+  return fetch(`/api/game-session/?game_session_id=${gameSessionId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      guesses: guesses,
-    }),
+    body: JSON.stringify(gameSession),
   }).then((response) => {
     if (!response.ok) {
       throw new Error("Failed to update game session today");

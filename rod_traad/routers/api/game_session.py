@@ -69,36 +69,19 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
     )
     def get_game_session(
         session: Annotated[Session, Depends(SessionDependency(engine))],
-        user: Annotated[User, Depends(UserDependency(engine))],
-        puzzle_id: int,
+        game_session_id: int,
     ):
-        query = select(GameSession).where(
-            GameSession.user_id == user.id,
-            GameSession.puzzle_id == puzzle_id,
-        )
-        game_session = session.exec(query).first()
-
-        if not game_session:
-            game_session = GameSession(user=user, puzzle_id=puzzle_id)
-            session.add(game_session)
-            session.commit()
-            session.refresh(game_session)
-
+        game_session = session.get(GameSession, game_session_id)
         return game_session
 
     @router.put('/', response_model=GameSessionPublic)
     def update_game_session(
         session: Annotated[Session, Depends(SessionDependency(engine))],
         user: Annotated[User, Depends(UserDependency(engine))],
-        puzzle_id: int,
+        game_session_id: int,
         game_session: GameSessionUpdate,
     ):
-        existing_session = session.exec(
-            select(GameSession).where(
-                GameSession.user_id == user.id,
-                GameSession.puzzle_id == puzzle_id,
-            )
-        ).first()
+        existing_session = session.get(GameSession, game_session_id)
 
         if not existing_session:
             raise HTTPException(404, "Game session not found.")

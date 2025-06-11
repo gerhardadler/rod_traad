@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 import locale
 import logging
 from typing import Any, Callable
@@ -17,6 +17,12 @@ def date_format(value: date | Any):
         month_abbreviated = value.strftime('%b').rstrip('.')
         year = value.strftime('%Y')
         return f'{date_}. {month_abbreviated} {year}'
+    return value
+
+
+def datetime_format(value: datetime | Any):
+    if isinstance(value, datetime):
+        return value.strftime('%d.%m.%Y %H:%M')
     return value
 
 
@@ -42,6 +48,7 @@ def create_app():
     templates = Jinja2Templates(directory='rod_traad/templates')
 
     templates.env.filters['date_format'] = date_format
+    templates.env.filters['datetime_format'] = datetime_format
     templates.env.filters['float_format'] = float_format
     templates.env.policies['json.dumps_kwargs'] = {'sort_keys': False}
 

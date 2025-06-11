@@ -100,15 +100,19 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
         game_sessions = session.exec(query).all()
 
         won_games_count = 0
+        completed_game_count = 0
 
         for game_session in game_sessions:
             if not game_session.end_time:
                 continue
+            completed_game_count += 1
             if is_game_session_won(game_session):
                 won_games_count += 1
 
         win_percent = (
-            (won_games_count / len(game_sessions) * 100) if game_sessions else None
+            (won_games_count / completed_game_count * 100)
+            if completed_game_count > 0
+            else None
         )
 
         return templates.TemplateResponse(
@@ -116,6 +120,8 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
             {
                 'request': request,
                 'puzzle': puzzle,
+                'game_count': len(game_sessions),
+                'completed_game_count': completed_game_count,
                 'win_percent': win_percent,
                 'game_sessions': [
                     GameSessionPublic.model_validate(game_session)

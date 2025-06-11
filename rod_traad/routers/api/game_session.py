@@ -108,10 +108,9 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
                 403, "You do not have permission to update this session."
             )
 
-        if game_session.guesses is not None:
-            existing_session.guesses = game_session.guesses
+        existing_session.guesses = game_session.guesses
 
-        if is_game_session_complete(existing_session):
+        if is_game_session_complete(game_session):
             existing_session.end_time = datetime.datetime.now(datetime.UTC)
 
         session.add(existing_session)

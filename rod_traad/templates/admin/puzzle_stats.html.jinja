@@ -21,13 +21,29 @@
 
     <br>
 
-    Antall spill: {{ game_sessions|length }}<br>
+    Antall spill: {{ game_count }}<br>
+    Antall fullførte spill: {{ completed_game_count }}<br>
     Vinneprosent: {{ win_percent }}%<br>
     <ul>
         {% for session in game_sessions %}
         <li>
-            <pre>{{ session.model_dump(mode='json').guesses|tojson(indent=2) }}</pre>
+            <ul>
+                <li>Brukerid: {{ session.user_id }}</li>
+                <li>Start: {{ session.start_time|datetime_format }}</li>
+                <li>Slutt: {{ session.end_time|datetime_format }}</li>
+                <li>
+                    <ul>
+
+                        {% for guess in session.guesses %}
+                        <li>
+                            {{'RIKTIG' if guess.correct else 'FEIL'}} - - - - {{ guess.words|join(', ')}}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
         </li>
+        <br>
         {% endfor %}
     </ul>
 

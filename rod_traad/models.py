@@ -72,7 +72,7 @@ class GameSession(GameSessionBase, table=True):
 
 
 class GameSessionUpdate(GameSessionBase):
-    guesses: list["Guess"] | None = None
+    guesses: list["Guess"]
 
 
 class GameSessionPublic(GameSessionBase):
@@ -82,21 +82,21 @@ class GameSessionPublic(GameSessionBase):
 
 
 def is_game_session_won(
-    session: GameSession | GameSessionPublic,
+    session: GameSession | GameSessionPublic | GameSessionUpdate,
 ) -> bool:
-    correct_guesses = sum(guess.correct for guess in session.guesses)
+    correct_guesses = sum(1 if guess.correct else 0 for guess in session.guesses)
     return correct_guesses >= 4
 
 
 def is_game_session_lost(
-    session: GameSession | GameSessionPublic,
+    session: GameSession | GameSessionPublic | GameSessionUpdate,
 ) -> bool:
-    incorrect_guesses = sum(not guess.correct for guess in session.guesses)
+    incorrect_guesses = sum(1 if not guess.correct else 0 for guess in session.guesses)
     return incorrect_guesses >= 4
 
 
 def is_game_session_complete(
-    session: GameSession | GameSessionPublic,
+    session: GameSession | GameSessionPublic | GameSessionUpdate,
 ) -> bool:
     return is_game_session_won(session) or is_game_session_lost(session)
 

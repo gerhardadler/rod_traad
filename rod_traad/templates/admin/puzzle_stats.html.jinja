@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="no">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    {#
+    <link rel="stylesheet" href="/static/style/global.css"> #}
+
+    <title>Rød tråd - Admin</title>
+</head>
+
+<body>
+    <h1>Brett nr. {{ puzzle.number }} (id: {{ puzzle.id }}) - {{ puzzle.date|date_format }}</h1>
+
+    <nav>
+        <a href="/admin/puzzles">Alle brett</a>
+        <a href="/admin/puzzles/{{ puzzle.id }}">Rediger</a>
+    </nav>
+
+    <br>
+
+    Antall spill: {{ game_sessions|length }}<br>
+    Vinneprosent: {{ win_percent }}%<br>
+    <ul>
+        {% for session in game_sessions %}
+        <li>
+            <pre>{{ session.model_dump(mode='json').guesses|tojson(indent=2) }}</pre>
+        </li>
+        {% endfor %}
+    </ul>
+
+</body>
+
+</html>

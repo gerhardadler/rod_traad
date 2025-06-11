@@ -1,5 +1,6 @@
 from datetime import date
 import locale
+import logging
 from typing import Any, Callable
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
@@ -28,6 +29,9 @@ def float_format(value: float | Any):
 def create_app():
     # Application uses Norwegian locale
     locale.setlocale(locale.LC_TIME, 'nb_NO.UTF-8')
+
+    logger = logging.getLogger("uvicorn")
+    logger.propagate = True
 
     app = FastAPI()
 

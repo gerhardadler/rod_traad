@@ -11,7 +11,14 @@ from sqlmodel import Session, col, select
 from rod_traad.config import TIMEZONE
 from rod_traad.dependencies import SessionDependency, UserDependency
 from rod_traad.helpers.puzzle import get_empty_puzzle_data
-from rod_traad.models import GameSession, GameSessionPublic, Puzzle, PuzzleUpdate, User
+from rod_traad.models import (
+    GameSession,
+    GameSessionPublic,
+    Puzzle,
+    PuzzleUpdate,
+    User,
+    is_game_session_won,
+)
 
 
 def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
@@ -76,6 +83,44 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
             {
                 'request': request,
                 'puzzle': puzzle,
+            },
+        )
+
+    @router.get('/{puzzle_id}/stats')
+    def get_puzzle_stats(
+        puzzle_id: int,
+        request: Request,
+        session: Annotated[Session, Depends(SessionDependency(engine))],
+    ):
+        puzzle = session.get(Puzzle, puzzle_id)
+        if not puzzle:
+            raise HTTPException(status_code=404, detail="Puzzle not found.")
+
+        query = select(GameSession).where(GameSession.puzzle_id == puzzle_id)
+        game_sessions = session.exec(query).all()
+
+        won_games_count = 0
+
+        for game_session in game_sessions:
+            if not game_session.end_time:
+                continue
+            if is_game_session_won(game_session):
+                won_games_count += 1
+
+        win_percent = (
+            (won_games_count / len(game_sessions) * 100) if game_sessions else None
+        )
+
+        return templates.TemplateResponse(
+            'admin/puzzle_stats.html.jinja',
+            {
+                'request': request,
+                'puzzle': puzzle,
+                'win_percent': win_percent,
+                'game_sessions': [
+                    GameSessionPublic.model_validate(game_session)
+                    for game_session in game_sessions
+                ],
             },
         )
 

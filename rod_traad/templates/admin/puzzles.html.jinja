@@ -3,10 +3,12 @@
     <a href="/admin/puzzles/{{ puzzle.id }}">nr. {{ puzzle.number }} (id:{{ puzzle.id }}) - {{ puzzle.date|date_format
         }}</a>
     <a href="/?puzzle_id={{ puzzle.id }}">Test</a>
+    <a href="/admin/puzzles/{{ puzzle.id }}/stats">Statistikk</a>
     <a href="/admin/puzzles/{{ puzzle.id }}/delete"
         onclick="return confirm('Er du sikker på at du vil slette dette brettet?')">Slett</a>
 </li>
 {% endmacro %}
+
 <!DOCTYPE html>
 <html lang="no">
 

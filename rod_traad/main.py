@@ -37,8 +37,9 @@ def create_app():
 
     templates = Jinja2Templates(directory='rod_traad/templates')
 
-    templates.env.filters['date_format'] = date_format  # type: ignore
-    templates.env.filters['float_format'] = float_format  # type: ignore
+    templates.env.filters['date_format'] = date_format
+    templates.env.filters['float_format'] = float_format
+    templates.env.policies['json.dumps_kwargs'] = {'sort_keys': False}
 
     app.middleware("http")(create_user_id_middleware(engine))
 

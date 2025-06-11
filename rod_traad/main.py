@@ -24,7 +24,7 @@ def date_format(value: date | Any):
 def datetime_format(value: datetime | Any):
     if isinstance(value, datetime):
         value = value.astimezone(config.TIMEZONE)
-        return value.strftime('%d.%m.%Y %H:%M')
+        return value.strftime('%d.%m.%Y %H:%M%z')
     return value
 
 

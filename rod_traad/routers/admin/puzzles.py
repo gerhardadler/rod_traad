@@ -6,7 +6,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import AfterValidator
 from sqlalchemy import Engine
-from sqlmodel import Session, col, select
+from sqlmodel import Session, col, select, func
 
 from rod_traad.config import TIMEZONE
 from rod_traad.dependencies import SessionDependency, UserDependency
@@ -14,6 +14,7 @@ from rod_traad.helpers.puzzle import get_empty_puzzle_data
 from rod_traad.models import (
     GameSession,
     GameSessionPublic,
+    Guess,
     Puzzle,
     PuzzleUpdate,
     User,
@@ -96,22 +97,30 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
         if not puzzle:
             raise HTTPException(status_code=404, detail="Puzzle not found.")
 
-        query = select(GameSession).where(GameSession.puzzle_id == puzzle_id)
+        query = (
+            select(GameSession)
+            .where(GameSession.puzzle_id == puzzle_id)
+            .join(Guess)
+            .group_by(col(GameSession.id))
+            # only started sessions are interesting
+            .having(func.count(col(Guess.id)) > 0)
+        )
         game_sessions = session.exec(query).all()
 
-        won_games_count = 0
-        completed_game_count = 0
+        won_game_sessions = []
+        completed_game_sessions = []
 
         for game_session in game_sessions:
-            if not game_session.end_time:
+            if game_session.end_time is None:
                 continue
-            completed_game_count += 1
+
+            completed_game_sessions.append(game_session)
             if is_game_session_won(game_session):
-                won_games_count += 1
+                won_game_sessions.append(game_session)
 
         win_percent = (
-            (won_games_count / completed_game_count * 100)
-            if completed_game_count > 0
+            (len(won_game_sessions) / len(completed_game_sessions) * 100)
+            if completed_game_sessions
             else None
         )
 
@@ -121,7 +130,7 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
                 'request': request,
                 'puzzle': puzzle,
                 'game_count': len(game_sessions),
-                'completed_game_count': completed_game_count,
+                'completed_game_count': len(completed_game_sessions),
                 'win_percent': win_percent,
                 'game_sessions': [
                     GameSessionPublic.model_validate(game_session)

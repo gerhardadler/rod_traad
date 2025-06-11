@@ -1,5 +1,5 @@
-import { Game } from "./game.js";
-import { GameState } from "./game.js";
+import { Game } from "./game.js?2025-06-11T22:00:03";
+import { GameState } from "./game.js?2025-06-11T22:00:03";
 
 function setupGame() {
   const gameState = new GameState(gameSession);

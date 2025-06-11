@@ -1,6 +1,6 @@
-import { heartSvg } from "./svg.js";
-import { animateElement } from "../utils.js";
-import { MAX_MISTAKES } from "../config.js";
+import { heartSvg } from "./svg.js?2025-06-11T22:00:03";
+import { animateElement } from "../utils.js?2025-06-11T22:00:03";
+import { MAX_MISTAKES } from "../config.js?2025-06-11T22:00:03";
 
 class Heart {
   constructor(index) {

@@ -1,7 +1,7 @@
-import { Puzzle } from "./puzzle.js";
-import { Result } from "./result.js";
-import { GameBottom } from "./game-bottom.js";
-import { share } from "./share.js";
+import { Puzzle } from "./puzzle.js?2025-06-11T22:00:03";
+import { Result } from "./result.js?2025-06-11T22:00:03";
+import { GameBottom } from "./game-bottom.js?2025-06-11T22:00:03";
+import { share } from "./share.js?2025-06-11T22:00:03";
 
 export class UI {
   constructor(

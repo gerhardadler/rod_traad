@@ -1,7 +1,7 @@
-import { WordItem } from "./word.js";
-import { Solved } from "./solved.js";
-import { ToastContainer } from "./toast.js";
-import { ensureShuffle } from "../utils.js";
+import { WordItem } from "./word.js?2025-06-11T22:00:03";
+import { Solved } from "./solved.js?2025-06-11T22:00:03";
+import { ToastContainer } from "./toast.js?2025-06-11T22:00:03";
+import { ensureShuffle } from "../utils.js?2025-06-11T22:00:03";
 
 export class Puzzle {
   constructor(toggleWordCallback, deselectWordCallback) {

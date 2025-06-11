@@ -110,7 +110,11 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
 
         existing_session.guesses = game_session.guesses
 
-        if is_game_session_complete(game_session):
+        if game_session.start_time:
+            existing_session.start_time = game_session.start_time
+        if game_session.end_time:
+            existing_session.end_time = game_session.end_time
+        elif is_game_session_complete(game_session):
             existing_session.end_time = datetime.datetime.now(datetime.UTC)
 
         session.add(existing_session)

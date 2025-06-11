@@ -3,8 +3,8 @@ import datetime
 import tomllib
 from typing import Annotated, Any
 import uuid
-from pydantic import BaseModel, BeforeValidator, Json
-from sqlalchemy import Column, Engine
+from pydantic import AfterValidator, BaseModel, BeforeValidator, Json, PlainSerializer
+from sqlalchemy import Column, DateTime, Engine
 from sqlmodel import JSON, Field, Relationship, SQLModel, create_engine, text
 from rod_traad.config import SQLITE_DB
 
@@ -25,6 +25,19 @@ def empty_string_to_none(value: Any) -> Any:
     if isinstance(value, str) and value.strip() == "":
         return None
     return value
+
+
+def aware_convert(value: datetime.datetime | None) -> datetime.datetime | None:
+    if value is None:
+        return None
+    if value.tzinfo is None:
+        return value.replace(tzinfo=datetime.UTC)
+
+
+AwareConvertDatetime = Annotated[
+    datetime.datetime | None,
+    AfterValidator(aware_convert),
+]
 
 
 class Detail(BaseModel):
@@ -57,10 +70,10 @@ class GameSessionBase(SQLModel):
     user_id: str | None = Field(default=None, foreign_key="user.id")
     puzzle_id: int | None = Field(default=None, foreign_key="puzzle.id", nullable=False)
 
-    start_time: datetime.datetime = Field(
+    start_time: AwareConvertDatetime = Field(
         default_factory=lambda: datetime.datetime.now(datetime.UTC)
     )
-    end_time: datetime.datetime | None = None
+    end_time: AwareConvertDatetime | None = None
 
 
 class GameSession(GameSessionBase, table=True):

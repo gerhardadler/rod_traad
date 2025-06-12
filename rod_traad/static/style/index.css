@@ -391,10 +391,21 @@ input[type="checkbox"]:focus-visible + span {
 }
 
 #result .guesses-title {
-  margin-top: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.2rem;
   margin-bottom: 0.8em;
+}
+
+#result .guesses-title h3 {
+  margin: 0;
   font-size: 1.5rem;
   font-family: "Poltawski Novi", serif;
+}
+
+#result .guesses-title #copy-button {
+  position: relative;
 }
 
 #result #guesses {
@@ -402,13 +413,14 @@ input[type="checkbox"]:focus-visible + span {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.2rem;
-  width: fit-content;
+  width: 100%;
+  max-width: 12rem;
   margin-inline: auto;
 }
 
 #result #guesses div {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 100%;
+  aspect-ratio: 1;
   border-radius: 0.5rem;
 }
 
@@ -468,7 +480,6 @@ input[type="checkbox"]:focus-visible + span {
   position: absolute;
   top: 0.7rem;
   right: 0.7rem;
-  padding: 0.2rem;
   cursor: pointer;
 }
 

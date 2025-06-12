@@ -26,9 +26,9 @@
 
     <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
     <link rel="stylesheet" href="/static/style/global.css?2025-06-11T22:00:03">
-    <link rel="stylesheet" href="/static/style/button.css?2025-06-11T22:00:03">
+    <link rel="stylesheet" href="/static/style/button.css?2025-06-12T18:51:00">
     <link rel="stylesheet" href="/static/style/animations.css?2025-06-11T22:00:03">
-    <link rel="stylesheet" href="/static/style/index.css?2025-06-12T12:42:00">
+    <link rel="stylesheet" href="/static/style/index.css?2025-06-12T18:51:00">
 
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -73,11 +73,17 @@
                         <h2>Du tapte...</h2>
                         <p>Prøv igjen i morgen!</p>
                         <button class="share-button button">Del resultat!
-                            <span class="tooltip">Lenke kopiert!</span>
+                            <span class="tooltip">Kopiert!</span>
                         </button>
                     </div>
                     <div class="result-right">
-                        <h3 class="guesses-title">Dine forsøk</h3>
+                        <div class="guesses-title">
+                            <h3>Dine forsøk</h3>
+                            <button class="icon-button" id="copy-button" aria-label="Kopier">
+                                {% include "snippets/copy-solid.svg.jinja" %}
+                                <span class="tooltip">Kopiert!</span>
+                            </button>
+                        </div>
                         <div id="guesses"></div>
                     </div>
                 </div>
@@ -89,7 +95,8 @@
         <p>Laget av: Gerhard Adler Skartveit</p>
     </footer>
     <dialog id="help-dialog">
-        <button class="close-icon" onclick="document.getElementById('help-dialog').close()" aria-label="Lukk">
+        <button class="close-icon icon-button" onclick="document.getElementById('help-dialog').close()"
+            aria-label="Lukk">
             {% include "snippets/x.svg.jinja" %}
         </button>
 
@@ -120,6 +127,7 @@
     </dialog>
     <script>
         const gameSession = JSON.parse('{{ game_session.model_dump_json()|safe }}');
+        const prettyDate = '{{ game_session.puzzle.date|date_format }}';
     </script>
 </body>
 

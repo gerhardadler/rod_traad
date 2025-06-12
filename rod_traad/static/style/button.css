@@ -20,3 +20,27 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.icon-button {
+  padding: 0.4em;
+  border-radius: 0.7rem;
+  background: var(--default-color-100);
+  transition: 0.2s;
+  user-select: none;
+  cursor: pointer;
+  border: var(--border-width) solid transparent;
+  line-height: 1;
+}
+
+.icon-button svg {
+  display: block;
+  width: 1.5em;
+  height: 1.5em;
+  fill: var(--text-1);
+}
+
+.icon-button:hover:not(:disabled),
+.icon-button:focus-visible:not(:disabled) {
+  background: var(--default-color-150);
+  border-color: var(--default-color-200);
+}

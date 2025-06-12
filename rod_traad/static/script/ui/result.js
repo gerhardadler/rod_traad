@@ -43,11 +43,33 @@ export class Result {
       text: "",
       url: window.location.href,
     };
+    this.copyText = "";
 
     this.shareButton = this.el.querySelector(".share-button");
     this.shareButton.addEventListener("click", async () =>
       share(this.shareButton, this.shareData)
     );
+
+    this.copyButton = this.el.querySelector("#copy-button");
+    this.copyButtonTooltip = this.copyButton.querySelector(".tooltip");
+
+    this.copyButton.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(this.copyText);
+
+        // Show tooltip
+        this.copyButtonTooltip.style.visibility = "visible";
+        this.copyButtonTooltip.style.opacity = "1";
+
+        // Hide after 2 seconds
+        setTimeout(() => {
+          this.copyButtonTooltip.style.opacity = "0";
+          this.copyButtonTooltip.style.visibility = "hidden";
+        }, 2000);
+      } catch (err) {
+        console.error("Failed to copy text: ", err);
+      }
+    });
   }
 
   setTitle(title) {
@@ -68,7 +90,7 @@ export class Result {
     this.setText("Prøv igjen i morgen!");
   }
 
-  updateGuesses(guesses, solutions) {
+  updateGuesses(guesses, solutions, date) {
     this.guessesEl.innerHTML = ""; // Clear previous guesses
 
     for (const guess of guesses) {
@@ -91,6 +113,9 @@ export class Result {
     }
     this.shareData.text += `${getGuessesEmojis(guesses, solutions)}\n`;
     this.shareData.text += `Prøv selv:`; // url is automatically appended
+
+    this.copyText = `Rød tråd ${prettyDate}\n`;
+    this.copyText += `${getGuessesEmojis(guesses, solutions)}`;
   }
 
   draw(isGameWon, isGameLost, guesses, solutions) {

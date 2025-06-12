@@ -324,8 +324,15 @@ input[type="checkbox"]:focus-visible + span {
   }
 }
 
-#result .share-button {
+#result .result-actions {
   margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+#result .share-button {
   border-color: transparent;
   transition: 1s;
   z-index: 0;

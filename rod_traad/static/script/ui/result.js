@@ -32,6 +32,9 @@ function getGuessesEmojis(guesses, solutions) {
 export class Result {
   constructor() {
     this.el = document.querySelector("#result");
+
+    this.resultActions = this.el.querySelector(".result-actions");
+
     this.titleEl = this.el.querySelector("h2");
     this.subtitleEl = this.el.querySelector("p");
     this.guessesEl = this.el.querySelector("#guesses");
@@ -70,6 +73,8 @@ export class Result {
         console.error("Failed to copy text: ", err);
       }
     });
+    this.installAppButton = null;
+    this.deferredPrompt = null;
   }
 
   setTitle(title) {
@@ -88,6 +93,27 @@ export class Result {
   setLoseContent() {
     this.setTitle("Du tapte...");
     this.setText("Prøv igjen i morgen!");
+  }
+
+  setupInstallAppButton(deferredPrompt) {
+    this.deferredPrompt = deferredPrompt;
+    if (this.installAppButton) {
+      return;
+    }
+    this.installAppButton = document.createElement("button");
+    this.installAppButton.textContent = "Installer app";
+    this.installAppButton.classList.add("button");
+    this.installAppButton.addEventListener("click", async () => {
+      this.deferredPrompt.prompt();
+      const { outcome } = await this.deferredPrompt.userChoice;
+      if (outcome === "accepted") {
+        console.log("User accepted the A2HS prompt");
+      } else {
+        console.log("User dismissed the A2HS prompt");
+      }
+      this.deferredPrompt = null; // Clear the prompt
+    });
+    this.resultActions.appendChild(this.installAppButton);
   }
 
   updateGuesses(guesses, solutions, date) {

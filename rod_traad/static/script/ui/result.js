@@ -56,7 +56,6 @@ export class Result {
     this.copyButton.addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(this.copyText);
-        console.log("Text copied to clipboard:", this.copyText);
 
         // Show tooltip
         this.copyButtonTooltip.style.visibility = "visible";

@@ -1,0 +1,21 @@
+{
+    "name": "Rød tråd",
+    "short_name": "Rød tråd",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#eceef4",
+    "theme_color": "#cf263a",
+    "icons": [
+      {
+        "src": "/static/images/icon-192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/static/images/icon-512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "lang": "no"
+  }

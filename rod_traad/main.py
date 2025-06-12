@@ -60,6 +60,8 @@ def create_app():
     app.mount('/api', api.create_api(engine, templates))
     app.mount('/admin', admin.create_admin(engine, templates))
 
+    app.mount('/', StaticFiles(directory='rod_traad/root_static'), name='root_static')
+
     return app
 
 

@@ -39,7 +39,7 @@ def create_user_id_middleware(engine: Engine):
             value=user_id,
             httponly=True,
             samesite='lax',
-            expires=datetime.datetime(2099, 12, 31),
+            expires=datetime.datetime(2099, 12, 31, tzinfo=datetime.UTC),
         )
         return response
 

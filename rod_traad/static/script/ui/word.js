@@ -22,7 +22,7 @@ export class WordItem {
     this.checkbox = new Button(checkboxEl);
 
     this.span = document.createElement("span");
-    this.span.innerText = word;
+    this.span.innerHTML = word;
 
     this.el.appendChild(this.checkbox.el);
     this.el.appendChild(this.span);

@@ -39,7 +39,7 @@
         <br>
 
         <label for="data">Data:</label>
-        <textarea id="data" name="data" rows="54" cols="80" required>{{ puzzle.data|tojson(indent=2) }}</textarea>
+        <textarea id="data" name="data" rows="54" cols="80" required>{{ puzzle_data|safe }}</textarea>
 
         <br>
 

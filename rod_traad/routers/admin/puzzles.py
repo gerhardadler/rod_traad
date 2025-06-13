@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 import tomllib
 from typing import Annotated
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
@@ -20,6 +21,15 @@ from rod_traad.models import (
     User,
     is_game_session_won,
 )
+
+
+def get_puzzle_data_string(puzzle: Puzzle):
+    return (
+        json.dumps(puzzle.data, indent=2)
+        .replace('&', '&amp;')
+        .replace('<', '&lt;')
+        .replace('>', '&gt;')
+    )
 
 
 def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
@@ -56,16 +66,19 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
 
         next_number = (current_number or 0) + 1
 
+        puzzle = Puzzle(
+            number=next_number,
+            date=today,
+            data=get_empty_puzzle_data(),
+        )
+
         return templates.TemplateResponse(
             'admin/puzzle.html.jinja',
             {
                 'request': request,
                 'today': today,
-                'puzzle': Puzzle(
-                    number=next_number,
-                    date=today,
-                    data=get_empty_puzzle_data(),
-                ),
+                'puzzle': puzzle,
+                'puzzle_data': get_puzzle_data_string(puzzle),
             },
         )
 
@@ -84,6 +97,7 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
             {
                 'request': request,
                 'puzzle': puzzle,
+                'puzzle_data': get_puzzle_data_string(puzzle),
             },
         )
 
@@ -176,6 +190,7 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
             {
                 'request': request,
                 'puzzle': new_puzzle,
+                'puzzle_data': get_puzzle_data_string(new_puzzle),
             },
         )
 
@@ -202,6 +217,7 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
             {
                 'request': request,
                 'puzzle': existing_puzzle,
+                'puzzle_data': get_puzzle_data_string(existing_puzzle),
             },
         )
 

@@ -32,13 +32,15 @@ def create_user_id_middleware(engine: Engine):
         user_id = user.id
         response = await call_next(request)
         if is_new_user:
-            response.set_cookie(
-                key='user_id',
-                value=user_id,
-                httponly=True,
-                samesite='lax',
-                expires=datetime.datetime(2099, 12, 31),
-            )
+            # TODO Move cookie setting here.
+            pass
+        response.set_cookie(
+            key='user_id',
+            value=user_id,
+            httponly=True,
+            samesite='lax',
+            expires=datetime.datetime(2099, 12, 31),
+        )
         return response
 
     return user_id_middleware

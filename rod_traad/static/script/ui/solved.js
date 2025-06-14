@@ -7,7 +7,7 @@ export class Solved {
     this.h3.innerText = name;
 
     this.p = document.createElement("p");
-    this.p.innerText = words.join(", ");
+    this.p.innerHTML = words.join(", ");
 
     this.el.appendChild(this.h3);
     this.el.appendChild(this.p);

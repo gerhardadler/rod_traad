@@ -63,6 +63,9 @@ class PuzzleUpdate(PuzzleBase):
 
 class User(SQLModel, table=True):
     id: str | None = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
+    google_id: str | None = Field(default=None, nullable=True, unique=True, index=True)
+    email: str | None = Field(default=None, nullable=True, unique=True, index=True)
+    username: str | None = Field(default=None, nullable=True, unique=True, index=True)
     sessions: list["GameSession"] = Relationship(back_populates="user")
 
 

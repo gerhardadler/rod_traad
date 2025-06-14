@@ -9,7 +9,7 @@ from sqlmodel import Session
 from rod_traad import config
 from rod_traad.middleware import create_user_id_middleware
 from rod_traad.models import User, setup_engine
-from rod_traad.routers import index, api, admin
+from rod_traad.routers import index, api, admin, login
 
 
 def date_format(value: date | Any):
@@ -57,6 +57,8 @@ def create_app():
     app.middleware("http")(create_user_id_middleware(engine))
 
     app.include_router(index.create_router(engine, templates))
+    app.include_router(login.create_router(engine, templates))
+
     app.mount('/api', api.create_api(engine, templates))
     app.mount('/admin', admin.create_admin(engine, templates))
 

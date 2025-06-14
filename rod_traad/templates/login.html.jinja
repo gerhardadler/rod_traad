@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="no">
+
+<head>
+    <!-- setup up service worker as the first step -->
+    <script src="/static/script/setup_sw.js"></script>
+
+    <!-- meta -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Et spill hvor du skal gruppere ord som hører sammen. Hver dag kommer det et nytt brett!" />
+
+    <meta name="google-site-verification" content="OjpV-guskwbaqWDYaLtZShkGe-3c9TPCWbBBPqrcJDE" />
+
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/static/style/global.css?2025-06-11T22:00:03">
+    <link rel="stylesheet" href="/static/style/button.css?2025-06-12T18:51:00">
+    <link rel="stylesheet" href="/static/style/animations.css?2025-06-11T22:00:03">
+    <link rel="stylesheet" href="/static/style/index.css?2025-06-12T18:51:00">
+
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poltawski+Nowy:ital,wght@0,400..700;1,400..700&display=swap"
+        rel="stylesheet">
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <title>Rød tråd - logg inn</title>
+</head>
+
+<body>
+    <main>
+        <div class="content">
+            <h1>
+                <span class="accessibility-title">Rød tråd</span>
+                {% include "snippets/logo.svg.jinja" %}
+                <span class="date">Logg inn</span>
+            </h1>
+
+            <div id="g_id_onload"
+                data-client_id="1019006722559-2p57mvhhfk5oj3l1rubsmvb9biv9req8.apps.googleusercontent.com"
+                data-callback="handleCredentialResponse" data-auto_prompt="false">
+            </div>
+
+            <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline"
+                data-text="sign_in_with" data-size="large" data-logo_alignment="left">
+            </div>
+
+
+            <script>
+                function handleCredentialResponse(response) {
+                    const idToken = response.credential;
+
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/login/';
+
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'google_id_token';
+                    input.value = idToken;
+
+                    form.appendChild(input);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            </script>
+        </div>
+    </main>
+
+</body>
+
+</html>

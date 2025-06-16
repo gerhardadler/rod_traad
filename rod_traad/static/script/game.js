@@ -136,6 +136,7 @@ export class Game {
       if (difference.length === 0) {
         correct = true;
         this.gameState.selected = [];
+        this.ui.gameBottom.submitButton.setDisabled(true);
         this.gameState.gameSession.guesses.push({
           words: solution,
           correct: true,

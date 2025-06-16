@@ -334,7 +334,7 @@ input[type="checkbox"]:focus-visible + span {
 
 #result .share-button {
   border-color: transparent;
-  transition: 1s;
+  transition: 0.2s;
   z-index: 0;
 }
 

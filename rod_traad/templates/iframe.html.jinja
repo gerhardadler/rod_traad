@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="no">
+
+<head>
+    <!-- meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="OjpV-guskwbaqWDYaLtZShkGe-3c9TPCWbBBPqrcJDE" />
+
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/static/style/global.css?2025-06-11T22:00:03">
+    <link rel="stylesheet" href="/static/style/button.css?2025-06-12T18:51:00">
+    <link rel="stylesheet" href="/static/style/animations.css?2025-06-11T22:00:03">
+    <link rel="stylesheet" href="/static/style/index.css?2025-06-12T18:51:00">
+    <link rel="stylesheet" href="/static/style/iframe.css?2025-06-12T18:51:00">
+
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poltawski+Nowy:ital,wght@0,400..700;1,400..700&display=swap"
+        rel="stylesheet">
+
+    <script src="/static/script/iframe_main.js?2025-06-14T23:32:00" defer type="module"></script>
+    <title>Rød tråd</title>
+</head>
+
+<body class="no-animate">
+    <div class="actions">
+        <a href="https://rodtraad.no/" target="_blank">
+            <button id="help-button">?</button>
+        </a>
+    </div>
+    <main>
+        <div class="content transition fade-in">
+            <a href="https://rodtraad.no/" target="_blank" class="logo-link">
+                <h1>
+                    <span class="accessibility-title">Rød tråd</span>
+                    {% include "snippets/logo.svg.jinja" %}
+                    <span class="date">{{ game_session.puzzle.date|date_format }}</span>
+                </h1>
+            </a>
+            <p id="status">Finn fire grupper på fire ord!</p>
+            <div id="puzzle">
+                <div class="solved-container"></div>
+                <div class="unsolved-container"></div>
+            </div>
+            <button class="button disabled" id="submit-button" disabled="">Bekreft</button>
+        </div>
+    </main>
+    <script>
+        const gameSession = JSON.parse('{{ game_session.model_dump_json()|safe }}');
+        const prettyDate = '{{ game_session.puzzle.date|date_format }}';
+    </script>
+</body>
+
+</html>

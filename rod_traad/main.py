@@ -60,6 +60,8 @@ def create_app():
     app.middleware("http")(create_user_id_middleware(engine))
 
     app.include_router(index.create_router(engine, templates))
+    app.include_router(iframe.create_router(engine, templates))
+
     app.mount('/api', api.create_api(engine, templates))
     app.mount('/admin', admin.create_admin(engine, templates))
 

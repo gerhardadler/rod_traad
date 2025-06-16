@@ -1,0 +1,68 @@
+#puzzle .unsolved-container {
+  grid-auto-rows: 4.5rem;
+}
+
+#submit-button {
+  margin-top: 1.5rem;
+  min-width: 10rem;
+  position: relative;
+  border-color: transparent;
+  transition: 0.2s;
+  z-index: 0;
+}
+
+#submit-button::before {
+  content: "";
+  position: absolute;
+  inset: calc(0px - var(--border-width));
+  border-radius: 0.5rem;
+  border: var(--border-width) solid transparent;
+  background: linear-gradient(
+        to right,
+        var(--solution-1-150),
+        var(--solution-2-150),
+        var(--solution-3-150),
+        var(--solution-4-150),
+        var(--solution-1-150)
+      )
+      padding-box,
+    linear-gradient(
+        to right,
+        var(--solution-1-250),
+        var(--solution-2-250),
+        var(--solution-3-250),
+        var(--solution-4-250),
+        var(--solution-1-250)
+      )
+      border-box;
+  animation: scroll-gradient 20s linear infinite;
+  background-size: 500% 100%;
+  z-index: -1;
+}
+
+#submit-button::after {
+  content: "";
+  position: absolute;
+  inset: calc(0px - var(--border-width));
+  border-radius: 0.5rem;
+  border: var(--border-width) solid transparent;
+  background: linear-gradient(
+      to right,
+      var(--solution-1-200),
+      var(--solution-2-200),
+      var(--solution-3-200),
+      var(--solution-4-200),
+      var(--solution-1-200)
+    )
+    content-box;
+  opacity: 0;
+  z-index: -1;
+  animation: scroll-gradient 20s linear infinite;
+  background-size: 500% 100%;
+  transition: opacity 0.5s ease;
+}
+
+#submit-button:hover:not(:disabled)::after,
+#submit-button:focus-visible:not(:disabled)::after {
+  opacity: 1;
+}

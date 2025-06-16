@@ -35,7 +35,7 @@
     <link rel="stylesheet" href="/static/style/global.css?2025-06-11T22:00:03">
     <link rel="stylesheet" href="/static/style/button.css?2025-06-12T18:51:00">
     <link rel="stylesheet" href="/static/style/animations.css?2025-06-11T22:00:03">
-    <link rel="stylesheet" href="/static/style/index.css?2025-06-16T21:10:00">
+    <link rel="stylesheet" href="/static/style/index.css?2025-06-17T00:22:00">
 
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,7 +43,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poltawski+Nowy:ital,wght@0,400..700;1,400..700&display=swap"
         rel="stylesheet">
 
-    <script src="/static/script/main.js?2025-06-16T21:10:00" defer type="module"></script>
+    <script src="/static/script/main.js?2025-06-17T00:22:00" defer type="module"></script>
     <title>Rød tråd</title>
 </head>
 
@@ -102,6 +102,9 @@
     <footer>
         <p>Rød tråd nr. {{ game_session.puzzle.number }}</p>
         <p>Laget av: Gerhard Adler Skartveit</p>
+        <a class="link" id="contact-email" href="">
+            {% include "snippets/envelope.svg.jinja" %}
+        </a>
     </footer>
     <dialog id="help-dialog">
         <button class="close-icon icon-button" onclick="document.getElementById('help-dialog').close()"

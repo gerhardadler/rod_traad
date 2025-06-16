@@ -42,6 +42,13 @@ export class UI {
     });
 
     this.result = new Result();
+
+    // Draw contact email
+    const user = "gerhard";
+    const domain = "rodtraad.no";
+    this.contactEmail = document.querySelector("#contact-email");
+    this.contactEmail.href = `mailto:${user}@${domain}`;
+    this.contactEmail.innerHTML += `${user}@${domain}`;
   }
 
   activateAnimations() {

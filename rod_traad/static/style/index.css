@@ -1,3 +1,7 @@
+.link {
+  text-decoration: underline;
+}
+
 .tooltip {
   visibility: hidden;
   background-color: var(--text-1);
@@ -556,6 +560,13 @@ footer {
 
 footer p {
   margin-block: 0rem;
+}
+
+footer svg {
+  width: 1rem;
+  height: 1rem;
+  fill: var(--text-2);
+  vertical-align: middle;
 }
 
 @media screen and (max-width: 600px) {

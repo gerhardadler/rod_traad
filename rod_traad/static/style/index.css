@@ -2,6 +2,12 @@
   text-decoration: underline;
 }
 
+.inline-logo {
+  color: var(--solution-4-350);
+  font-family: "Poltawski Novi", serif;
+  font-weight: bold;
+}
+
 .tooltip {
   visibility: hidden;
   background-color: var(--text-1);

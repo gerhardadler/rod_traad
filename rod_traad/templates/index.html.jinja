@@ -10,7 +10,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Et spill hvor du skal gruppere ord som hører sammen. Hver dag kommer det et nytt brett!" />
+        content="Et spill hvor du skal gruppere ord som hører sammen. Hver dag kommer det et ny oppgave!" />
 
     <meta name="google-site-verification" content="OjpV-guskwbaqWDYaLtZShkGe-3c9TPCWbBBPqrcJDE" />
 
@@ -18,7 +18,7 @@
 
     <meta property="og:title" content="Rød tråd - Grupper ord som hører sammen" />
     <meta property="og:description"
-        content="Et spill hvor du skal gruppere ord som hører sammen. Hver dag kommer det et nytt brett!" />
+        content="Et spill hvor du skal gruppere ord som hører sammen. Hver dag kommer det et ny oppgave!" />
     <meta property="og:image" content="https://rodtraad.no/static/images/social-preview.png" />
     <meta property="og:url" content="https://rodtraad.no/" />
     <meta property="og:type" content="website" />
@@ -27,7 +27,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Rød tråd - Grupper ord som hører sammen">
     <meta name="twitter:description"
-        content="Et spill hvor du skal gruppere ord som hører sammen. Hver dag kommer det et nytt brett!">
+        content="Et spill hvor du skal gruppere ord som hører sammen. Hver dag kommer det et ny oppgave!">
     <meta name="twitter:image" content="https://rodtraad.no/static/images/social-preview.png">
 
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -101,6 +101,7 @@
     </main>
     <footer>
         <p>Rød tråd nr. {{ game_session.puzzle.number }}</p>
+        <br>
         <p>Laget av: Gerhard Adler Skartveit</p>
         <a class="link" id="contact-email" href="">
             {% include "snippets/envelope.svg.jinja" %}
@@ -113,11 +114,12 @@
         </button>
 
         <h2>Hvordan spille</h2>
-        <p>Målet er å finne fire tråder (grupper) med fire ord som hører sammen.</p>
+        <p><span class="inline-logo">Rød tråd</span> er et ordspill inspirert av NYT Connections. Målet
+            er å finne fire tråder (grupper) med fire ord som hører sammen.</p>
         <ul>
             <li>Klikk på ordene for å markere dem.</li>
             <li>Når du har markert fire ord, klikk "Bekreft".</li>
-            <li>Du har fire liv, så vær varsom.</li>
+            <li>Du har kun fire liv, så tenk deg nøye gjennom!</li>
         </ul>
         <h3>Kategori eksempler</h3>
         <ul>
@@ -126,14 +128,14 @@
             <li>__ LYS: te, sol, blå, nær</li>
         </ul>
         <p>Kategoriene vil alltid være mer spesifikke enn f.eks "VERB", "NAVN" eller "ORD PÅ 4 BOKSTAVER".</p>
-        <p>Hvert brett har tråder med fire ulike vansklighetsgrader:</p>
+        <p>Hver oppgave har tråder med fire ulike vansklighetsgrader:</p>
         <ul class="solution-tags">
             <li><span class="tag solution-1">GRØNN</span>Lett</li>
             <li><span class="tag solution-2">BLÅ</span>Middels</li>
             <li><span class="tag solution-3">LILLA</span>Vrien</li>
             <li><span class="tag solution-4">RØD</span>Veldig vrien</li>
         </ul>
-        <p>Hver dag kommer det et nytt brett, så husk å kom tilbake!</p>
+        <p>Hver dag kommer det en ny oppgave, så husk å kom tilbake!</p>
         <p>Lykke til!</p>
         <button class="button neutral" onclick="document.getElementById('help-dialog').close()">Lukk</button>
     </dialog>

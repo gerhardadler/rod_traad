@@ -4,7 +4,6 @@ let game;
 
 function setupGame() {
   let selectedWords = null;
-  console.log(document.cookie);
   const preSelected = document.cookie
     .split("; ")
     .find((row) => row.startsWith("preSelected="));

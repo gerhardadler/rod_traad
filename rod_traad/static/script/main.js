@@ -19,6 +19,11 @@ function setupGame() {
     );
   }
 
+  if (selectedWords == null && localStorage.getItem("hasSeenHelp") !== "true") {
+    document.querySelector("#help-dialog").showModal();
+    localStorage.setItem("hasSeenHelp", "true");
+  }
+
   const gameState = new GameState(gameSession, selectedWords);
 
   const game = new Game(gameState);

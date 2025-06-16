@@ -9,7 +9,10 @@ from sqlmodel import Session
 from rod_traad import config
 from rod_traad.middleware import create_user_id_middleware
 from rod_traad.models import User, setup_engine
-from rod_traad.routers import index, api, admin
+from rod_traad.routers import iframe, index, api, admin
+from rod_traad.helpers.monkey_patch_starlette import monkey_patch_starlette
+
+monkey_patch_starlette()
 
 
 def date_format(value: date | Any):

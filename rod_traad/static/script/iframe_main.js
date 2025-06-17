@@ -42,5 +42,5 @@ function setupGame() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(setupGame, 100);
+  setTimeout(setupGame, 100); // small delay to ensure DOM is ready
 });

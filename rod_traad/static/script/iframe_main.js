@@ -33,7 +33,7 @@ function setupGame() {
 
   submitButton.el.addEventListener("click", async () => {
     document.cookie = `preSelected=${gameState.selected.join(",")}; path=/;`;
-    window.top.location.href = window.top.location.origin + "/";
+    window.top.location.href = "https://rodtraad.no";
   });
 }
 

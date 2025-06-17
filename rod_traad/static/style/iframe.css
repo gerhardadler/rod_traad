@@ -1,3 +1,7 @@
+body {
+  height: 100vh;
+}
+
 #puzzle .unsolved-container {
   grid-auto-rows: 4.5rem;
 }

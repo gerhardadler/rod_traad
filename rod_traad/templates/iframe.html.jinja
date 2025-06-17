@@ -45,11 +45,12 @@
                 <div class="unsolved-container"></div>
             </div>
             <button class="button disabled" id="submit-button" disabled="">Bekreft</button>
-            <footer>
-                <p>Laget av: Gerhard Adler Skartveit</p>
-            </footer>
+
         </div>
     </main>
+    <footer>
+        <p>Laget av: Gerhard Adler Skartveit</p>
+    </footer>
     <script>
         const gameSession = JSON.parse('{{ game_session.model_dump_json()|safe }}');
         const prettyDate = '{{ game_session.puzzle.date|date_format }}';

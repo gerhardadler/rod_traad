@@ -37,7 +37,7 @@ function setupGame() {
       params.append("preSelected", word);
     });
 
-    window.top.location.href = "http://localhost:8000?" + params.toString();
+    window.top.location.href = "https://rodtraad.no?" + params.toString();
   });
 }
 

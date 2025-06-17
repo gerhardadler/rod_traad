@@ -101,7 +101,27 @@ a:active {
 body {
   margin: 0;
   padding: 0;
-  background: var(--background);
+  background-color: var(--background);
+  position: relative;
+}
+body::before {
+  content: "";
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 600px;
+  background-image: radial-gradient(
+      at 0% 0%,
+      var(--solution-1-150) 0px,
+      transparent 30%
+    ),
+    radial-gradient(at 100% 0%, var(--solution-2-150) 0px, transparent 30%),
+    radial-gradient(at 0% 100%, var(--solution-3-150) 0px, transparent 30%),
+    radial-gradient(at 100% 100%, var(--solution-4-150) 0px, transparent 30%);
+  pointer-events: none;
+  z-index: -1;
 }
 
 .preload * {

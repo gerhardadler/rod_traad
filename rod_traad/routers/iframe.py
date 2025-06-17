@@ -17,7 +17,6 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
     @router.get('/')
     def get_iframe(
         session: Annotated[Session, Depends(SessionDependency(engine))],
-        user: Annotated[User, Depends(UserDependency(engine))],
         request: Request,
         puzzle_id: int | None = None,
     ):
@@ -30,17 +29,7 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
         if not puzzle:
             raise HTTPException(status_code=404, detail="Puzzle for today not found.")
 
-        query = select(GameSession).where(
-            GameSession.user_id == user.id,
-            GameSession.puzzle_id == puzzle.id,
-        )
-        game_session = session.exec(query).first()
-
-        if not game_session:
-            game_session = GameSession(user=user, puzzle_id=puzzle.id)
-            session.add(game_session)
-            session.commit()
-            session.refresh(game_session)
+        game_session = GameSession(id=999999, puzzle=puzzle)
 
         return templates.TemplateResponse(
             'iframe.html.jinja',

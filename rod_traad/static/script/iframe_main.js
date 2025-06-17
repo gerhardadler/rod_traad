@@ -32,8 +32,12 @@ function setupGame() {
   document.querySelector("body").classList.remove("no-animate");
 
   submitButton.el.addEventListener("click", async () => {
-    document.cookie = `preSelected=${gameState.selected.join(",")}; path=/;`;
-    window.top.location.href = "https://rodtraad.no";
+    const params = new URLSearchParams();
+    gameState.selected.forEach((word) => {
+      params.append("preSelected", word);
+    });
+
+    window.top.location.href = "http://localhost:8000?" + params.toString();
   });
 }
 

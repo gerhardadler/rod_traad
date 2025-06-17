@@ -3,34 +3,38 @@ import { Game, GameState } from "./game.js?2025-06-17T00:22:00";
 let game;
 
 function setupGame() {
-  let selectedWords = null;
-  const preSelected = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("preSelected="));
+  let preSelected = new URLSearchParams(window.location.search).getAll(
+    "preSelected"
+  );
 
   if (preSelected) {
-    selectedWords = preSelected.split("=")[1].split(",");
-    document.cookie = `preSelected=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    // remove from address bar
+    const url = new URL(window.location.href);
+    url.searchParams.delete("preSelected");
+    window.history.replaceState({}, "", url.toString());
 
     // filter out selected words which are not in puzzle data
-    selectedWords = selectedWords.filter((word) =>
+    preSelected = preSelected.filter((word) =>
       gameSession.puzzle.data.grid.flat().includes(word)
     );
   }
 
-  if (selectedWords == null && localStorage.getItem("hasSeenHelp") !== "true") {
+  if (
+    preSelected.length === 0 &&
+    localStorage.getItem("hasSeenHelp") !== "true"
+  ) {
     document.querySelector("#help-dialog").showModal();
     localStorage.setItem("hasSeenHelp", "true");
   }
 
-  const gameState = new GameState(gameSession, selectedWords);
+  const gameState = new GameState(gameSession, preSelected);
 
   const game = new Game(gameState);
   game.ui.draw(gameState);
   game.ui.activateAnimations();
   game.ui.show();
 
-  if (selectedWords && selectedWords.length === 4) {
+  if (preSelected && preSelected.length === 4) {
     game.makeGuess(gameState.selected);
   }
 

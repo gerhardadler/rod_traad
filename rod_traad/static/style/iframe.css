@@ -3,7 +3,7 @@
 }
 
 #submit-button {
-  margin-top: 1.5rem;
+  margin-top: 1rem;
   min-width: 10rem;
   position: relative;
   border-color: transparent;
@@ -65,4 +65,9 @@
 #submit-button:hover:not(:disabled)::after,
 #submit-button:focus-visible:not(:disabled)::after {
   opacity: 1;
+}
+
+footer {
+  margin-bottom: 0.5rem;
+  margin-top: auto;
 }

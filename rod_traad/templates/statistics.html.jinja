@@ -65,49 +65,39 @@
             <div class="statistics box">
                 <h2>Statisitikk</h2>
 
+                {% if not is_game_session_complete %}
+                <p class="error-message">Du har fullført dagens spill enda!</p>
+                <a class="button neutral" href="/">Spill dagens spill</a>
+                {% elif statistics.completed_game_sessions_count < 15 %}{#></>#}
+                <p class="error-message">Du er blandt dagens første 15 spillere! Kom tilbake senere for å se
+                    statistikken.</p>
+                <section class="bottom-actions">
+                    <button class="share-button button glow-button">Del resultat!
+                        <span class="tooltip">Kopiert!</span>
+                    </button>
+                    <a class="button neutral" href="/">Tilbake</a>
+                </section>
+                {% else %}
+
                 <section class="solve-rate">
                     <h3>Løsningsprosent</h3>
-                    <p class="solve-rate-percentage">55%</p>
+                    <p class="solve-rate-percentage">{{ statistics.solve_rate|percentage_format }}</p>
                 </section>
 
                 <section class="mistake-count">
                     <h3>Antall feil</h3>
-                    <div class="bar-chart-entry">
-                        Ingen
+                    {% set mistake_name_map = {0: "Ingen", 1: "En", 2: "To", 3: "Tre", 4: "Fire"} %}
+                    {% for mistake_count, rate in statistics.mistake_count_distribution.items() %}
+                    <div class="bar-chart-entry {{ 'active' if user_mistake_count == mistake_count else '' }}">
+                        <span class="mistake-count-label">{{ mistake_name_map[mistake_count] }}</span>
                         <div class="bar-container">
-                            <div class="bar" style="width:60%"></div>
-                            60%
+                            <div class="bar" style="width:{{ rate|percentage_format }}"></div>
+                            <span class="mistake-count-percentage">{{ rate|percentage_format }}</span>
                         </div>
+                        <span class="active-label">{{ "DU" if user_mistake_count == mistake_count else "" }}</span>
+
                     </div>
-                    <div class="bar-chart-entry active">
-                        En
-                        <div class="bar-container">
-                            <div class="bar" style="width:21%"></div>
-                            21%
-                        </div>
-                        <span class="active-label">DU</span>
-                    </div>
-                    <div class="bar-chart-entry">
-                        To
-                        <div class="bar-container">
-                            <div class="bar" style="width:8%"></div>
-                            8%
-                        </div>
-                    </div>
-                    <div class="bar-chart-entry">
-                        Tre
-                        <div class="bar-container">
-                            <div class="bar" style="width:4%"></div>
-                            4%
-                        </div>
-                    </div>
-                    <div class="bar-chart-entry">
-                        Fire
-                        <div class="bar-container">
-                            <div class="bar" style="width:8%"></div>
-                            8%
-                        </div>
-                    </div>
+                    {% endfor %}
                 </section>
                 <section class="bottom-actions">
                     <button class="share-button button glow-button">Del resultat!
@@ -115,6 +105,7 @@
                     </button>
                     <a class="button neutral" href="/">Tilbake</a>
                 </section>
+                {% endif %}
             </div>
         </div>
     </main>

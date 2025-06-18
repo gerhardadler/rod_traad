@@ -7,7 +7,14 @@ from sqlmodel import Session, select
 
 from rod_traad.config import TIMEZONE
 from rod_traad.dependencies import SessionDependency, UserDependency
-from rod_traad.models import GameSession, GameSessionPublic, Puzzle, User
+from rod_traad.helpers.calculate_statistics import calculate_statistics
+from rod_traad.models import (
+    GameSession,
+    GameSessionPublic,
+    Puzzle,
+    User,
+    is_game_session_complete,
+)
 
 
 def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
@@ -46,6 +53,11 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
             {
                 'request': request,
                 'game_session': GameSessionPublic.model_validate(game_session),
+                'statistics': calculate_statistics(session, puzzle),
+                'user_mistake_count': sum(
+                    1 for guess in game_session.guesses if not guess.correct
+                ),
+                'is_game_session_complete': is_game_session_complete(game_session),
             },
         )
 

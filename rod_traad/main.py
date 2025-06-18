@@ -31,9 +31,16 @@ def datetime_format(value: datetime | Any):
     return value
 
 
-def float_format(value: float | Any):
+def float_format(value: float | Any, decimal_places: int = 2):
     if isinstance(value, float):
-        return f'{value:.2f}'.replace('.', ',')
+        return f'{value:.{decimal_places}f}'.replace('.', ',')
+    return value
+
+
+def percentage_format(value: float | Any, decimal_places: int = 0):
+    if isinstance(value, float):
+        formatted_number = f'{(value * 100):.{decimal_places}f}'
+        return formatted_number.replace('.', ',') + '%'
     return value
 
 
@@ -55,6 +62,7 @@ def create_app():
     templates.env.filters['date_format'] = date_format
     templates.env.filters['datetime_format'] = datetime_format
     templates.env.filters['float_format'] = float_format
+    templates.env.filters['percentage_format'] = percentage_format
     templates.env.policies['json.dumps_kwargs'] = {'sort_keys': False}
 
     app.middleware("http")(create_user_id_middleware(engine))

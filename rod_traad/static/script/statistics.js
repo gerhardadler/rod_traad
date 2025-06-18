@@ -15,13 +15,15 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const mainShareButton = document.querySelector(".statistics .share-button");
-  mainShareButton.addEventListener("click", () => {
-    shareGameResult(
-      mainShareButton,
-      gameState.gameSession.guesses,
-      gameState.gameSession.puzzle.data.solutions
-    );
-  });
+  if (mainShareButton) {
+    mainShareButton.addEventListener("click", () => {
+      shareGameResult(
+        mainShareButton,
+        gameState.gameSession.guesses,
+        gameState.gameSession.puzzle.data.solutions
+      );
+    });
+  }
 
   drawEmail();
 });

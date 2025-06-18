@@ -56,6 +56,7 @@ h3 {
 .bar {
   background-color: var(--neutral-250);
   border-radius: 0.5rem;
+  min-width: 0.5rem;
 }
 
 .bottom-actions {

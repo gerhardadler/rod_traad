@@ -2,7 +2,7 @@ import { animateElement } from "../utils.js?2025-06-11T22:00:03";
 import {
   shareGameResult,
   getGuessesEmojis,
-} from "./share.js?2025-06-18T20:04:00";
+} from "./share.js?2025-06-18T23:58:00";
 
 export class Result {
   constructor() {

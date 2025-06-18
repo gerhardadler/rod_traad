@@ -1,6 +1,6 @@
 import { GameState } from "./game.js";
 import { drawEmail } from "./ui/email.js";
-import { shareGameResult, sharePage } from "./ui/share.js?2025-06-18T20:08:00";
+import { shareGameResult, sharePage } from "./ui/share.js?2025-06-18T23:58:00";
 
 document.addEventListener("DOMContentLoaded", () => {
   const gameState = new GameState(gameSession);

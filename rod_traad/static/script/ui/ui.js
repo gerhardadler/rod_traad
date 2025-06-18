@@ -1,7 +1,7 @@
 import { Puzzle } from "./puzzle.js?2025-06-11T22:00:03";
-import { Result } from "./result.js?2025-06-18:51:00";
+import { Result } from "./result.js?2025-06-18T23:57:00";
 import { GameBottom } from "./game-bottom.js?2025-06-11T22:00:03";
-import { sharePage } from "./share.js";
+import { sharePage } from "./share.js?2025-06-18T23:58:00";
 import { drawEmail } from "./email.js";
 
 export class UI {

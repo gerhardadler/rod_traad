@@ -66,10 +66,10 @@
                 <h2>Dagens statisitikk</h2>
 
                 {% if not is_game_session_complete %}
-                <p class="error-message">Du har ikke fullført dagens spill enda!</p>
+                <p class="info-message">Du har ikke fullført dagens spill enda!</p>
                 <a class="button neutral" href="/">Spill dagens spill</a>
                 {% elif statistics.completed_game_sessions_count < 15 %}{#></>#}
-                <p class="error-message">Du er blandt dagens første 15 spillere! Kom tilbake senere for å se
+                <p class="info-message">Du er blant dagens første 15 spillere! Kom tilbake senere for å se
                     statistikken.</p>
                 <section class="bottom-actions">
                     <button class="share-button button glow-button">Del resultat!

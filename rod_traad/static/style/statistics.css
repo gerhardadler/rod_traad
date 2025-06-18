@@ -17,6 +17,15 @@ h3 {
   margin-bottom: 0.5em;
 }
 
+.info-message {
+  margin: 0;
+  font-size: 1.2rem;
+  text-align: center;
+  background-color: var(--solution-2-150);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
 .solve-rate-container {
   display: flex;
   gap: 1.5rem;

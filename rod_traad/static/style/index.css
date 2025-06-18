@@ -341,6 +341,22 @@ input[type="checkbox"]:focus-visible + span {
   position: relative;
 }
 
+.statistics-button {
+  position: relative;
+}
+
+.new-tag {
+  padding: 0.2em 0.6em;
+  font-size: 0.9rem;
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  bottom: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 #result .guesses-title {
   display: flex;
   flex-direction: row;

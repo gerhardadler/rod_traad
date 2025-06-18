@@ -1,4 +1,3 @@
-from collections import defaultdict
 from dataclasses import dataclass
 
 from sqlmodel import Session, col, func, select
@@ -13,6 +12,42 @@ class Statistics:
     completed_game_sessions_count: int
     solve_rate: float | None
     mistake_count_distribution: dict[int, float]
+
+    @property
+    def difficulty(self):
+        """
+        Returns the difficulty of the puzzle based on the solve rate.
+        """
+        if self.solve_rate is None:
+            return None
+
+        match self.solve_rate:
+            case rate if rate >= 0.84:
+                return 1
+            case rate if rate >= 0.75:
+                return 2
+            case rate if rate >= 0.64:
+                return 3
+            case rate if rate >= 0.59:
+                return 4
+            case _:
+                return 5
+
+    @property
+    def difficulty_string(self):
+        match self.difficulty:
+            case None:
+                return None
+            case 1:
+                return "Enkel"
+            case 2:
+                return "Helt grei"
+            case 3:
+                return "Moderat"
+            case 4:
+                return "Vanskelig"
+            case 5:
+                return "Veldig vrien"
 
 
 def _calculate_mistake_count_distribution(completed_game_sessions: list[GameSession]):

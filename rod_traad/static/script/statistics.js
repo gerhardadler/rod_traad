@@ -26,4 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   drawEmail();
+
+  document.querySelector(".content").classList.remove("fade-in");
 });

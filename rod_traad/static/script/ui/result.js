@@ -1,33 +1,8 @@
 import { animateElement } from "../utils.js?2025-06-11T22:00:03";
-import { share } from "./share.js?2025-06-11T22:00:03";
-
-function getGuessesEmojis(guesses, solutions) {
-  const emojiRows = [];
-  for (const guess of guesses) {
-    const emojis = [];
-    guess.words.map((word) => {
-      const solutionIndex = Object.values(solutions).findIndex(
-        (solutionWords) => solutionWords.includes(word)
-      );
-      switch (solutionIndex) {
-        case 0:
-          emojis.push("🟩");
-          break;
-        case 1:
-          emojis.push("🟦");
-          break;
-        case 2:
-          emojis.push("🟪");
-          break;
-        case 3:
-          emojis.push("🟥");
-          break;
-      }
-    });
-    emojiRows.push(emojis.join(""));
-  }
-  return emojiRows.join("\n");
-}
+import {
+  shareGameResult,
+  getGuessesEmojis,
+} from "./share.js?2025-06-18T20:04:00";
 
 export class Result {
   constructor() {
@@ -41,16 +16,13 @@ export class Result {
 
     this.originalDisplay = getComputedStyle(this.el).display;
 
-    this.shareData = {
-      title: document.title,
-      text: "",
-      url: window.location.href,
-    };
+    this.guesses = [];
+    this.solutions = {};
     this.copyText = "";
 
     this.shareButton = this.el.querySelector(".share-button");
     this.shareButton.addEventListener("click", async () =>
-      share(this.shareButton, this.shareData)
+      shareGameResult(this.shareButton, this.guesses, this.solutions)
     );
 
     this.copyButton = this.el.querySelector("#copy-button");
@@ -116,7 +88,7 @@ export class Result {
     this.resultActions.appendChild(this.installAppButton);
   }
 
-  updateGuesses(guesses, solutions, date) {
+  updateGuesses(guesses, solutions) {
     this.guessesEl.innerHTML = ""; // Clear previous guesses
 
     for (const guess of guesses) {
@@ -130,15 +102,8 @@ export class Result {
       }
     }
 
-    this.shareData.text = "";
-
-    if (guesses.filter((g) => g.correct).length >= 4) {
-      this.shareData.text = "Jeg vant i Rød Tråd!\n";
-    } else if (guesses.length >= 4) {
-      this.shareData.text = "Jeg tapte i Rød Tråd...\n";
-    }
-    this.shareData.text += `${getGuessesEmojis(guesses, solutions)}\n`;
-    this.shareData.text += `Prøv selv:`; // url is automatically appended
+    this.guesses = guesses;
+    this.solutions = solutions;
 
     this.copyText = `Rød tråd ${prettyDate}\n`;
     this.copyText += `${getGuessesEmojis(guesses, solutions)}`;

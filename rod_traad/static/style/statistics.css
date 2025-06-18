@@ -1,0 +1,81 @@
+.statistics {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+h2 {
+  margin: 0;
+  text-align: center;
+  font-size: 2rem;
+  font-family: "Poltawski Novi", serif;
+}
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+
+.solve-rate-percentage {
+  font-size: 3rem;
+  font-family: "Poltawski Novi", serif;
+  font-weight: 700;
+  color: var(--solution-4-350);
+  margin-top: -0.2em;
+  margin-bottom: 0;
+}
+
+.bar-chart-entry {
+  display: grid;
+  grid-template-columns: 5ch 1fr 3ch;
+  gap: 1rem;
+  padding: 0.5rem;
+  margin-inline: -0.5rem;
+  border-radius: 0.5rem;
+}
+
+.bar-chart-entry.active {
+  background-color: var(--solution-4-150);
+}
+
+.bar-chart-entry.active .bar {
+  background-color: var(--solution-4-250);
+}
+
+.bar-chart-entry .active-label {
+  color: var(--solution-4-400);
+  font-weight: 700;
+}
+
+.bar-container {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.bar {
+  background-color: var(--neutral-250);
+  border-radius: 0.5rem;
+}
+
+.bottom-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.bottom-actions .button {
+  min-width: 12rem;
+}
+
+@media screen and (max-width: 600px) {
+  .statistics {
+    padding: 1.2rem;
+  }
+
+  .bottom-actions {
+    flex-direction: column;
+  }
+  .bottom-actions .button {
+    width: 100%;
+  }
+}

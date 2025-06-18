@@ -1,7 +1,8 @@
 import { Puzzle } from "./puzzle.js?2025-06-11T22:00:03";
 import { Result } from "./result.js?2025-06-18:51:00";
 import { GameBottom } from "./game-bottom.js?2025-06-11T22:00:03";
-import { share } from "./share.js?2025-06-11T22:00:03";
+import { sharePage } from "./share.js";
+import { drawEmail } from "./email.js";
 
 export class UI {
   constructor(
@@ -34,21 +35,12 @@ export class UI {
     });
     this.shareButton = document.querySelector(".share-button");
     this.shareButton.addEventListener("click", () => {
-      share(this.shareButton, {
-        title: document.title,
-        text: "Sjekk ut Rød tråd!",
-        url: window.location.href,
-      });
+      sharePage(this.shareButton);
     });
 
     this.result = new Result();
 
-    // Draw contact email
-    const user = "gerhard";
-    const domain = "rodtraad.no";
-    this.contactEmail = document.querySelector("#contact-email");
-    this.contactEmail.href = `mailto:${user}@${domain}`;
-    this.contactEmail.innerHTML += `${user}@${domain}`;
+    drawEmail();
   }
 
   activateAnimations() {

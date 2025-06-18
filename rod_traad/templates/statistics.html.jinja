@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="no">
+
+<head>
+    <!-- setup up service worker as the first step -->
+    <script src="/static/script/setup_sw.js"></script>
+
+    <!-- meta -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Et spill hvor du skal gruppere ord som hører sammen. Hver dag kommer det et ny oppgave!" />
+
+    <meta name="google-site-verification" content="OjpV-guskwbaqWDYaLtZShkGe-3c9TPCWbBBPqrcJDE" />
+
+    <!-- Open Graph -->
+
+    <meta property="og:title" content="Rød tråd - Grupper ord som hører sammen" />
+    <meta property="og:description"
+        content="Et spill hvor du skal gruppere ord som hører sammen. Hver dag kommer det et ny oppgave!" />
+    <meta property="og:image" content="https://rodtraad.no/static/images/social-preview.png" />
+    <meta property="og:url" content="https://rodtraad.no/" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Rød tråd - Grupper ord som hører sammen">
+    <meta name="twitter:description"
+        content="Et spill hvor du skal gruppere ord som hører sammen. Hver dag kommer det et ny oppgave!">
+    <meta name="twitter:image" content="https://rodtraad.no/static/images/social-preview.png">
+
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/static/style/global.css?2025-06-17T19:48:00">
+    <link rel="stylesheet" href="/static/style/button.css?2025-06-12T18:51:00">
+    <link rel="stylesheet" href="/static/style/animations.css?2025-06-11T22:00:03">
+    <link rel="stylesheet" href="/static/style/index.css?2025-06-17T01:32:00">
+    <link rel="stylesheet" href="/static/style/statistics.css?2025-06-17T14:42:00">
+
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poltawski+Nowy:ital,wght@0,400..700;1,400..700&display=swap"
+        rel="stylesheet">
+
+    <script src="/static/script/statistics.js" defer type="module"></script>
+
+    <title>Rød tråd - statisitikk</title>
+</head>
+
+<body class="no-animate">
+    <div class="actions">
+        <button class="share-button">{% include "snippets/share.svg.jinja" %}
+            <span class="tooltip">Lenke kopiert!</span>
+        </button>
+    </div>
+    <main>
+        <div class="content">
+            <h1>
+                <span class="accessibility-title">Rød tråd</span>
+                {% include "snippets/logo.svg.jinja" %}
+                <span class="date">{{ game_session.puzzle.date|date_format }}</span>
+            </h1>
+            <div class="statistics box">
+                <h2>Statisitikk</h2>
+
+                <section class="solve-rate">
+                    <h3>Løsningsprosent</h3>
+                    <p class="solve-rate-percentage">55%</p>
+                </section>
+
+                <section class="mistake-count">
+                    <h3>Antall feil</h3>
+                    <div class="bar-chart-entry">
+                        Ingen
+                        <div class="bar-container">
+                            <div class="bar" style="width:60%"></div>
+                            60%
+                        </div>
+                    </div>
+                    <div class="bar-chart-entry active">
+                        En
+                        <div class="bar-container">
+                            <div class="bar" style="width:21%"></div>
+                            21%
+                        </div>
+                        <span class="active-label">DU</span>
+                    </div>
+                    <div class="bar-chart-entry">
+                        To
+                        <div class="bar-container">
+                            <div class="bar" style="width:8%"></div>
+                            8%
+                        </div>
+                    </div>
+                    <div class="bar-chart-entry">
+                        Tre
+                        <div class="bar-container">
+                            <div class="bar" style="width:4%"></div>
+                            4%
+                        </div>
+                    </div>
+                    <div class="bar-chart-entry">
+                        Fire
+                        <div class="bar-container">
+                            <div class="bar" style="width:8%"></div>
+                            8%
+                        </div>
+                    </div>
+                </section>
+                <section class="bottom-actions">
+                    <button class="share-button button glow-button">Del resultat!
+                        <span class="tooltip">Kopiert!</span>
+                    </button>
+                    <a class="button neutral" href="/">Tilbake</a>
+                </section>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>Rød tråd nr. {{ game_session.puzzle.number }}</p>
+        <br>
+        <p>Laget av: Gerhard Adler Skartveit</p>
+        <a class="link" id="contact-email" href="">
+            {% include "snippets/envelope.svg.jinja" %}
+        </a>
+    </footer>
+    <script>
+        const gameSession = JSON.parse('{{ game_session.model_dump_json()|safe }}');
+        const prettyDate = '{{ game_session.puzzle.date|date_format }}';
+    </script>
+</body>
+
+</html>

@@ -9,7 +9,7 @@ from sqlmodel import Session
 from rod_traad import config
 from rod_traad.middleware import create_user_id_middleware
 from rod_traad.models import User, setup_engine
-from rod_traad.routers import iframe, index, api, admin
+from rod_traad.routers import iframe, index, api, admin, statistics
 from rod_traad.helpers.monkey_patch_starlette import monkey_patch_starlette
 
 monkey_patch_starlette()
@@ -61,6 +61,7 @@ def create_app():
 
     app.include_router(index.create_router(engine, templates))
     app.include_router(iframe.create_router(engine, templates))
+    app.include_router(statistics.create_router(engine, templates))
 
     app.mount('/api', api.create_api(engine, templates))
     app.mount('/admin', admin.create_admin(engine, templates))

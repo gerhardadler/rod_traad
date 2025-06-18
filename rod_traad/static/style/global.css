@@ -161,6 +161,13 @@ h2 {
   transition: none !important;
 }
 
+.box {
+  padding: 2rem;
+  background-color: var(--neutral-100);
+  border: var(--border-width) solid var(--neutral-200);
+  border-radius: 0.5rem;
+}
+
 .primary {
   --default-color: var(--primary);
   --alternate-default-color: var(--alternate-primary);
@@ -239,8 +246,12 @@ h2 {
   --default-color-400: var(--solution-4-400);
 }
 
-@media screen and (max-width: 45rem) {
+@media screen and (max-width: 600px) {
   h1 {
     font-size: 1.7rem;
+  }
+
+  .box {
+    padding: 1.5rem;
   }
 }

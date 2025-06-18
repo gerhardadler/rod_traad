@@ -63,10 +63,10 @@
                 <span class="date">{{ game_session.puzzle.date|date_format }}</span>
             </h1>
             <div class="statistics box">
-                <h2>Statisitikk</h2>
+                <h2>Dagens statisitikk</h2>
 
                 {% if not is_game_session_complete %}
-                <p class="error-message">Du har fullført dagens spill enda!</p>
+                <p class="error-message">Du har ikke fullført dagens spill enda!</p>
                 <a class="button neutral" href="/">Spill dagens spill</a>
                 {% elif statistics.completed_game_sessions_count < 15 %}{#></>#}
                 <p class="error-message">Du er blandt dagens første 15 spillere! Kom tilbake senere for å se
@@ -85,7 +85,7 @@
                 </section>
 
                 <section class="mistake-count">
-                    <h3>Antall feil</h3>
+                    <h3>Fordeling av feil</h3>
                     {% set mistake_name_map = {0: "Ingen", 1: "En", 2: "To", 3: "Tre", 4: "Fire"} %}
                     {% for mistake_count, rate in statistics.mistake_count_distribution.items() %}
                     <div class="bar-chart-entry {{ 'active' if user_mistake_count == mistake_count else '' }}">

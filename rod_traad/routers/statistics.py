@@ -18,7 +18,7 @@ from rod_traad.models import (
 
 
 def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
-    router = APIRouter(prefix='/statistics')
+    router = APIRouter(prefix='/statistikk')
 
     @router.get('/')
     def get_statistics(

@@ -31,12 +31,13 @@ h3 {
   grid-template-columns: 5ch 1fr 3ch;
   gap: 1rem;
   padding: 0.5rem;
-  margin-inline: -0.5rem;
+  margin-inline: calc(-0.5rem - var(--border-width));
   border-radius: 0.5rem;
+  border: var(--border-width) solid transparent;
 }
 
 .bar-chart-entry.active {
-  background-color: var(--solution-4-150);
+  border-color: var(--solution-4-200);
 }
 
 .bar-chart-entry.active .bar {

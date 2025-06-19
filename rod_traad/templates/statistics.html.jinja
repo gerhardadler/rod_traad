@@ -98,7 +98,7 @@
                 </section>
 
                 <section class="mistake-count">
-                    <h3>Fordeling av feil</h3>
+                    <h3>Fordeling av antall feil</h3>
                     {% set mistake_name_map = {0: "Ingen", 1: "En", 2: "To", 3: "Tre", 4: "Fire"} %}
                     {% for mistake_count, rate in statistics.mistake_count_distribution.items() %}
                     <div class="bar-chart-entry {{ 'active' if user_mistake_count == mistake_count else '' }}">

@@ -89,6 +89,12 @@ def calculate_statistics(session: Session, puzzle: Puzzle) -> Statistics:
     for game_session in game_sessions:
         if game_session.end_time is None:
             continue
+        if game_session.user_id in [
+            "c61ff0ce-71a0-45d8-a919-0fc5488a03d3",
+            "14ec7bc3-1dab-4e92-8bd4-08224f55a2b2",
+        ]:
+            # Skip test users
+            continue
 
         completed_game_sessions.append(game_session)
         if is_game_session_won(game_session):

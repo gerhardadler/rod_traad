@@ -64,6 +64,9 @@ def _calculate_mistake_count_distribution(completed_game_sessions: list[GameSess
         )
         mistake_count_distribution[incorrect_guesses] += 1
 
+    if len(completed_game_sessions) == 0:
+        return mistake_count_distribution
+
     for key in mistake_count_distribution:
         mistake_count_distribution[key] = mistake_count_distribution[key] / len(
             completed_game_sessions

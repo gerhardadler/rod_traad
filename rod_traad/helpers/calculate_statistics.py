@@ -43,7 +43,7 @@ class Statistics:
             case 2:
                 return "Helt grei"
             case 3:
-                return "Moderat"
+                return "Middels"
             case 4:
                 return "Vanskelig"
             case 5:

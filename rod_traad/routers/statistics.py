@@ -25,7 +25,7 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
         session: Annotated[Session, Depends(SessionDependency(engine))],
         user: Annotated[User, Depends(UserDependency(engine))],
         request: Request,
-        puzzle_id: int | None = None,
+        puzzle_id: str | None = None,
     ):
         if puzzle_id:
             puzzle = session.get(Puzzle, puzzle_id)

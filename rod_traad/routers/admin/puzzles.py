@@ -84,7 +84,7 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
 
     @router.get('/{puzzle_id}')
     def get_puzzle(
-        puzzle_id: int,
+        puzzle_id: str,
         request: Request,
         session: Annotated[Session, Depends(SessionDependency(engine))],
     ):
@@ -103,7 +103,7 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
 
     @router.get('/{puzzle_id}/stats')
     def get_puzzle_stats(
-        puzzle_id: int,
+        puzzle_id: str,
         request: Request,
         session: Annotated[Session, Depends(SessionDependency(engine))],
     ):
@@ -155,7 +155,7 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
 
     @router.get('/{puzzle_id}/delete')
     def get_delete_puzzle(
-        puzzle_id: int,
+        puzzle_id: str,
         session: Annotated[Session, Depends(SessionDependency(engine))],
     ):
         puzzle = session.get(Puzzle, puzzle_id)
@@ -196,7 +196,7 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
 
     @router.post('/{puzzle_id}')
     def update_puzzle(
-        puzzle_id: int,
+        puzzle_id: str,
         request: Request,
         session: Annotated[Session, Depends(SessionDependency(engine))],
         puzzle: Annotated[PuzzleUpdate, Form()],

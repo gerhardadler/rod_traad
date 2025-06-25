@@ -1,15 +1,22 @@
 import logging
 import datetime
-import tomllib
 from typing import Annotated, Any
 import uuid
-from pydantic import AfterValidator, BaseModel, BeforeValidator, Json, PlainSerializer
-from sqlalchemy import Column, DateTime, Engine
-from sqlmodel import JSON, Field, Relationship, SQLModel, create_engine, text
+from pydantic import AfterValidator, BaseModel, BeforeValidator, Json
+from sqlalchemy import Column
+from sqlmodel import JSON, Field, Relationship, SQLModel, create_engine
 from rod_traad.config import SQLITE_DB
 
 
 logger = logging.getLogger(__name__)
+
+SQLModel.metadata.naming_convention = {
+    "ix": "ix_%(table_name)s_%(column_0_name)s",
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(constraint_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s",
+}
 
 
 def setup_engine():
@@ -45,19 +52,19 @@ class Detail(BaseModel):
 
 
 class PuzzleBase(SQLModel):
-    date: datetime.date
+    date: datetime.date | None
     data: dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
 
 
 class Puzzle(PuzzleBase, table=True):
-    id: int | None = Field(default=None, primary_key=True)
+    id: str | None = Field(default=None, primary_key=True)
     number: int | None = Field(default=None, nullable=True, unique=True)
     sessions: list["GameSession"] = Relationship(back_populates="puzzle")
 
 
 class PuzzleUpdate(PuzzleBase):
     number: Annotated[int | None, BeforeValidator(empty_string_to_none)] = None
-    date: datetime.date
+    date: datetime.date | None
     data: Json[dict[str, Any]] = Field(default_factory=dict)
 
 
@@ -68,7 +75,7 @@ class User(SQLModel, table=True):
 
 class GameSessionBase(SQLModel):
     user_id: str | None = Field(default=None, foreign_key="user.id")
-    puzzle_id: int | None = Field(default=None, foreign_key="puzzle.id", nullable=False)
+    puzzle_id: str | None = Field(default=None, foreign_key="puzzle.id", nullable=False)
 
     start_time: AwareConvertDatetime = Field(
         default_factory=lambda: datetime.datetime.now(datetime.UTC)

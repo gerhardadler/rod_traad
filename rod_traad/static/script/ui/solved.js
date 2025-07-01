@@ -4,7 +4,7 @@ export class Solved {
     this.el.classList.add("solved", `solution-${index}`);
 
     this.h3 = document.createElement("h3");
-    this.h3.innerText = name;
+    this.h3.innerHTML = name;
 
     this.p = document.createElement("p");
     this.p.innerHTML = words.join(", ");

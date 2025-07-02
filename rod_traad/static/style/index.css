@@ -142,7 +142,7 @@ h1 .date {
   --puzzle-gap: 0.5rem;
 }
 
-#puzzle .solved-container {
+.solved-container {
   display: flex;
   gap: var(--puzzle-gap);
   flex-direction: column;
@@ -152,17 +152,17 @@ h1 .date {
 and unsolved containers without having extra spacing above or below either container. 
 ---> */
 
-#puzzle .solved-container .solved:last-child {
+.solved-container .solved:last-child {
   margin-bottom: var(--puzzle-gap);
 }
 
-#puzzle .solved-container .solved:nth-child(4) {
+.solved-container .solved:nth-child(4) {
   margin-bottom: 0;
 }
 
 /* <--- */
 
-#puzzle .unsolved-container {
+.unsolved-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: 5.5rem;

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="no">
+
+<head>
+    <!-- setup up service worker as the first step -->
+    <script src="/static/script/setup_sw.js"></script>
+
+    <!-- meta -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Et spill hvor du skal gruppere ord som hører sammen. Hver dag kommer det et ny oppgave!" />
+
+    <meta name="google-site-verification" content="OjpV-guskwbaqWDYaLtZShkGe-3c9TPCWbBBPqrcJDE" />
+
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/static/style/global.css?2025-06-18T23:58:00">
+    <link rel="stylesheet" href="/static/style/button.css?2025-06-18T23:58:00">
+    <link rel="stylesheet" href="/static/style/animations.css?2025-06-11T22:00:03">
+    <link rel="stylesheet" href="/static/style/index.css?2025-06-19T00:33:00">
+    <link rel="stylesheet" href="/static/style/editor.css">
+    <link rel="stylesheet" href="/static/style/forms.css">
+
+
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poltawski+Nowy:ital,wght@0,400..700;1,400..700&display=swap"
+        rel="stylesheet">
+
+    <script src="/static/script/editor.js" defer type="module"></script>
+
+    <title>Rød tråd - redigerer</title>
+</head>
+
+<body class="no-animate">
+    <div class="actions">
+        <button id="help-button">?</button>
+        <button class="share-button">{% include "snippets/share.svg.jinja" %}
+            <span class="tooltip">Lenke kopiert!</span>
+        </button>
+    </div>
+    <main>
+        <div class="content transition fade-in">
+            <h1>
+                <span class="accessibility-title">Rød tråd</span>
+                {% include "snippets/logo.svg.jinja" %}
+                <span class="date">Redigerer</span>
+            </h1>
+            <div class="content-container">
+                <div class="left">
+                    <section class="general-options">
+                        <h2>Generelle instillinger</h2>
+                        <form class="form general-options-form">
+                            <div class="form-entry">
+                                <label for="name">Oppgavenavn</label>
+                                <input type="text" id="name" value="" required>
+                            </div>
+                            <div class=" form-entry">
+                                <label for="made-by">Laget av</label>
+                                <input type="text" id="made-by" value="" required>
+                            </div>
+                        </form>
+                    </section>
+                    <section class="solutions">
+                        <h2>Kategorier</h2>
+                        <div class="solutions-container">
+                            <form class="form solution solution-1" data-solutionNumber="1">
+                                <div class="form-entry">
+                                    <label>Kategori navn</label>
+                                    <input type="text" id="solution-name" placeholder="FUGLER" required>
+                                </div>
+                                <div class="form-entry">
+                                    <label>Ord (komma seperert)</label>
+                                    <input type="text" id="word-input" placeholder="MÅKE, KRÅKE, DUE, UGLE" required>
+                                </div>
+                            </form>
+                            <form class="form solution solution-2" data-solutionNumber="2">
+                                <div class="form-entry">
+                                    <label>Kategori navn</label>
+                                    <input type="text" id="solution-name" placeholder="FUGLER" required>
+                                </div>
+                                <div class="form-entry">
+                                    <label>Ord (komma seperert)</label>
+                                    <input type="text" id="word-input" placeholder="MÅKE, KRÅKE, DUE, UGLE" required>
+                                </div>
+                            </form>
+                            <form class="form solution solution-3" data-solutionNumber="3">
+                                <div class="form-entry">
+                                    <label>Kategori navn</label>
+                                    <input type="text" id="solution-name" placeholder="FUGLER" required>
+                                </div>
+                                <div class="form-entry">
+                                    <label>Ord (komma seperert)</label>
+                                    <input type="text" id="word-input" placeholder="MÅKE, KRÅKE, DUE, UGLE" required>
+                                </div>
+                            </form>
+                            <form class="form solution solution-4" data-solutionNumber="4">
+                                <div class="form-entry">
+                                    <label>Kategori navn</label>
+                                    <input type="text" id="solution-name" placeholder="FUGLER" required>
+                                </div>
+                                <div class="form-entry">
+                                    <label>Ord (komma seperert)</label>
+                                    <input type="text" id="word-input" placeholder="MÅKE, KRÅKE, DUE, UGLE" required>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                </div>
+                <div class="right">
+                    <section class="grid">
+                        <h2>Ord</h2>
+                        <div class="unsolved-container">
+                            {% for _ in range(16)%}
+                            <div class="word">
+                                <span></span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>Laget av: Gerhard Adler Skartveit</p>
+        <a class="link" id="contact-email" href="">
+            {% include "snippets/envelope.svg.jinja" %}
+        </a>
+    </footer>
+</body>
+
+</html>

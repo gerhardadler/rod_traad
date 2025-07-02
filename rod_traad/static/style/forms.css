@@ -1,0 +1,51 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+}
+
+.form .form-entry {
+  display: flex;
+  flex-direction: column;
+}
+
+.form label {
+  color: var(--text-2);
+  margin-bottom: 0.5em;
+}
+
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="password"],
+.form select {
+  display: block;
+  width: 100%;
+  font-size: 1.2rem;
+  padding: 0.5em 0.8em;
+  border-radius: 0.7rem;
+  border: 3px solid var(--default-color-200);
+  background: var(--neutral-100);
+  color: var(--text-1);
+  transition: 0.2s;
+}
+
+.form input[type="text"]:focus,
+.form input[type="email"]:focus,
+.form input[type="password"]:focus,
+.form select:focus {
+  border: 3px solid var(--default-color-350);
+  outline: none;
+}
+
+.button-row {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  justify-content: stretch;
+  width: 100%;
+}
+
+.button-row * {
+  flex: 1;
+}

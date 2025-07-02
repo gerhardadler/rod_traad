@@ -1,0 +1,53 @@
+.content {
+  max-width: 1200px;
+}
+
+.content-container {
+  display: flex;
+  gap: 2rem;
+  max-width: 1200px;
+  width: 100%;
+  justify-content: stretch;
+}
+
+.left,
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: start;
+}
+
+.content-container > * {
+  flex: 1;
+}
+
+.general-options form {
+  max-width: 1fr;
+}
+
+.solutions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.solution {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: var(--default-color-250);
+  border: var(--border-width) solid var(--default-color-350);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.solution label {
+  color: var(--text-1) !important;
+}
+
+.grid {
+  position: sticky;
+  top: 0;
+  --puzzle-gap: 0.5rem;
+}

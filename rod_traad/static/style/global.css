@@ -16,6 +16,10 @@
   --default-color-100: var(--neutral-100);
   --default-color-150: var(--neutral-150);
   --default-color-200: var(--neutral-200);
+  --default-color-250: var(--neutral-250);
+  --default-color-300: var(--neutral-300);
+  --default-color-350: var(--neutral-350);
+  --default-color-400: var(--neutral-400);
 
   --solution-1-100: hsl(145, 0%, 100%);
   --solution-1-150: hsl(145, 60%, 92%);

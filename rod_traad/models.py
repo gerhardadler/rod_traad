@@ -1,5 +1,6 @@
 import logging
 import datetime
+import random
 from typing import Annotated, Any
 import uuid
 from pydantic import AfterValidator, BaseModel, BeforeValidator, Json
@@ -41,6 +42,12 @@ def aware_convert(value: datetime.datetime | None) -> datetime.datetime | None:
         return value.replace(tzinfo=datetime.UTC)
 
 
+def generate_random_id(length: int = 8) -> str:
+    """Generate a random alphanumeric string of fixed length."""
+    allowed_chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    return ''.join(random.choice(allowed_chars) for _ in range(length))
+
+
 AwareConvertDatetime = Annotated[
     datetime.datetime | None,
     AfterValidator(aware_convert),
@@ -61,7 +68,7 @@ class PuzzleBase(SQLModel):
 
 
 class Puzzle(PuzzleBase, table=True):
-    id: str | None = Field(default=None, primary_key=True)
+    id: str | None = Field(default_factory=generate_random_id, primary_key=True)
     number: int | None = Field(default=None, nullable=True, unique=True)
     sessions: list["GameSession"] = Relationship(back_populates="puzzle")
 

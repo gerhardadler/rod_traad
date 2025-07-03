@@ -13,6 +13,8 @@ from alembic import op
 import sqlalchemy as sa
 import sqlmodel
 
+from rod_traad.models import generate_random_id
+
 
 # revision identifiers, used by Alembic.
 revision: str = '79fa76ad5e9e'
@@ -32,7 +34,7 @@ def upgrade() -> None:
     conn = op.get_bind()
     puzzles = conn.execute(sa.text("SELECT id FROM puzzle")).fetchall()
     for row in puzzles:
-        new_uuid = str(uuid.uuid4())
+        new_uuid = generate_random_id()
         conn.execute(
             sa.text("UPDATE puzzle SET uuid = :uuid WHERE id = :id"),
             {"uuid": new_uuid, "id": row.id},

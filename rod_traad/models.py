@@ -130,8 +130,12 @@ def is_game_session_complete(
 
 class GuessBase(SQLModel):
     session_id: int = Field(foreign_key="gamesession.id")
-    words: list[str] = Field(default_factory=list, sa_column=Column(JSON))
-    correct: bool
+    words: list[int] = Field(default_factory=list, sa_column=Column(JSON))
+    solution: int | None = None
+
+    @property
+    def correct(self):
+        return self.solution is not None
 
 
 class Guess(GuessBase, table=True):

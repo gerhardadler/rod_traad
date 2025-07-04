@@ -1,10 +1,9 @@
-import json
 import logging
 import datetime
 import random
-from typing import Annotated, Any, Self
+from typing import Annotated, Any
 import uuid
-from pydantic import AfterValidator, BaseModel, BeforeValidator, Json, model_validator
+from pydantic import AfterValidator, BaseModel, BeforeValidator, Json
 from sqlalchemy import Column
 from sqlmodel import JSON, Field, Relationship, SQLModel, create_engine
 from rod_traad.config import SQLITE_DB
@@ -55,133 +54,25 @@ AwareConvertDatetime = Annotated[
 ]
 
 
-class BaseTable(SQLModel):
-    @model_validator(mode="before")
-    @classmethod
-    def validate_types(cls, data: Any) -> Any:
-        # Dynamically loop through model fields
-        for field_name, field in cls.model_fields.items():
-            field_type = field.annotation
-            try:
-                value = data.get(field_name)
-            except AttributeError:
-                value = getattr(data, field_name, None)
-
-        return data
-
-
 class Detail(BaseModel):
     detail: str
 
 
-class GuessWordLink(SQLModel, table=True):
-    guess_id: int = Field(foreign_key="guess.id", primary_key=True)
-    word_id: int = Field(foreign_key="word.id", primary_key=True)
-
-
-class PuzzleBase(BaseTable):
+class PuzzleBase(SQLModel):
     date: datetime.date | None
-    number: int | None = Field(default=None, nullable=True, unique=True)
+    data: dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
 
 
 class Puzzle(PuzzleBase, table=True):
     id: str | None = Field(default_factory=generate_random_id, primary_key=True)
+    number: int | None = Field(default=None, nullable=True, unique=True)
     sessions: list["GameSession"] = Relationship(back_populates="puzzle")
-
-    words: list["Word"] = Relationship(
-        back_populates="puzzle",
-        cascade_delete=True,
-    )
-    solutions: list["Solution"] = Relationship(
-        back_populates="puzzle",
-        cascade_delete=True,
-    )
 
 
 class PuzzleUpdate(PuzzleBase):
-    id: str
     number: Annotated[int | None, BeforeValidator(empty_string_to_none)] = None
     date: datetime.date | None
-    # words: Json[list["Word"]] = []
-    solutions: Json[list["SolutionUpdate"]] = []
-
-
-class PuzzleCreate(PuzzleBase):
-    number: Annotated[int | None, BeforeValidator(empty_string_to_none)] = None
-    date: datetime.date | None
-    solutions: Json[list["SolutionCreate"]] = []
-
-
-class PuzzlePublic(PuzzleBase):
-    id: str | None = None
-    words: list["Word"] = []
-    solutions: list["SolutionPublic"] = []
-
-
-class WordBase(SQLModel):
-    word: str = Field(default="", nullable=False, index=True)
-    position: int = Field(default=0, nullable=False, index=True)
-
-
-class Word(WordBase, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    puzzle_id: str | None = Field(default=None, foreign_key="puzzle.id", nullable=False)
-    solution_id: int | None = Field(
-        default=None, foreign_key="solution.id", nullable=False
-    )
-
-    puzzle: Puzzle = Relationship(back_populates="words")
-    solution: "Solution" = Relationship(back_populates="words")
-
-    guesses: list["Guess"] = Relationship(
-        back_populates="words",
-        link_model=GuessWordLink,
-    )
-
-
-class WordUpdate(WordBase):
-    id: int
-    pass
-
-
-class WordCreate(WordBase):
-    pass
-
-
-class WordPublic(WordBase):
-    id: int | None = None
-    pass
-
-
-class SolutionBase(SQLModel):
-    name: str = Field(default="", nullable=False, index=True)
-    difficulty: int = Field(default=0, nullable=False, index=True)
-
-
-class Solution(SolutionBase, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    puzzle_id: str | None = Field(default=None, foreign_key="puzzle.id", nullable=False)
-
-    words: list[Word] = Relationship(back_populates="solution", cascade_delete=True)
-    puzzle: Puzzle = Relationship(back_populates="solutions")
-    guesses: list["Guess"] = Relationship(
-        back_populates="solution", cascade_delete=True
-    )
-
-
-class SolutionCreate(SolutionBase):
-    words: list[WordCreate] = []
-
-
-class SolutionUpdate(SolutionBase):
-    id: int
-    puzzle_id: str
-    words: list[WordUpdate] = []
-
-
-class SolutionPublic(SolutionBase):
-    id: int | None = None
-    words: list[WordPublic] = []
+    data: Json[dict[str, Any]] = Field(default_factory=dict)
 
 
 class User(SQLModel, table=True):
@@ -239,21 +130,11 @@ def is_game_session_complete(
 
 class GuessBase(SQLModel):
     session_id: int = Field(foreign_key="gamesession.id")
-    solution_id: int | None = Field(
-        default=None, foreign_key="solution.id", nullable=True
-    )
-
-    @property
-    def correct(self) -> bool:
-        return self.solution_id is not None
+    words: list[str] = Field(default_factory=list, sa_column=Column(JSON))
+    correct: bool
 
 
 class Guess(GuessBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
 
     session: GameSession = Relationship(back_populates="guesses")
-    words: list["Word"] = Relationship(
-        back_populates="guesses",
-        link_model=GuessWordLink,
-    )
-    solution: Solution | None = Relationship(back_populates="guesses")

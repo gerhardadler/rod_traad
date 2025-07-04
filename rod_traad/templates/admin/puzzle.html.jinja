@@ -39,12 +39,7 @@
         <br>
 
         <label for="data">Data:</label>
-        <textarea id="solutions" name="solutions" rows="54" cols="80" required>
-{{dumped_puzzle['solutions']|tojson(indent=2)|safe}}
-        </textarea>
-        {# <textarea id="words" name="words" rows="54" cols="80" required>
-{{dumped_puzzle['words']|tojson(indent=2)|safe}}
-    </textarea> #}
+        <textarea id="data" name="data" rows="54" cols="80" required>{{ puzzle_data|safe }}</textarea>
 
         <br>
 

@@ -1,9 +1,8 @@
 from datetime import datetime
 import json
 import tomllib
-from typing import Annotated, Any
-from fastapi import APIRouter, Body, Depends, Form, HTTPException, Request
-from fastapi.exceptions import RequestValidationError
+from typing import Annotated
+from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import AfterValidator
@@ -18,16 +17,19 @@ from rod_traad.models import (
     GameSessionPublic,
     Guess,
     Puzzle,
-    PuzzleCreate,
-    PuzzlePublic,
     PuzzleUpdate,
-    Solution,
-    SolutionPublic,
     User,
-    Word,
-    WordPublic,
     is_game_session_won,
 )
+
+
+def get_puzzle_data_string(puzzle: Puzzle):
+    return (
+        json.dumps(puzzle.data, indent=2)
+        .replace('&', '&amp;')
+        .replace('<', '&lt;')
+        .replace('>', '&gt;')
+    )
 
 
 def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
@@ -64,19 +66,11 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
 
         next_number = (current_number or 0) + 1
 
-        puzzle = PuzzlePublic(
+        puzzle = Puzzle(
             number=next_number,
             date=today,
-            solutions=[
-                SolutionPublic(
-                    difficulty=s,
-                    words=[WordPublic(position=s * 4 + w) for w in range(4)],
-                )
-                for s in range(4)
-            ],
+            data=get_empty_puzzle_data(),
         )
-
-        print(puzzle.model_dump(mode='json'))
 
         return templates.TemplateResponse(
             'admin/puzzle.html.jinja',
@@ -84,7 +78,7 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
                 'request': request,
                 'today': today,
                 'puzzle': puzzle,
-                'dumped_puzzle': puzzle.model_dump(mode='json'),
+                'puzzle_data': get_puzzle_data_string(puzzle),
             },
         )
 
@@ -98,13 +92,12 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
         if not puzzle:
             raise HTTPException(status_code=404, detail="Puzzle not found.")
 
-        puzzle_public = PuzzlePublic.model_validate(puzzle)
         return templates.TemplateResponse(
             'admin/puzzle.html.jinja',
             {
                 'request': request,
-                'puzzle': puzzle_public,
-                'dumped_puzzle': puzzle_public.model_dump(mode='json'),
+                'puzzle': puzzle,
+                'puzzle_data': get_puzzle_data_string(puzzle),
             },
         )
 
@@ -178,50 +171,53 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
         )
 
     @router.post('/new')
-    async def post_new_puzzle(
+    def post_new_puzzle(
         request: Request,
         session: Annotated[Session, Depends(SessionDependency(engine))],
+        puzzle: Annotated[PuzzleUpdate, Form()],
     ):
-        puzzle = PuzzleCreate.model_validate(await request.form())
-
-        new_puzzle = Puzzle.model_validate(puzzle.model_dump(mode='json'))
+        new_puzzle = Puzzle(
+            number=puzzle.number,
+            date=puzzle.date,
+            data=puzzle.data,
+        )
         session.add(new_puzzle)
         session.commit()
         session.refresh(new_puzzle)
 
-        public_puzzle = PuzzlePublic.model_validate(new_puzzle)
-
         return templates.TemplateResponse(
             'admin/puzzle.html.jinja',
             {
                 'request': request,
-                'puzzle': public_puzzle,
-                'dumped_puzzle': public_puzzle.model_dump(mode='json'),
+                'puzzle': new_puzzle,
+                'puzzle_data': get_puzzle_data_string(new_puzzle),
             },
         )
 
     @router.post('/{puzzle_id}')
-    async def update_puzzle(
+    def update_puzzle(
         puzzle_id: str,
         request: Request,
         session: Annotated[Session, Depends(SessionDependency(engine))],
+        puzzle: Annotated[PuzzleUpdate, Form()],
     ):
-        puzzle_update = PuzzleUpdate.model_validate(await request.form())
+        existing_puzzle = session.get(Puzzle, puzzle_id)
 
-        puzzle = Puzzle.model_validate(puzzle_update)
+        if not existing_puzzle:
+            raise HTTPException(status_code=404, detail="Puzzle not found.")
 
-        session.merge(puzzle)
+        existing_puzzle.number = puzzle.number
+        existing_puzzle.date = puzzle.date
+        existing_puzzle.data = puzzle.data
         session.commit()
-        # session.refresh(puzzle)
-
-        public_puzzle = PuzzlePublic.model_validate(puzzle)
+        session.refresh(existing_puzzle)
 
         return templates.TemplateResponse(
             'admin/puzzle.html.jinja',
             {
                 'request': request,
-                'puzzle': public_puzzle,
-                'dumped_puzzle': public_puzzle.model_dump(mode='json'),
+                'puzzle': existing_puzzle,
+                'puzzle_data': get_puzzle_data_string(existing_puzzle),
             },
         )
 

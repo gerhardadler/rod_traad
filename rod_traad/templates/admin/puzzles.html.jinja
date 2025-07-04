@@ -30,16 +30,9 @@
         </ul>
     </nav>
 
-    <h2>Uten dato</h2>
-    <ul>
-        {% for puzzle in puzzles if not puzzle.date %} {#>#}{#</>#}
-        {{ puzzle_item(puzzle) }}
-        {% endfor %}
-    </ul>
-
     <h2>Gamle brett</h2>
     <ul>
-        {% for puzzle in puzzles if puzzle.date and puzzle.date < today %} {#>#}{#</>#}
+        {% for puzzle in puzzles if puzzle.date < today %} {#>#}{#</>#}
         {{ puzzle_item(puzzle) }}
         {% endfor %}
     </ul>
@@ -53,7 +46,7 @@
 
     <h2>Kommende brett</h2>
     <ul>
-        {% for puzzle in puzzles if puzzle.date and puzzle.date > today %}
+        {% for puzzle in puzzles if puzzle.date > today %}
         {{ puzzle_item(puzzle) }}
         {% endfor %}
     </ul>

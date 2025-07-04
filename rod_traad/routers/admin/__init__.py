@@ -1,5 +1,6 @@
 from typing import Annotated
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.exceptions import RequestValidationError
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Engine
@@ -23,6 +24,10 @@ def create_admin(engine: Engine, templates: Jinja2Templates):  # noqa C901
             raise HTTPException(status_code=401, detail="Invalid credentials")
 
     app = FastAPI(dependencies=[Depends(verify_admin_credentials)], debug=True)
+
+    @app.exception_handler(RequestValidationError)
+    async def validation_exception_handler(request, exc):
+        pass
 
     app.include_router(index.create_router(engine, templates))
     app.include_router(puzzles.create_router(engine, templates))

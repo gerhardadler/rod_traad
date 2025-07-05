@@ -153,6 +153,9 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
                     GameSessionPublic.model_validate(game_session)
                     for game_session in game_sessions
                 ],
+                'word_id_map': {
+                    word['id']: word['name'] for word in puzzle.data['words']
+                },
             },
         )
 

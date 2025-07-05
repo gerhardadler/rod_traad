@@ -1,3 +1,10 @@
+{% macro get_word_name(word_id) %}
+{% for word in puzzle.data.words %}
+{% if word.id == word_id %}
+{{ word.name }}
+{% endif %}
+{% endfor %}
+{% endmacro %}
 <!DOCTYPE html>
 <html lang="no">
 
@@ -34,7 +41,11 @@
 
                         {% for guess in session.guesses %}
                         <li>
-                            {{'RIKTIG' if guess.correct else 'FEIL'}} - - - - {{ guess.words|join(', ')}}
+                            {{'RIKTIG' if guess.correct else 'FEIL'}} - - - -
+                            {% for word in guess.words %}
+                            {{ get_word_name(word) }}
+                            {% if not loop.last %}, {% endif %}
+                            {% endfor%}
                         </li>
                         {% endfor %}
                     </ul>

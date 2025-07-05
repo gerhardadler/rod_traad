@@ -14,9 +14,9 @@ function setupGame() {
     window.history.replaceState({}, "", url.toString());
 
     // filter out selected words which are not in puzzle data
-    preSelected = preSelected.filter((word) =>
-      gameSession.puzzle.data.grid.flat().includes(word)
-    );
+    preSelected = preSelected
+      .map((p) => parseInt(p, 10))
+      .filter((id) => id >= 0 && id < 16);
   }
 
   if (

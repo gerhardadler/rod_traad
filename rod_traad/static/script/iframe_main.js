@@ -6,14 +6,16 @@ function setupGame() {
   const submitButton = Button.fromSelector("#submit-button");
 
   const gameState = new GameState(gameSession);
+  console.log(gameState.unsolved);
   const puzzle = new Puzzle(
-    (word) => {
+    (wordId) => {
       let out = false;
-      if (gameState.selected.includes(word)) {
-        gameState.selected = gameState.selected.filter((w) => w !== word);
+      let word = gameState.unsolvedFromId(wordId);
+      if (word.selected) {
+        word.selected = false;
         out = true;
       } else if (gameState.selected.length < 4) {
-        gameState.selected.push(word);
+        word.selected = true;
         out = true;
       }
       submitButton.setDisabled(gameState.selected.length !== 4);
@@ -28,7 +30,7 @@ function setupGame() {
   submitButton.el.addEventListener("click", async () => {
     const params = new URLSearchParams();
     gameState.selected.forEach((word) => {
-      params.append("preSelected", word);
+      params.append("preSelected", word.id);
     });
 
     window.top.location.href = "https://rodtraad.no?" + params.toString();

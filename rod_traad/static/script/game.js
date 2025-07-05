@@ -16,8 +16,7 @@ export class GameState {
         )
         .map((word) => ({
           ...word,
-          selected:
-            preSelected == null ? word.id : preSelected.includes(word.id),
+          selected: preSelected == null ? false : preSelected.includes(word.id),
         }));
   }
 

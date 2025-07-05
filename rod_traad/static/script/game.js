@@ -21,7 +21,6 @@ export class GameState {
   }
 
   async updateGameSession() {
-    return;
     let response;
     try {
       response = await updateGameSession(this.gameSession.id, this.gameSession);

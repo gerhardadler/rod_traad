@@ -21,7 +21,7 @@ h3 {
   margin: 0;
   font-size: 1.2rem;
   text-align: center;
-  background-color: var(--solution-2-150);
+  background-color: var(--solution-1-150);
   padding: 0.5rem;
   border-radius: 0.5rem;
 }
@@ -40,7 +40,7 @@ h3 {
 
 .difficulty-rating strong {
   font-size: 1.4rem;
-  color: var(--solution-4-350);
+  color: var(--solution-3-350);
 }
 
 .difficulty-rating-graphic {
@@ -60,15 +60,15 @@ h3 {
 }
 
 .difficulty-rating-graphic svg.active {
-  color: var(--solution-4-250);
-  stroke: var(--solution-4-350);
+  color: var(--solution-3-250);
+  stroke: var(--solution-3-350);
 }
 
 .solve-rate-percentage {
   font-size: 4rem;
   font-family: "Poltawski Novi", serif;
   font-weight: 700;
-  color: var(--solution-4-350);
+  color: var(--solution-3-350);
   margin-block: -0.2em;
 }
 
@@ -83,15 +83,15 @@ h3 {
 }
 
 .bar-chart-entry.active {
-  border-color: var(--solution-4-200);
+  border-color: var(--solution-3-200);
 }
 
 .bar-chart-entry.active .bar {
-  background-color: var(--solution-4-250);
+  background-color: var(--solution-3-250);
 }
 
 .bar-chart-entry .active-label {
-  color: var(--solution-4-400);
+  color: var(--solution-3-400);
   font-weight: 700;
 }
 

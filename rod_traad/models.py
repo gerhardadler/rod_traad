@@ -61,12 +61,16 @@ class Detail(BaseModel):
 class PuzzleBase(SQLModel):
     date: datetime.date | None
     data: dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
+    number: int | None = Field(default=None, nullable=True, unique=True)
 
 
 class Puzzle(PuzzleBase, table=True):
     id: str | None = Field(default_factory=generate_random_id, primary_key=True)
-    number: int | None = Field(default=None, nullable=True, unique=True)
     sessions: list["GameSession"] = Relationship(back_populates="puzzle")
+
+
+class PuzzlePublic(PuzzleBase):
+    id: str | None = None
 
 
 class PuzzleUpdate(PuzzleBase):

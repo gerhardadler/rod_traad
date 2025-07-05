@@ -21,37 +21,37 @@
   --default-color-350: var(--neutral-350);
   --default-color-400: var(--neutral-400);
 
-  --solution-1-100: hsl(145, 0%, 100%);
-  --solution-1-150: hsl(145, 60%, 92%);
-  --solution-1-200: hsl(145, 65%, 85%);
-  --solution-1-250: hsl(145, 67%, 65%);
-  --solution-1-300: hsl(145, 69%, 58%);
-  --solution-1-350: hsl(145, 71%, 44%);
-  --solution-1-400: hsl(145, 74%, 40%);
+  --solution-0-100: hsl(145, 0%, 100%);
+  --solution-0-150: hsl(145, 60%, 92%);
+  --solution-0-200: hsl(145, 65%, 85%);
+  --solution-0-250: hsl(145, 67%, 65%);
+  --solution-0-300: hsl(145, 69%, 58%);
+  --solution-0-350: hsl(145, 71%, 44%);
+  --solution-0-400: hsl(145, 74%, 40%);
 
-  --solution-2-100: hsl(220, 0%, 100%);
-  --solution-2-150: hsl(220, 60%, 90%);
-  --solution-2-200: hsl(220, 65%, 85%);
-  --solution-2-250: hsl(220, 75%, 69%);
-  --solution-2-300: hsl(220, 69%, 58%);
-  --solution-2-350: hsl(220, 70%, 46%);
-  --solution-2-400: hsl(220, 74%, 40%);
+  --solution-1-100: hsl(220, 0%, 100%);
+  --solution-1-150: hsl(220, 60%, 90%);
+  --solution-1-200: hsl(220, 65%, 85%);
+  --solution-1-250: hsl(220, 75%, 69%);
+  --solution-1-300: hsl(220, 69%, 58%);
+  --solution-1-350: hsl(220, 70%, 46%);
+  --solution-1-400: hsl(220, 74%, 40%);
 
-  --solution-3-100: hsl(280, 0%, 100%);
-  --solution-3-150: hsl(280, 60%, 90%);
-  --solution-3-200: hsl(280, 65%, 85%);
-  --solution-3-250: hsl(280, 66%, 70%);
-  --solution-3-300: hsl(280, 69%, 58%);
-  --solution-3-350: hsl(280, 73%, 50%);
-  --solution-3-400: hsl(280, 74%, 40%);
+  --solution-2-100: hsl(280, 0%, 100%);
+  --solution-2-150: hsl(280, 60%, 90%);
+  --solution-2-200: hsl(280, 65%, 85%);
+  --solution-2-250: hsl(280, 66%, 70%);
+  --solution-2-300: hsl(280, 69%, 58%);
+  --solution-2-350: hsl(280, 73%, 50%);
+  --solution-2-400: hsl(280, 74%, 40%);
 
-  --solution-4-100: hsl(353, 0%, 100%);
-  --solution-4-150: hsl(353, 60%, 90%);
-  --solution-4-200: hsl(353, 65%, 85%);
-  --solution-4-250: hsl(353, 68%, 70%);
-  --solution-4-300: hsl(353, 69%, 58%);
-  --solution-4-350: hsl(353, 69%, 48%);
-  --solution-4-400: hsl(353, 74%, 40%);
+  --solution-3-100: hsl(353, 0%, 100%);
+  --solution-3-150: hsl(353, 60%, 90%);
+  --solution-3-200: hsl(353, 65%, 85%);
+  --solution-3-250: hsl(353, 68%, 70%);
+  --solution-3-300: hsl(353, 69%, 58%);
+  --solution-3-350: hsl(353, 69%, 48%);
+  --solution-3-400: hsl(353, 74%, 40%);
 
   --border-width: 3px;
 }
@@ -61,7 +61,7 @@
 }
 
 *:focus-visible {
-  outline: var(--border-width) solid var(--solution-2);
+  outline: var(--border-width) solid var(--solution-1);
 }
 
 html {
@@ -118,12 +118,12 @@ body::before {
   min-width: 600px;
   background-image: radial-gradient(
       at 0% 0%,
-      var(--solution-1-150) 0px,
+      var(--solution-0-150) 0px,
       transparent 30%
     ),
-    radial-gradient(at 100% 0%, var(--solution-2-150) 0px, transparent 30%),
-    radial-gradient(at 0% 100%, var(--solution-3-150) 0px, transparent 30%),
-    radial-gradient(at 100% 100%, var(--solution-4-150) 0px, transparent 30%);
+    radial-gradient(at 100% 0%, var(--solution-1-150) 0px, transparent 30%),
+    radial-gradient(at 0% 100%, var(--solution-2-150) 0px, transparent 30%),
+    radial-gradient(at 100% 100%, var(--solution-3-150) 0px, transparent 30%);
   pointer-events: none;
   z-index: -1;
 }
@@ -210,13 +210,23 @@ h2 {
   --alternate-default-color: var(--danger);
 }
 
+.solution-0 {
+  --default-color-100: var(--solution-0-100);
+  --default-color-150: var(--solution-0-150);
+  --default-color-200: var(--solution-0-200);
+  --default-color-250: var(--solution-0-250);
+  --default-color-300: var(--solution-0-350);
+  --default-color-350: var(--solution-0-400);
+  --default-color-400: var(--solution-0-400);
+}
+
 .solution-1 {
   --default-color-100: var(--solution-1-100);
   --default-color-150: var(--solution-1-150);
   --default-color-200: var(--solution-1-200);
   --default-color-250: var(--solution-1-250);
-  --default-color-300: var(--solution-1-350);
-  --default-color-350: var(--solution-1-400);
+  --default-color-300: var(--solution-1-300);
+  --default-color-350: var(--solution-1-350);
   --default-color-400: var(--solution-1-400);
 }
 
@@ -238,16 +248,6 @@ h2 {
   --default-color-300: var(--solution-3-300);
   --default-color-350: var(--solution-3-350);
   --default-color-400: var(--solution-3-400);
-}
-
-.solution-4 {
-  --default-color-100: var(--solution-4-100);
-  --default-color-150: var(--solution-4-150);
-  --default-color-200: var(--solution-4-200);
-  --default-color-250: var(--solution-4-250);
-  --default-color-300: var(--solution-4-300);
-  --default-color-350: var(--solution-4-350);
-  --default-color-400: var(--solution-4-400);
 }
 
 @media screen and (max-width: 600px) {

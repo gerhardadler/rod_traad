@@ -31,10 +31,10 @@ export function getGuessesEmojis(guesses, solutions) {
   for (const guess of guesses) {
     const emojis = [];
     guess.words.map((word) => {
-      const solutionIndex = Object.values(solutions).findIndex(
-        (solutionWords) => solutionWords.includes(word)
+      const solution = solutions.find((solution) =>
+        solution.words.includes(word)
       );
-      switch (solutionIndex) {
+      switch (solution.difficulty) {
         case 0:
           emojis.push("🟩");
           break;

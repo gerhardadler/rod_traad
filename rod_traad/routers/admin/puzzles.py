@@ -17,13 +17,14 @@ from rod_traad.models import (
     GameSessionPublic,
     Guess,
     Puzzle,
+    PuzzlePublic,
     PuzzleUpdate,
     User,
     is_game_session_won,
 )
 
 
-def get_puzzle_data_string(puzzle: Puzzle):
+def get_puzzle_data_string(puzzle: PuzzlePublic):
     return (
         json.dumps(puzzle.data, indent=2)
         .replace('&', '&amp;')
@@ -66,7 +67,7 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
 
         next_number = (current_number or 0) + 1
 
-        puzzle = Puzzle(
+        puzzle_public = PuzzlePublic(
             number=next_number,
             date=today,
             data=get_empty_puzzle_data(),
@@ -77,8 +78,8 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
             {
                 'request': request,
                 'today': today,
-                'puzzle': puzzle,
-                'puzzle_data': get_puzzle_data_string(puzzle),
+                'puzzle': puzzle_public,
+                'puzzle_data': get_puzzle_data_string(puzzle_public),
             },
         )
 
@@ -92,12 +93,14 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
         if not puzzle:
             raise HTTPException(status_code=404, detail="Puzzle not found.")
 
+        puzzle_public = PuzzlePublic.model_validate(puzzle)
+
         return templates.TemplateResponse(
             'admin/puzzle.html.jinja',
             {
                 'request': request,
-                'puzzle': puzzle,
-                'puzzle_data': get_puzzle_data_string(puzzle),
+                'puzzle': puzzle_public,
+                'puzzle_data': get_puzzle_data_string(puzzle_public),
             },
         )
 
@@ -185,12 +188,14 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
         session.commit()
         session.refresh(new_puzzle)
 
+        puzzle_public = PuzzlePublic.model_validate(new_puzzle)
+
         return templates.TemplateResponse(
             'admin/puzzle.html.jinja',
             {
                 'request': request,
-                'puzzle': new_puzzle,
-                'puzzle_data': get_puzzle_data_string(new_puzzle),
+                'puzzle': puzzle_public,
+                'puzzle_data': get_puzzle_data_string(puzzle_public),
             },
         )
 
@@ -201,23 +206,19 @@ def create_router(engine: Engine, templates: Jinja2Templates):  # noqa C901
         session: Annotated[Session, Depends(SessionDependency(engine))],
         puzzle: Annotated[PuzzleUpdate, Form()],
     ):
-        existing_puzzle = session.get(Puzzle, puzzle_id)
+        update_puzzle = Puzzle.model_validate(puzzle, update={'id': puzzle_id})
 
-        if not existing_puzzle:
-            raise HTTPException(status_code=404, detail="Puzzle not found.")
-
-        existing_puzzle.number = puzzle.number
-        existing_puzzle.date = puzzle.date
-        existing_puzzle.data = puzzle.data
+        session.merge(update_puzzle)
         session.commit()
-        session.refresh(existing_puzzle)
+
+        puzzle_public = PuzzlePublic.model_validate(update_puzzle)
 
         return templates.TemplateResponse(
             'admin/puzzle.html.jinja',
             {
                 'request': request,
-                'puzzle': existing_puzzle,
-                'puzzle_data': get_puzzle_data_string(existing_puzzle),
+                'puzzle': puzzle_public,
+                'puzzle_data': get_puzzle_data_string(puzzle_public),
             },
         )
 

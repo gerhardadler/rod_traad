@@ -3,7 +3,7 @@
 }
 
 .inline-logo {
-  color: var(--solution-4-350);
+  color: var(--solution-3-350);
   font-family: "Poltawski Novi", serif;
   font-weight: bold;
 }
@@ -109,7 +109,7 @@ h1 .accessibility-title {
 }
 
 h1 .logo {
-  color: var(--solution-4-350);
+  color: var(--solution-3-350);
   height: 4.5rem;
   width: auto;
 }
@@ -276,8 +276,8 @@ input[type="checkbox"]:focus-visible + span {
 }
 
 .heart svg {
-  color: var(--solution-4-250);
-  stroke: var(--solution-4-350);
+  color: var(--solution-3-250);
+  stroke: var(--solution-3-350);
   stroke-width: var(--border-width);
   stroke-linejoin: round;
   overflow: visible;
@@ -391,6 +391,11 @@ input[type="checkbox"]:focus-visible + span {
   border-radius: 0.5rem;
 }
 
+#result #guesses .guess-0 {
+  background: var(--solution-0-250);
+  border: var(--border-width) solid var(--solution-0-350);
+}
+
 #result #guesses .guess-1 {
   background: var(--solution-1-250);
   border: var(--border-width) solid var(--solution-1-350);
@@ -404,11 +409,6 @@ input[type="checkbox"]:focus-visible + span {
 #result #guesses .guess-3 {
   background: var(--solution-3-250);
   border: var(--border-width) solid var(--solution-3-350);
-}
-
-#result #guesses .guess-4 {
-  background: var(--solution-4-250);
-  border: var(--border-width) solid var(--solution-4-350);
 }
 
 .toast-container {

@@ -54,13 +54,7 @@ export class UI {
   }
 
   draw(gameState) {
-    this.puzzle.draw(
-      gameState.solved,
-      gameState.unsolved,
-      gameState.isGameOver(),
-      gameState.selected,
-      gameState.gameSession.puzzle.data.solutions
-    );
+    this.puzzle.draw(gameState);
     this.gameBottom.draw(gameState);
     this.result.draw(
       gameState.isGameWon(),
@@ -97,28 +91,20 @@ export class UI {
     this.gameBottom.el.style.display = "none";
 
     const fakeGameState = gameState.clone();
+    fakeGameState.isGameWon = () => false;
+    fakeGameState.isGameLost = () => false;
     // animate all solutions
     let i = 0;
-    for (const [name, solution] of Object.entries(
-      fakeGameState.gameSession.puzzle.data.solutions
-    )) {
-      if (!fakeGameState.solved.some((s) => s.name === name)) {
+    for (const solution of fakeGameState.gameSession.puzzle.data.solutions) {
+      if (
+        !fakeGameState.solved.some((s) => s.difficulty === solution.difficulty)
+      ) {
         fakeGameState.gameSession.guesses.push({
-          words: solution,
-          correct: true,
+          words: solution.words,
+          solution: solution.difficulty,
         });
-        await this.puzzle.animateSolve(fakeGameState.unsolved, {
-          index: i + 1,
-          name: name,
-          words: solution,
-        });
-        this.puzzle.draw(
-          fakeGameState.solved,
-          fakeGameState.unsolved,
-          false,
-          [],
-          fakeGameState.gameSession.puzzle.data.solutions
-        );
+        await this.puzzle.animateSolve(fakeGameState, solution);
+        this.puzzle.draw(fakeGameState);
       }
       i++;
     }

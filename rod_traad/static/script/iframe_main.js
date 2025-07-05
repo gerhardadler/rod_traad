@@ -21,13 +21,7 @@ function setupGame() {
     },
     () => {}
   );
-  puzzle.draw(
-    gameState.solved,
-    gameState.unsolved,
-    gameState.isGameOver(),
-    gameState.selected,
-    gameSession.puzzle.data.solutions
-  );
+  puzzle.draw(gameState);
   document.querySelector(".content").classList.remove("fade-in");
   document.querySelector("body").classList.remove("no-animate");
 

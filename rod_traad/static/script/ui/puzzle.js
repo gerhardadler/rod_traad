@@ -25,31 +25,31 @@ export class Puzzle {
       .getPropertyValue("gap");
   }
 
-  draw(solved, unsolved, isGameOver, selected, solutions) {
+  draw(gameState) {
     this.solvedItems = [];
     this.wordItems = [];
     this.solvedContainer.innerHTML = "";
     this.unsolvedContainer.innerHTML = "";
 
-    solved.forEach(({ index, name, words }) => {
-      const solvedItem = new Solved(index, name, words);
+    gameState.solved.forEach((solution) => {
+      const solvedItem = new Solved(gameState, solution);
       this.solvedContainer.appendChild(solvedItem.el);
     });
 
-    if (isGameOver) {
+    if (gameState.isGameOver()) {
       // draw the rest of the solutions as solved items
-      Object.entries(solutions).forEach(([name, solutionWords], index) => {
-        if (solved.some((s) => s.name === name)) return;
-        const solvedItem = new Solved(index + 1, name, solutionWords);
+      gameState.gameSession.puzzle.data.solutions.forEach((solution) => {
+        if (gameState.solved.some((s) => s.difficulty === solution.difficulty))
+          return;
+        const solvedItem = new Solved(gameState, solution);
         this.solvedContainer.appendChild(solvedItem.el);
       });
     } else {
-      unsolved.forEach((word) => {
+      gameState.unsolved.forEach((word) => {
         const wordItem = new WordItem(
           word,
           this.toggleWordCallback,
-          this.deselectWordCallback,
-          selected.includes(word)
+          this.deselectWordCallback
         );
         this.wordItems.push(wordItem);
         this.unsolvedContainer.appendChild(wordItem.el);
@@ -68,17 +68,17 @@ export class Puzzle {
     });
   }
 
-  async animateJump(words) {
+  async animateJump(wordIds) {
     const selectedWordItems = this.wordItems.filter((w) =>
-      words.includes(w.word)
+      wordIds.includes(w.word.id)
     );
     for (const wordItem of selectedWordItems) {
       await wordItem.animateJump();
     }
   }
 
-  async animateMove(word, toIndex) {
-    const wordItem = this.wordItems.find((w) => w.word === word);
+  async animateMove(wordId, toIndex) {
+    const wordItem = this.wordItems.find((w) => w.word.id === wordId);
     const originalIndex = this.wordItems.indexOf(wordItem);
 
     // insert placeholder
@@ -90,8 +90,8 @@ export class Puzzle {
     await wordItem.animateMove(gridSize, this.gap, originalIndex, toIndex);
   }
 
-  async animateSolved({ index, name, words }) {
-    const solvedItem = new Solved(index, name, words);
+  async animateSolved(gameState, solution) {
+    const solvedItem = new Solved(gameState, solution);
     this.unsolvedContainer.insertBefore(
       solvedItem.el,
       this.unsolvedContainer.firstChild
@@ -110,49 +110,55 @@ export class Puzzle {
     );
   }
 
-  async animateSolve(unsolved, { index, name, words }) {
+  async animateSolve(gameState, solution) {
     // make items jump
-    await this.animateJump(words);
+    await this.animateJump(solution.words);
 
     await new Promise((resolve) => setTimeout(resolve, 300));
 
     const moves = [];
-    const wordsToMove = [...words];
+    const wordsToMove = JSON.parse(
+      JSON.stringify(gameState.unsolvedFromIds(solution.words))
+    );
 
-    const topRow = unsolved.slice(0, 4);
+    const topRow = gameState.unsolved.slice(0, 4);
     // create moves
     topRow.forEach((topWord, i) => {
       // skip if the word is already in the top row
-      if (words.includes(topWord)) return;
+      if (solution.words.includes(topWord.id)) return;
 
       const firstMissingWordIndex = wordsToMove.findIndex(
-        (word) => !topRow.includes(word)
+        (word) => !topRow.map((w) => w.id).includes(word.id)
       );
       const wordToMove = wordsToMove.splice(firstMissingWordIndex, 1)[0];
 
       moves.push({ word: wordToMove, index: i });
       moves.push({
         word: topWord,
-        index: unsolved.indexOf(wordToMove),
+        index: gameState.unsolved.findIndex(
+          (unsolved) => unsolved.id == wordToMove.id
+        ),
       });
 
-      unsolved[unsolved.indexOf(wordToMove)] = topWord;
-      unsolved[i] = wordToMove;
+      gameState.unsolved[
+        gameState.unsolved.findIndex((unsolved) => unsolved.id == wordToMove.id)
+      ] = topWord;
+      gameState.unsolved[i] = wordToMove;
     });
 
     await Promise.all(
-      moves.map((move) => this.animateMove(move.word, move.index))
+      moves.map((move) => this.animateMove(move.word.id, move.index))
     );
 
     // animate adding solved item
-    words.forEach((word) => {
-      const wordItem = this.wordItems.find((w) => w.word === word);
+    solution.words.forEach((wordId) => {
+      const wordItem = this.wordItems.find((w) => w.word.id === wordId);
       wordItem.animateFadeOut();
     });
 
-    await this.animateSolved({ index, name, words });
+    await this.animateSolved(gameState, solution);
 
-    unsolved.splice(0, 4);
+    gameState.unsolved.splice(0, 4);
   }
 
   async shuffle(unsolved) {
@@ -161,7 +167,7 @@ export class Puzzle {
     // create moves and wait for them to finish
     await Promise.all(
       unsolved.map((word, i) => {
-        return this.animateMove(word, i);
+        return this.animateMove(word.id, i);
       })
     );
   }

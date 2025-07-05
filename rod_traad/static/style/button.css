@@ -60,20 +60,20 @@
   border: var(--border-width) solid transparent;
   background: linear-gradient(
         to right,
+        var(--solution-0-150),
         var(--solution-1-150),
         var(--solution-2-150),
         var(--solution-3-150),
-        var(--solution-4-150),
-        var(--solution-1-150)
+        var(--solution-0-150)
       )
       padding-box,
     linear-gradient(
         to right,
+        var(--solution-0-250),
         var(--solution-1-250),
         var(--solution-2-250),
         var(--solution-3-250),
-        var(--solution-4-250),
-        var(--solution-1-250)
+        var(--solution-0-250)
       )
       border-box;
   animation: scroll-gradient 20s linear infinite;
@@ -89,11 +89,11 @@
   border: var(--border-width) solid transparent;
   background: linear-gradient(
       to right,
+      var(--solution-0-200),
       var(--solution-1-200),
       var(--solution-2-200),
       var(--solution-3-200),
-      var(--solution-4-200),
-      var(--solution-1-200)
+      var(--solution-0-200)
     )
     content-box;
   opacity: 0;

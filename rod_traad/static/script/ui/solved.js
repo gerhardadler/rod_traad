@@ -1,13 +1,16 @@
 export class Solved {
-  constructor(index, name, words) {
+  constructor(gameState, solved) {
     this.el = document.createElement("div");
-    this.el.classList.add("solved", `solution-${index}`);
+    this.el.classList.add("solved", `solution-${solved.difficulty}`);
 
     this.h3 = document.createElement("h3");
-    this.h3.innerHTML = name;
+    this.h3.innerHTML = solved.name;
 
     this.p = document.createElement("p");
-    this.p.innerHTML = words.join(", ");
+    this.p.innerHTML = gameState
+      .wordsFromIds(solved.words)
+      .map((w) => w.name)
+      .join(", ");
 
     this.el.appendChild(this.h3);
     this.el.appendChild(this.p);

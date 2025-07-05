@@ -93,11 +93,11 @@ export class Result {
 
     for (const guess of guesses) {
       for (const word of guess.words) {
-        const solutionIndex = Object.values(solutions).findIndex(
-          (solutionWords) => solutionWords.includes(word)
+        const solution = solutions.find((solution) =>
+          solution.words.includes(word)
         );
         const guessEl = document.createElement("div");
-        guessEl.classList.add(`guess-${solutionIndex + 1}`);
+        guessEl.classList.add(`guess-${solution.difficulty}`);
         this.guessesEl.appendChild(guessEl);
       }
     }

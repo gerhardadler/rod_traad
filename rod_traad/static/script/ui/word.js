@@ -4,25 +4,25 @@ import { Button } from "./button.js?2025-06-11T22:00:03";
 const cachedFontSize = {};
 
 export class WordItem {
-  constructor(word, toggleWordCallback, deselectWordCallback, checked) {
+  constructor(word, toggleWordCallback, deselectWordCallback) {
     this.word = word;
     this.toggleWordCallback = toggleWordCallback;
     this.deselectWordCallback = deselectWordCallback;
 
     this.el = document.createElement("label");
-    this.el.setAttribute("for", word);
+    this.el.setAttribute("for", word.name);
     this.el.classList.add("word");
 
     const checkboxEl = document.createElement("input");
     checkboxEl.type = "checkbox";
     checkboxEl.classList.add("visually-hidden");
-    checkboxEl.id = word;
-    checkboxEl.checked = checked;
+    checkboxEl.id = word.name;
+    checkboxEl.checked = word.selected;
     checkboxEl.setAttribute("autocomplete", "off");
     this.checkbox = new Button(checkboxEl);
 
     this.span = document.createElement("span");
-    this.span.innerHTML = word;
+    this.span.innerHTML = word.name;
 
     this.el.appendChild(this.checkbox.el);
     this.el.appendChild(this.span);
@@ -31,7 +31,7 @@ export class WordItem {
       if (this.checkbox.el.disabled) return;
       const alreadySelected = this.checkbox.el.checked;
 
-      if (!this.toggleWordCallback(word)) return;
+      if (!this.toggleWordCallback(word.id)) return;
 
       this.checkbox.el.checked = !alreadySelected;
 
@@ -57,8 +57,8 @@ export class WordItem {
       return rect.width;
     };
 
-    if (cachedFontSize[this.word]) {
-      this.span.style.fontSize = cachedFontSize[this.word];
+    if (cachedFontSize[this.word.name]) {
+      this.span.style.fontSize = cachedFontSize[this.word.name];
       return;
     }
 
@@ -86,13 +86,13 @@ export class WordItem {
     }
 
     this.span.style.fontSize = `${currentSize}${unit}`;
-    cachedFontSize[this.word] = this.span.style.fontSize;
+    cachedFontSize[this.word.name] = this.span.style.fontSize;
   }
 
   deselect() {
     this.checkbox.el.checked = false;
     this.el.classList.remove("selected");
-    this.deselectWordCallback(this.word);
+    this.deselectWordCallback(this.word.id);
   }
 
   async animateMove(gridSize, gapSize, startIndex, endIndex) {

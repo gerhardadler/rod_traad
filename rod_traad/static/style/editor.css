@@ -40,14 +40,48 @@
   border: var(--border-width) solid var(--default-color-350);
   padding: 1.5rem;
   border-radius: 0.5rem;
+  position: relative;
+}
+
+.solution .arrow-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.5rem;
+  display: flex;
+  gap: 0.3rem;
+}
+
+.solution .arrow {
+  --background-hover: none;
+  --border-color-hover: var(--default-color-300);
+  background: none;
+  /* color: var(--default-color-400); */
+  padding: 0.3rem;
+}
+
+.solution .arrow svg {
+  width: 1rem;
+  height: 1rem;
 }
 
 .solution label {
   color: var(--text-1) !important;
 }
 
-.grid {
+.right {
   position: sticky;
   top: 0;
+  height: fit-content;
+}
+
+.grid {
   --puzzle-gap: 0.5rem;
+}
+
+.unsolved-container .word span {
+  hyphens: auto !important;
+  overflow: hidden;
+  max-width: 100%;
+  overflow-wrap: break-word;
 }

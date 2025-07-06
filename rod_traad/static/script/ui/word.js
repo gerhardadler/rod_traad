@@ -4,48 +4,51 @@ import { Button } from "./button.js?2025-06-11T22:00:03";
 const cachedFontSize = {};
 
 export class WordItem {
-  constructor(word, toggleWordCallback, deselectWordCallback) {
+  constructor(word, toggleWordCallback = null, deselectWordCallback = null) {
     this.word = word;
     this.toggleWordCallback = toggleWordCallback;
     this.deselectWordCallback = deselectWordCallback;
+    this.isInteractive =
+      toggleWordCallback !== null || deselectWordCallback !== null;
 
-    this.el = document.createElement("label");
+    this.el = document.createElement(this.isInteractive ? "label" : "div");
     this.el.setAttribute("for", word.name);
     this.el.classList.add("word");
 
-    const checkboxEl = document.createElement("input");
-    checkboxEl.type = "checkbox";
-    checkboxEl.classList.add("visually-hidden");
-    checkboxEl.id = word.name;
-    checkboxEl.checked = word.selected;
-    checkboxEl.setAttribute("autocomplete", "off");
-    this.checkbox = new Button(checkboxEl);
+    if (this.isInteractive) {
+      const checkboxEl = document.createElement("input");
+      checkboxEl.type = "checkbox";
+      checkboxEl.classList.add("visually-hidden");
+      checkboxEl.checked = word.selected;
+      checkboxEl.setAttribute("autocomplete", "off");
+      this.checkbox = new Button(checkboxEl);
+      this.el.appendChild(this.checkbox.el);
+
+      this.el.addEventListener("mousedown", () => {
+        if (this.checkbox.el.disabled) return;
+        const alreadySelected = this.checkbox.el.checked;
+
+        if (!this.toggleWordCallback(word.id)) return;
+
+        this.checkbox.el.checked = !alreadySelected;
+
+        this.el.classList.add("shrink");
+        document.addEventListener(
+          "mouseup",
+          () => {
+            this.el.classList.remove("shrink");
+          },
+          { once: true }
+        );
+      });
+
+      this.el.addEventListener("click", (e) => e.preventDefault());
+    }
 
     this.span = document.createElement("span");
     this.span.innerHTML = word.name;
 
-    this.el.appendChild(this.checkbox.el);
     this.el.appendChild(this.span);
-
-    this.el.addEventListener("mousedown", () => {
-      if (this.checkbox.el.disabled) return;
-      const alreadySelected = this.checkbox.el.checked;
-
-      if (!this.toggleWordCallback(word.id)) return;
-
-      this.checkbox.el.checked = !alreadySelected;
-
-      this.el.classList.add("shrink");
-      document.addEventListener(
-        "mouseup",
-        () => {
-          this.el.classList.remove("shrink");
-        },
-        { once: true }
-      );
-    });
-
-    this.el.addEventListener("click", (e) => e.preventDefault());
   }
 
   scaleText() {

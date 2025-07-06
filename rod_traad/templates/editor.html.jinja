@@ -1,3 +1,24 @@
+{% macro solution(solutionNumber) %}
+<form class="form solution solution-{{ solutionNumber }}" data-difficulty="{{ solutionNumber }}">
+    <div class="arrow-container">
+        <button type="button" class="icon-button arrow arrow-down solution-{{ solutionNumber }}">
+            {% include "snippets/chevron-down.svg.jinja" %}
+        </button>
+        <button type="button" class="icon-button arrow arrow-up solution-{{ solutionNumber }}">
+            {% include "snippets/chevron-up.svg.jinja" %}
+        </button>
+    </div>
+    <div class="form-entry">
+        <label>Kategori navn</label>
+        <input type="text" class="solution-name" placeholder="FUGLER" required>
+    </div>
+    <div class="form-entry">
+        <label>Ord (komma seperert)</label>
+        <input type="text" class="word-input" placeholder="MÅKE, KRÅKE, DUE, UGLE" required>
+    </div>
+</form>
+{% endmacro %}
+
 <!DOCTYPE html>
 <html lang="no">
 
@@ -67,46 +88,10 @@
                     <section class="solutions">
                         <h2>Kategorier</h2>
                         <div class="solutions-container">
-                            <form class="form solution solution-0" data-solutionNumber="1">
-                                <div class="form-entry">
-                                    <label>Kategori navn</label>
-                                    <input type="text" id="solution-name" placeholder="FUGLER" required>
-                                </div>
-                                <div class="form-entry">
-                                    <label>Ord (komma seperert)</label>
-                                    <input type="text" id="word-input" placeholder="MÅKE, KRÅKE, DUE, UGLE" required>
-                                </div>
-                            </form>
-                            <form class="form solution solution-1" data-solutionNumber="2">
-                                <div class="form-entry">
-                                    <label>Kategori navn</label>
-                                    <input type="text" id="solution-name" placeholder="FUGLER" required>
-                                </div>
-                                <div class="form-entry">
-                                    <label>Ord (komma seperert)</label>
-                                    <input type="text" id="word-input" placeholder="MÅKE, KRÅKE, DUE, UGLE" required>
-                                </div>
-                            </form>
-                            <form class="form solution solution-2" data-solutionNumber="3">
-                                <div class="form-entry">
-                                    <label>Kategori navn</label>
-                                    <input type="text" id="solution-name" placeholder="FUGLER" required>
-                                </div>
-                                <div class="form-entry">
-                                    <label>Ord (komma seperert)</label>
-                                    <input type="text" id="word-input" placeholder="MÅKE, KRÅKE, DUE, UGLE" required>
-                                </div>
-                            </form>
-                            <form class="form solution solution-3" data-solutionNumber="4">
-                                <div class="form-entry">
-                                    <label>Kategori navn</label>
-                                    <input type="text" id="solution-name" placeholder="FUGLER" required>
-                                </div>
-                                <div class="form-entry">
-                                    <label>Ord (komma seperert)</label>
-                                    <input type="text" id="word-input" placeholder="MÅKE, KRÅKE, DUE, UGLE" required>
-                                </div>
-                            </form>
+                            {{ solution(0) }}
+                            {{ solution(1) }}
+                            {{ solution(2) }}
+                            {{ solution(3) }}
                         </div>
                     </section>
                 </div>
@@ -114,12 +99,12 @@
                     <section class="grid">
                         <h2>Ord</h2>
                         <div class="unsolved-container">
-                            {% for _ in range(16)%}
-                            <div class="word">
-                                <span></span>
-                            </div>
-                            {% endfor %}
                         </div>
+                    </section>
+                    <section class="buttons">
+                        <button class="button">Flytt</button>
+                        <button class="button">Stokk om</button>
+                        <button class="button">Publiser</button>
                     </section>
                 </div>
             </div>

@@ -22,6 +22,8 @@
 }
 
 .icon-button {
+  --background-hover: var(--default-color-150);
+  --border-color-hover: var(--default-color-200);
   padding: 0.4em;
   border-radius: 0.5rem;
   background: var(--default-color-100);
@@ -41,8 +43,8 @@
 
 .icon-button:hover:not(:disabled),
 .icon-button:focus-visible:not(:disabled) {
-  background: var(--default-color-150);
-  border-color: var(--default-color-200);
+  background: var(--background-hover);
+  border-color: var(--border-color-hover);
 }
 
 .glow-button {
@@ -106,4 +108,16 @@
 .glow-button:hover:not(:disabled)::after,
 .glow-button:focus-visible:not(:disabled)::after {
   opacity: 1;
+}
+
+.button-row {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  justify-content: stretch;
+  width: 100%;
+}
+
+.button-row * {
+  flex: 1;
 }

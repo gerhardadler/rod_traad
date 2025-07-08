@@ -19,6 +19,14 @@ function shuffle(array) {
   }
 }
 
+function wordById(puzzleData, wordId) {
+  return puzzleData.words.find((w) => w.id === wordId);
+}
+
+function wordsByIds(puzzleData, wordIds) {
+  return puzzleData.words.filter((w) => wordIds.includes(w.id));
+}
+
 function drawGrid(puzzleData) {
   document.querySelector("body").classList.add("no-animate");
 
@@ -38,36 +46,59 @@ function drawGrid(puzzleData) {
   document.querySelector("body").classList.remove("no-animate");
 }
 
-function swapSolutions(currentSolution, direction) {
+function swapSolutions(puzzleData, solutionElement, direction) {
   // chatgpt
 
-  const adjacentSolution =
+  const adjacentSolutionElement =
     direction === "down"
-      ? currentSolution.nextElementSibling
-      : currentSolution.previousElementSibling;
+      ? solutionElement.nextElementSibling
+      : solutionElement.previousElementSibling;
 
-  if (!adjacentSolution) return;
+  if (!adjacentSolutionElement) return;
 
   const getElements = (el) => ({
     name: el.querySelector(".solution-name"),
     word: el.querySelector(".word-input"),
   });
 
-  const current = getElements(currentSolution);
-  const adjacent = getElements(adjacentSolution);
+  const currentElements = getElements(solutionElement);
+  const currentSolution = puzzleData.solutions.find(
+    (s) => s.difficulty === parseInt(solutionElement.dataset.difficulty)
+  );
+
+  const adjacentElements = getElements(adjacentSolutionElement);
+  const adjacentSolution = puzzleData.solutions.find(
+    (s) => s.difficulty === parseInt(adjacentSolutionElement.dataset.difficulty)
+  );
 
   // Swap values
-  [current.name.value, adjacent.name.value] = [
-    adjacent.name.value,
-    current.name.value,
+  [currentElements.name.value, adjacentElements.name.value] = [
+    adjacentElements.name.value,
+    currentElements.name.value,
   ];
-  [current.word.value, adjacent.word.value] = [
-    adjacent.word.value,
-    current.word.value,
+  [currentElements.word.value, adjacentElements.word.value] = [
+    adjacentElements.word.value,
+    currentElements.word.value,
   ];
 
+  const currentWords = wordsByIds(puzzleData, currentSolution.words);
+  const adjacentWords = wordsByIds(puzzleData, adjacentSolution.words);
+
+  currentWords.forEach((currentWord, i) => {
+    const adjacentWord = adjacentWords[i];
+    [currentWord.position, adjacentWord.position] = [
+      adjacentWord.position,
+      currentWord.position,
+    ];
+  });
+
   // Trigger input events
-  [current.name, current.word, adjacent.name, adjacent.word].forEach((el) => {
+  [
+    currentElements.name,
+    currentElements.word,
+    adjacentElements.name,
+    adjacentElements.word,
+  ].forEach((el) => {
     el.dispatchEvent(new Event("input"));
   });
 }
@@ -107,10 +138,6 @@ document.addEventListener("DOMContentLoaded", () => {
     word.position = word.position = randomPositions[i];
   });
 
-  function wordById(wordId) {
-    return puzzleData.words.find((w) => w.id === wordId);
-  }
-
   drawEmail();
   drawGrid(puzzleData);
 
@@ -140,13 +167,17 @@ document.addEventListener("DOMContentLoaded", () => {
         .slice(0, 4);
 
       fixedSolutionWords.slice(0, 4).forEach((word, i) => {
-        wordById(currentSolution.words[i]).name = word;
+        wordById(puzzleData, currentSolution.words[i]).name = word;
       });
       drawGrid(puzzleData);
     });
 
-    arrowDown.addEventListener("click", () => swapSolutions(solution, "down"));
+    arrowDown.addEventListener("click", () =>
+      swapSolutions(puzzleData, solution, "down")
+    );
 
-    arrowUp.addEventListener("click", () => swapSolutions(solution, "up"));
+    arrowUp.addEventListener("click", () =>
+      swapSolutions(puzzleData, solution, "up")
+    );
   });
 });

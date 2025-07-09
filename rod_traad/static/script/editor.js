@@ -31,7 +31,6 @@ function drawGrid(puzzleData) {
   document.querySelector("body").classList.add("no-animate");
 
   const unsolvedContainer = document.querySelector(".unsolved-container");
-  // const wordElements = unsolvedContainer.querySelectorAll(".word");
 
   const wordsByPositions = [...puzzleData.words].sort(
     (a, b) => a.position > b.position
@@ -44,6 +43,62 @@ function drawGrid(puzzleData) {
     wordItem.scaleText();
   });
   document.querySelector("body").classList.remove("no-animate");
+}
+
+function drawMoveGrid(puzzleData, selectWordCallback) {
+  const unsolvedContainer = document.querySelector(".unsolved-container");
+  unsolvedContainer.classList.add("no-animate");
+  const wordsByPositions = [...puzzleData.words].sort(
+    (a, b) => a.position > b.position
+  );
+
+  const gapSize = window
+    .getComputedStyle(unsolvedContainer)
+    .getPropertyValue("gap");
+
+  let wordItems = [];
+
+  unsolvedContainer.innerHTML = "";
+  wordsByPositions.forEach((word) => {
+    const wordItem = new WordItem(word, () => {
+      selectWordCallback(word);
+    });
+    wordItems.push(wordItem);
+    unsolvedContainer.appendChild(wordItem.el);
+
+    wordItem.scaleText();
+  });
+  unsolvedContainer.classList.remove("no-animate");
+
+  async function animateMove(wordFrom, wordTo) {
+    const fromWordItem = wordItems.find((wi) => wi.word.id == wordFrom.id);
+    const toWordItem = wordItems.find((wi) => wi.word.id == wordTo.id);
+
+    if (fromWordItem === toWordItem) return;
+
+    unsolvedContainer.insertBefore(
+      document.createElement("div"),
+      fromWordItem.el
+    );
+    fromWordItem.animateMove(
+      [4, 4],
+      gapSize,
+      wordFrom.position,
+      wordTo.position
+    );
+
+    unsolvedContainer.insertBefore(
+      document.createElement("div"),
+      toWordItem.el
+    );
+    await toWordItem.animateMove(
+      [4, 4],
+      gapSize,
+      wordTo.position,
+      wordFrom.position
+    );
+  }
+  return animateMove;
 }
 
 function swapSolutions(puzzleData, solutionElement, direction) {
@@ -104,6 +159,10 @@ function swapSolutions(puzzleData, solutionElement, direction) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  const solutions = document.querySelectorAll(".solution");
+  const moveButton = document.querySelector("#move-button");
+  const moveTooltip = document.querySelector("#move-tooltip");
+
   const puzzleData = {
     solutions: [
       { name: "", difficulty: 0, words: [0, 1, 2, 3] },
@@ -144,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelector(".content").classList.remove("fade-in");
   document.querySelector("body").classList.remove("no-animate");
 
-  document.querySelectorAll(".solution").forEach((solution) => {
+  solutions.forEach((solution) => {
     const solutionNameElement = solution.querySelector(".solution-name");
     const solutionWordInputElement = solution.querySelector(".word-input");
     const arrowDown = solution.querySelector(".arrow-down");
@@ -179,5 +238,57 @@ document.addEventListener("DOMContentLoaded", () => {
     arrowUp.addEventListener("click", () =>
       swapSolutions(puzzleData, solution, "up")
     );
+  });
+
+  let isMoving = false;
+  moveButton.addEventListener("click", () => {
+    function stopMove() {
+      puzzleData.words.forEach((w) => {
+        delete w.selected;
+      });
+      drawGrid(puzzleData);
+      isMoving = false;
+      moveButton.classList.remove("moving");
+      moveTooltip.classList.remove("moving");
+    }
+    if (isMoving) {
+      stopMove();
+      return;
+    }
+
+    isMoving = true;
+    moveButton.classList.add("moving");
+    moveTooltip.classList.add("moving");
+
+    document.onkeydown = function (evt) {
+      evt = evt;
+      var isEscape = false;
+      if ("key" in evt) {
+        isEscape = evt.key === "Escape" || evt.key === "Esc";
+      } else {
+        isEscape = evt.keyCode === 27;
+      }
+      if (isEscape) {
+        stopMove();
+      }
+    };
+
+    void moveButton.offsetHeight; // Trigger reflow
+
+    let firstWord = null;
+
+    async function selectWord(word) {
+      if (firstWord == null) {
+        firstWord = word;
+        firstWord.selected = true;
+        drawMoveGrid(puzzleData, selectWord);
+        return;
+      }
+      const animateMove = drawMoveGrid(puzzleData, () => {});
+      await animateMove(firstWord, word);
+      [firstWord.position, word.position] = [word.position, firstWord.position];
+      stopMove();
+    }
+    drawMoveGrid(puzzleData, selectWord);
   });
 });

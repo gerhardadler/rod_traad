@@ -12,7 +12,7 @@ export class WordItem {
       toggleWordCallback !== null || deselectWordCallback !== null;
 
     this.el = document.createElement(this.isInteractive ? "label" : "div");
-    this.el.setAttribute("for", word.name);
+    this.el.setAttribute("for", `word-${word.id}`);
     this.el.classList.add("word");
 
     if (this.isInteractive) {
@@ -20,6 +20,7 @@ export class WordItem {
       checkboxEl.type = "checkbox";
       checkboxEl.classList.add("visually-hidden");
       checkboxEl.checked = word.selected;
+      checkboxEl.name = `word-${word.id}`;
       checkboxEl.setAttribute("autocomplete", "off");
       this.checkbox = new Button(checkboxEl);
       this.el.appendChild(this.checkbox.el);

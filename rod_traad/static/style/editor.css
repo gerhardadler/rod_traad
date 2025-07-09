@@ -85,3 +85,26 @@
   max-width: 100%;
   overflow-wrap: break-word;
 }
+
+#move-tooltip {
+  margin-top: -1rem;
+  text-align: center;
+  font-style: italic;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#move-tooltip.moving {
+  visibility: visible;
+  opacity: 1;
+}
+
+.button.moving {
+  background-color: var(--neutral-250);
+  border: var(--border-width) solid var(--neutral-350);
+}
+
+.button.moving:hover {
+  background: var(--neutral-300);
+}

@@ -101,6 +101,25 @@ function drawMoveGrid(puzzleData, selectWordCallback) {
   return animateMove;
 }
 
+function drawSolutions(puzzleData) {
+  const solutions = document.querySelectorAll(".solution");
+  solutions.forEach((solution) => {
+    const difficulty = parseInt(solution.dataset.difficulty);
+    const currentSolution = puzzleData.solutions.find(
+      (s) => s.difficulty === difficulty
+    );
+
+    const solutionNameElement = solution.querySelector(".solution-name");
+    const solutionWordInputElement = solution.querySelector(".word-input");
+
+    solutionNameElement.value = currentSolution.name;
+    solutionWordInputElement.value = currentSolution.words
+      .map((id) => wordById(puzzleData, id).name)
+      .filter((w) => w)
+      .join(", ");
+  });
+}
+
 function swapSolutions(puzzleData, solutionElement, direction) {
   // chatgpt
 
@@ -158,11 +177,15 @@ function swapSolutions(puzzleData, solutionElement, direction) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const solutions = document.querySelectorAll(".solution");
-  const moveButton = document.querySelector("#move-button");
-  const moveTooltip = document.querySelector("#move-tooltip");
+function savePuzzleData(puzzleData) {
+  localStorage.setItem("puzzleData", JSON.stringify(puzzleData));
+}
 
+function loadPuzzleData() {
+  const data = localStorage.getItem("puzzleData");
+  if (data) {
+    return JSON.parse(data);
+  }
   const puzzleData = {
     solutions: [
       { name: "", difficulty: 0, words: [0, 1, 2, 3] },
@@ -197,8 +220,19 @@ document.addEventListener("DOMContentLoaded", () => {
     word.position = word.position = randomPositions[i];
   });
 
+  return puzzleData;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const solutions = document.querySelectorAll(".solution");
+  const moveButton = document.querySelector("#move-button");
+  const moveTooltip = document.querySelector("#move-tooltip");
+
+  const puzzleData = loadPuzzleData();
+
   drawEmail();
   drawGrid(puzzleData);
+  drawSolutions(puzzleData);
 
   document.querySelector(".content").classList.remove("fade-in");
   document.querySelector("body").classList.remove("no-animate");
@@ -217,6 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
     solutionNameElement.addEventListener("input", (event) => {
       const solutionName = event.target.value;
       currentSolution.name = solutionName;
+      savePuzzleData(puzzleData);
     });
 
     solutionWordInputElement.addEventListener("input", (event) => {
@@ -228,16 +263,19 @@ document.addEventListener("DOMContentLoaded", () => {
       fixedSolutionWords.slice(0, 4).forEach((word, i) => {
         wordById(puzzleData, currentSolution.words[i]).name = word;
       });
+      savePuzzleData(puzzleData);
       drawGrid(puzzleData);
     });
 
-    arrowDown.addEventListener("click", () =>
-      swapSolutions(puzzleData, solution, "down")
-    );
+    arrowDown.addEventListener("click", () => {
+      swapSolutions(puzzleData, solution, "down");
+      savePuzzleData(puzzleData);
+    });
 
-    arrowUp.addEventListener("click", () =>
-      swapSolutions(puzzleData, solution, "up")
-    );
+    arrowUp.addEventListener("click", () => {
+      swapSolutions(puzzleData, solution, "up");
+      savePuzzleData(puzzleData);
+    });
   });
 
   let isMoving = false;
@@ -246,6 +284,7 @@ document.addEventListener("DOMContentLoaded", () => {
       puzzleData.words.forEach((w) => {
         delete w.selected;
       });
+      savePuzzleData(puzzleData);
       drawGrid(puzzleData);
       isMoving = false;
       moveButton.classList.remove("moving");

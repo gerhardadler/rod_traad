@@ -1,11 +1,12 @@
 import logging
 import datetime
 import random
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 import uuid
 from pydantic import AfterValidator, BaseModel, BeforeValidator, Json
 from sqlalchemy import Column
 from sqlmodel import JSON, Field, Relationship, SQLModel, create_engine
+from rod_traad import config
 from rod_traad.config import SQLITE_DB
 
 
@@ -62,6 +63,9 @@ class PuzzleBase(SQLModel):
     date: datetime.date | None
     data: dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
     number: int | None = Field(default=None, nullable=True, unique=True)
+    name: str | None = Field(default=None, max_length=100)
+    author: str | None = Field(default=None, max_length=100)
+    is_official: bool = Field(default=False)
 
 
 class Puzzle(PuzzleBase, table=True):
@@ -76,7 +80,16 @@ class PuzzlePublic(PuzzleBase):
 class PuzzleUpdate(PuzzleBase):
     number: Annotated[int | None, BeforeValidator(empty_string_to_none)] = None
     date: datetime.date | None
-    data: Json[dict[str, Any]] = Field(default_factory=dict)
+    data: Json[dict[str, Any]] | dict[str, Any] = Field(default_factory=dict)
+
+
+class UnofficialPuzzleCreate(PuzzleBase):
+    date: datetime.date | None = Field(
+        default_factory=lambda: datetime.datetime.now(config.TIMEZONE).date()
+    )
+    number: None = None
+    is_official: Literal[False] = Field(default=False)
+    data: Json[dict[str, Any]] | dict[str, Any] = Field(default_factory=dict)
 
 
 class User(SQLModel, table=True):
